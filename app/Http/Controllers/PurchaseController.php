@@ -28,7 +28,7 @@ class PurchaseController extends Controller
         $unit = Unit::all();
         $category = Category::all();
         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
-        $property = Property::whereIn('id', [2, 3])->get();
+        $property = Property::whereIn('id', [1, 2, 3])->get();
         $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
                             ->join('property', 'purchases.properties_id', '=', 'property.id')
                             ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation')
@@ -96,7 +96,6 @@ class PurchaseController extends Controller
                 'item_descrip' => 'required',
                 'item_model' => 'required',
                 'serial_number' => 'required',
-                'date_acquired' => 'required',
                 'unit_id' => 'required',
                 'qty' => 'required',
                 'item_cost' => 'required',
@@ -122,6 +121,7 @@ class PurchaseController extends Controller
                     'item_number' => $newItemNumber,
                     'property_no_generated' => $propertyCodeGen,
                     'selected_account_id' => $request->input('selected_account_id'),
+                    'remarks' => $request->input('remarks'),
                 ]);
 
                 return redirect()->route('purchaseREAD')->with('success', 'Purchase Item  stored successfully!');
@@ -134,24 +134,25 @@ class PurchaseController extends Controller
     public function purchaseEdit(Request $request, $id) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $purchase = Purchases::findOrFail($id);
-        $property = Property::whereIn('id', [2, 3])->get();
+        $property = Property::whereIn('id', [1, 2, 3])->get();
         $office = Office::all();
         $item = Item::all();
         $unit = Unit::all();
         $category = Category::all();
 
         $selectedOfficeId = $purchase->office_id;
-        $selectedItemId = $purchase->office_id;
+        $selectedItemId = $purchase->item_id;
         $selectedUnitId = $purchase->unit_id;
         $selectedCatId = $purchase->categories_id;
         $selectedAccId = $purchase->property_id;
+        $selectedPropId = $purchase->properties_id;
 
         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
 
-        return view('purchases.edit-purchase', compact('setting', 'property', 'purchase', 'office', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId'));
+        return view('purchases.edit-purchase', compact('setting', 'property', 'purchase', 'office', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
     }
 
-    public function purchaseUpdate(Request $request, $id) {
+    public function purchaseUpdate(Request $request) {
         $request->validate([
             'id' => 'required',
             'office_id' => 'required',
@@ -166,18 +167,27 @@ class PurchaseController extends Controller
             'properties_id' => 'required',
         ]);
 
-        try {
+       try {
             $purchase = Purchases::findOrFail($request->input('id'));
             $purchase->update([
                 'office_id' => $request->input('office_id'),
                 'item_id' => $request->input('item_id'),
                 'item_descrip' => $request->input('item_descrip'),
+                'item_model' => $request->input('item_model'),
                 'serial_number' => $request->input('serial_number'),
                 'date_acquired' => $request->input('date_acquired'),
                 'unit_id' => $request->input('unit_id'),
+                'qty' => $request->input('qty'),
+                'item_cost' => $request->input('item_cost'),
+                'total_cost' => $request->input('total_cost'),
+                'properties_id' => $request->input('properties_id'),
+                'categories_id' => $request->input('categories_id'),
+                'property_id' => $request->input('property_id'),
+                'selected_account_id' => $request->input('selected_account_id'),
+                'remarks' => $request->input('remarks'),
             ]);
 
-            return redirect()->route('itemEdit', ['id' => $item->id])->with('success', 'Updated Successfully');
+            return redirect()->route('purchaseEdit', ['id' => $purchase->id])->with('success', 'Updated Successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update item!');
         }
@@ -212,4 +222,44 @@ class PurchaseController extends Controller
             'message'=>'Deleted Successfully',
         ]);
     }
+
+    public function purchaseReportsOtption() {
+        $setting = Setting::firstOrNew(['id' => 1]);
+        $property = Property::all();
+        $category = Category::all();
+
+        return view('purchases.reportsOption', compact('setting', 'property', 'category'));
+    }
+
+    public function purchaseReportsOtptionGen(Request $request) {
+        $setting = Setting::firstOrNew(['id' => 1]);
+        $office = Office::all();
+        $item = Item::all();
+        $unit = Unit::all();
+        $category = Category::all();
+
+        $propertiesId = $request->query('properties_id');
+        $categoriesId = $request->query('categories_id');
+        $propId = $request->query('property_id');
+        $dateAcquired = $request->query('date_acquired');
+        $selectId = $request->query('selected_account_id');
+
+        $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
+                ->join('properties', 'purchases.selected_account_id', '=', 'properties.id')
+                ->join('units', 'purchases.unit_id', '=', 'units.id')
+                ->where('purchases.properties_id', $propertiesId)
+                ->where('purchases.categories_id', $categoriesId)
+                ->where('purchases.property_id', $propId)
+                ->where('purchases.selected_account_id', $selectId)
+                ->where('purchases.date_acquired', $dateAcquired)
+                ->get();
+
+        $data = [
+            'purchase' => $purchase
+        ];
+
+        $pdf = PDF::loadView('purchases.printRPCPPE', $data)->setPaper('Legal', 'landscape');
+        return $pdf->stream();
+    }
+
 }

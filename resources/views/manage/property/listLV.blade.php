@@ -98,7 +98,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label for="">Account title</label>
-                                    <input type="text" id="account_title_abbr" name="account_title_abbr" value="{{ $cr == 'lvEdit' ? $lvProperties->account_title_abbr : '' }}" class="form-control" style="text-transform: capitalize;" placeholder="Enter Account Title Abbreviation">
+                                    <input type="text" id="account_title_abbr" name="account_title_abbr" value="{{ $cr == 'lvEdit' ? $lvProperties->account_title_abbr : '' }}" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter Account Title Abbreviation">
                                 </div>
                             </div>
                         </div>

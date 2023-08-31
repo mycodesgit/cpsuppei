@@ -17,6 +17,10 @@
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-employee">
                             <i class="fas fa-plus"></i> Add New
                         </button>
+
+                        <a href="{{ route('purchaseReportsOtption') }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-file-pdf"></i> Reports
+                        </a>
                     </h3>
                 </div>
 
@@ -42,7 +46,7 @@
                                     <th>Qty</th>
                                     <th>Total Cost</th>
                                     <th>Date Acq.</th>
-                                    <th>Status</th>
+                                    <th>Remarks</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -61,7 +65,7 @@
                                     <td>{{ $data->qty }}</td>
                                     <td>{{ $data->total_cost }}</td>
                                     <td>{{ $data->date_acquired }}</td>
-                                    <td>{{ $data->status }}</td>
+                                    <td>{{ $data->remarks }}</td>
                                     <td>
                                         <a href="{{ route('purchaseEdit', ['id' => $data->id] ) }}" class="btn btn-info btn-xs btn-edit" title="View/Edit">
                                             <i class="fas fa-exclamation-circle"></i>
@@ -94,7 +98,12 @@ function formatNumber(input) {
     input.value = formattedValue;
 }
 </script>
-
+<script>
+    function updateHiddenInput(selectElement) {
+        var selectedValue = selectElement.value;
+        document.getElementById('selected_category_id').value = selectedValue;
+    }
+</script>
 <script>
 function calculateTotalCost() {
     const qtyInput = document.getElementsByName('qty')[0];
@@ -113,9 +122,11 @@ function toggleSecondForm(selectElement) {
     const price = parseFloat(document.getElementsByName('item_cost')[0].value.replace(/[^\d.]/g, '')) || 0;
     const itemIdSelect = document.getElementById('item_id');
 
-    if (price <= 49000) {
+    if (price >= 10 && price <= 15000) {
         itemIdSelect.value = 2;
-    } else {
+    } else if (price >= 15001 && price <= 49000) {
+        itemIdSelect.value = 1;
+    } else if (price >= 50000) {
         itemIdSelect.value = 3;
     }
     secondForm.style.display = 'block';

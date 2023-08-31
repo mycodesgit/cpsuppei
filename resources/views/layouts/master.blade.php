@@ -305,6 +305,7 @@
 <!-- manage/view script -->
 @include('../script.property_script')
 @include('../script.propertylv_script')
+@include('../script.propertyhv_script')
 @include('../script.unit_script')
 @include('../script.item_script')
 @include('../script.office_script')

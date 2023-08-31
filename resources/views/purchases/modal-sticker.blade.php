@@ -53,10 +53,15 @@
         	font-size: 9pt;
         	text-decoration: underline;
         }
+        .dataText1 {
+        	font-style: italic;
+        	font-size: 9pt;
+        }
 	</style>
 </head>
 <body>
-	<div class="colortable" style="background-color: {{ $propertiesId == 3 ? 'yellow' : 'green' }}">
+	@if (strpos($purchase->serial_number, ';') !== false)
+	<div class="colortable" style="background-color: {{ $propertiesId == 3 ? 'yellow' : ($propertiesId == 2 ? 'lightgreen' : ($propertiesId == 1 ? 'green' : '')) }}">
 		<table id="sticker">
 			<thead>
 				<tr>
@@ -70,7 +75,109 @@
 					<th colspan="3" class="sticker-text-label" style="font-size: 11pt">Central Philippines State University</th>
 				</tr>
 				<tr>
-					<th rowspan="8" class="sticker-text-label"><canvas id="qrcode" class="elevation-3"></canvas></th>
+					<th rowspan="9" class="sticker-text-label"><canvas id="qrcode" class="elevation-3"></canvas></th>
+					<th><b class="sticker-label">Property No.:</b> <span class="dataText">{{ $purchase->property_no_generated  }}</span class=""></th>
+				</tr>
+				<tr>
+					<th>Classification: <span class="dataText">{{ $purchase->account_title_abbr  }}</span></th>
+				</tr>
+				<tr>
+					<th>Item/Model/Brand: <span class="dataText">{{ $purchase->item_model  }}</span></th>
+				</tr>
+				<tr>
+					<th>Serial No.: <span class="dataText">{{ strtok($purchase->serial_number, ';') }}</span></th>
+				</tr>
+				<tr>
+					<th>Acquisition Cost: <span class="dataText">{{ $purchase->item_cost  }}</span></th>
+				</tr>
+				<tr>
+					<th>Acquisition Date: <span class="dataText">{{ $purchase->date_acquired  }}</span></th>
+				</tr>
+				<tr>
+					<th>Person Accountable: <span class="dataText">{{ $purchase->office_officer  }}</span></th>
+				</tr>
+				<tr>
+					<th>Assignment: <span class="dataText">{{ $purchase->office_name  }}</span></th>
+				</tr>
+				<tr>
+					<th>Validation Sign: <span class="dataText"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="5" class="sticker-text-label">*Removing or tampering of this sticker is punishable by Law*</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="colortable" style="background-color: {{ $propertiesId == 3 ? 'yellow' : ($propertiesId == 2 ? 'lightgreen' : ($propertiesId == 1 ? 'green' : '')) }}">
+		<table id="sticker">
+			<thead>
+				<tr>
+					<th rowspan="1" class="sticker-text-label">
+						@if($setting->photo_filename)
+		                    <img src="{{ asset('uploads/'. $setting->photo_filename) }}" class="logo-sticker brand-image img-circle elevation-3" alt="Uploaded Photo">
+		                @else
+		                    <img class="logo-sticker img-circle" src="{{ asset('template/img/default-logo.png') }}" alt="User profile picture">
+		                @endif
+					</th>
+					<th colspan="3" class="sticker-text-label" style="font-size: 11pt">Central Philippines State University</th>
+				</tr>
+				<tr>
+					<th rowspan="9" class="sticker-text-label"><canvas id="qrcode1" class="elevation-3"></canvas></th>
+					<th><b class="sticker-label">Property No.:</b> <span class="dataText">{{ $purchase->property_no_generated  }}</span class=""></th>
+				</tr>
+				<tr>
+					<th>Classification: <span class="dataText">{{ $purchase->account_title_abbr  }}</span></th>
+				</tr>
+				<tr>
+					<th>Item/Model/Brand: <span class="dataText">{{ $purchase->item_model  }}</span></th>
+				</tr>
+				<tr>
+					<th>Serial No.: <span class="dataText">{{ substr(strstr($purchase->serial_number, ';'), 1) }}</span></th>
+				</tr>
+				<tr>
+					<th>Acquisition Cost: <span class="dataText">{{ $purchase->item_cost  }}</span></th>
+				</tr>
+				<tr>
+					<th>Acquisition Date: <span class="dataText">{{ $purchase->date_acquired  }}</span></th>
+				</tr>
+				<tr>
+					<th>Person Accountable: <span class="dataText">{{ $purchase->office_officer  }}</span></th>
+				</tr>
+				<tr>
+					<th>Assignment: <span class="dataText">{{ $purchase->office_name  }}</span></th>
+				</tr>
+				<tr>
+					<th>Validation Sign: <span class="dataText"></span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="5" class="sticker-text-label">*Removing or tampering of this sticker is punishable by Law*</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	@else
+
+	<div class="colortable" style="background-color: {{ $propertiesId == 3 ? 'yellow' : ($propertiesId == 2 ? 'lightgreen' : ($propertiesId == 1 ? 'green' : '')) }}">
+		<table id="sticker">
+			<thead>
+				<tr>
+					<th rowspan="1" class="sticker-text-label">
+						@if($setting->photo_filename)
+		                    <img src="{{ asset('uploads/'. $setting->photo_filename) }}" class="logo-sticker brand-image img-circle elevation-3" alt="Uploaded Photo">
+		                @else
+		                    <img class="logo-sticker img-circle" src="{{ asset('template/img/default-logo.png') }}" alt="User profile picture">
+		                @endif
+					</th>
+					<th colspan="3" class="sticker-text-label" style="font-size: 11pt">Central Philippines State University</th>
+				</tr>
+				<tr>
+					<th rowspan="9" class="sticker-text-label"><canvas id="qrcode" class="elevation-3"></canvas></th>
 					<th><b class="sticker-label">Property No.:</b> <span class="dataText">{{ $purchase->property_no_generated  }}</span class=""></th>
 				</tr>
 				<tr>
@@ -92,6 +199,9 @@
 					<th>Person Accountable: <span class="dataText">{{ $purchase->office_officer  }}</span></th>
 				</tr>
 				<tr>
+					<th>Assignment: <span class="dataText">{{ $purchase->office_name  }}</span></th>
+				</tr>
+				<tr>
 					<th>Validation Sign: <span class="dataText"></span></th>
 				</tr>
 			</thead>
@@ -103,6 +213,8 @@
 		</table>
 	</div>
 
+	@endif
+
 <script>
     var inputText= "{{ $purchase->property_no_generated  }}";
     var qr = new QRious({
@@ -112,21 +224,38 @@
     });
 </script>
 
+<script>
+    var inputText= "{{ $purchase->property_no_generated  }}";
+    var qr = new QRious({
+        element: document.getElementById("qrcode1"),
+        value: inputText,
+        size: 90,
+    });
+</script>
+
 
 <script>
-    $('#downloadStickerButton').click(function() {
-        downloadSticker();
-    });
+    function downloadStickers() {
+        const colortables = document.querySelectorAll('.colortable');
+        colortables.forEach((colortable, index) => {
+            downloadSticker(colortable, index);
+        });
+    }
 
-    function downloadSticker() {
-        const contentToCapture = document.getElementById('sticker');
-        contentToCapture.style.backgroundColor = "{{ $propertiesId == 3 ? 'yellow' : 'green' }}";
+    function downloadSticker(colortable, index) {
+        const contentToCapture = colortable;
+        const originalBackgroundColor = getBackgroundColor();
+        const backgroundColor = originalBackgroundColor;
+
+        contentToCapture.style.backgroundColor = backgroundColor;
+
         html2canvas(contentToCapture).then(function(canvas) {
             const imageData = canvas.toDataURL('image/png');
-            contentToCapture.style.backgroundColor = '';
+            contentToCapture.style.backgroundColor = originalBackgroundColor;
+
             const downloadLink = document.createElement('a');
             downloadLink.href = imageData;
-            downloadLink.download = 'sticker.png';
+            downloadLink.download = 'sticker_' + (index + 1) + '.png';
             triggerDownload(downloadLink);
         });
     }
@@ -139,7 +268,18 @@
         });
         link.dispatchEvent(event);
     }
+
+    function getBackgroundColor() {
+        return "{{ $propertiesId == 3 ? 'yellow' : ($propertiesId == 2 ? 'lightgreen' : ($propertiesId == 1 ? 'green' : '')) }}";
+    }
+
+    // Call the function to initiate the download
+    $('#downloadStickerButton').click(function() {
+        downloadStickers();
+    });
 </script>
+
+
 
 </body>
 </html>

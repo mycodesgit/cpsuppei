@@ -114,7 +114,15 @@
                                     <label>Property Type:</label>
                                     <select class="form-control" name="properties_id" id="item_id" style="pointer-events: none;" onchange="toggleSecondForm(this)">
                                         @foreach ($property as $data)
-                                            <option value="{{ $data->id }}" {{ $data->id == 2 && $currentPrice <= 49000 ? 'selected' : ($data->id == 3 && $currentPrice >= 50000 ? 'selected' : '') }}>
+                                            <option value="{{ $data->id }}"
+                                                @if ($currentPrice >= 10 && $currentPrice <= 15000 && $data->id == 2)
+                                                    selected
+                                                @elseif ($currentPrice >= 15001 && $currentPrice <= 49000 && $data->id == 1)
+                                                    selected
+                                                @elseif ($currentPrice >= 50000 && $data->id == 3)
+                                                    selected
+                                                @endif
+                                            >
                                                 {{ $data->property_name }} ({{ $data->abbreviation }})
                                             </option>
                                         @endforeach
@@ -137,8 +145,19 @@
                                     <select id="account_title" name="property_id" data-placeholder="Select Account Title" class="form-control select2bs4" style="width: 100%;">
                                     </select>
                                 </div>
-                                <input type="text" id="selected_account_id" name="selected_account_id">
+                                <input type="hidden" id="selected_account_id" name="selected_account_id">
 
+                                <div class="col-md-12 mt-3">
+                                    <label>Remarks:</label>
+                                    <select class="form-control" name="remarks" id="remarks">
+                                        <option value="Good Condition">Good Condition</option>
+                                        <option value="Needing Repair">Needing Repair</option>
+                                        <option value="Unserviceable">Unserviceable</option>
+                                        <option value="Obsolete">Obsolete</option>
+                                        <option value="No Longer Needed">No Longer Needed</option>
+                                        <option value="Not used since purchase">Not used since purchase</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         

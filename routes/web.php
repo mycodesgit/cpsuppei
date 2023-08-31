@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\PropertyTypelowController;
+use App\Http\Controllers\PropertyTypeHighController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficeController;
@@ -54,6 +55,12 @@ Route::group(['middleware'=>['login_auth']],function(){
             Route::get('list/{id}/LVedit', [PropertyTypeLowController::class, 'lvEdit'])->name('lvEdit');
             Route::post('listLV/update', [PropertyTypeLowController::class, 'lvUpdate'])->name('lvUpdate');
             Route::get('listLV/delete/{id}', [PropertyTypeLowController::class, 'lvDelete'])->name('lvDelete');
+
+            Route::post('listHV/create', [PropertyTypeHighController::class, 'hvCreate'])->name('hvCreate');
+            Route::get('/listHV', [PropertyTypeHighController::class, 'hvRead'])->name('hvRead');
+            Route::get('list/{id}/HVedit', [PropertyTypeHighController::class, 'hvEdit'])->name('hvEdit');
+            Route::post('listHV/update', [PropertyTypeHighController::class, 'hvUpdate'])->name('hvUpdate');
+            Route::get('listHV/delete/{id}', [PropertyTypeHighController::class, 'hvDelete'])->name('hvDelete');
         });
 
         Route::prefix('/unit')->group(function () {
@@ -86,9 +93,13 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/list', [PurchaseController::class, 'purchaseREAD'])->name('purchaseREAD');
         Route::post('/list', [PurchaseController::class, 'purchaseCreate'])->name('purchaseCreate');
         Route::get('/list/edit/{id}', [PurchaseController::class, 'purchaseEdit'])->name('purchaseEdit');
+        Route::post('/list/update', [PurchaseController::class, 'purchaseUpdate'])->name('purchaseUpdate');
         Route::get('/list/cat/{id}/{mode}', [PurchaseController::class, 'purchaseCat'])->name('purchaseCat');
         Route::get('/list/prnt/{id}', [PurchaseController::class, 'purchasePrntSticker'])->name('purchasePrntSticker');
         Route::get('/list/delete/{id}', [PurchaseController::class, 'purchaseDelete'])->name('purchaseDelete');
+
+        Route::get('/list/reports', [PurchaseController::class, 'purchaseReportsOtption'])->name('purchaseReportsOtption');
+        Route::get('/list/reportGen', [PurchaseController::class, 'purchaseReportsOtptionGen'])->name('purchaseReportsOtptionGen');
     });
 
     //Inventory
