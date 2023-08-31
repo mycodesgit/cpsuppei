@@ -42,7 +42,7 @@
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-two-tabContent">
                                 <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
-                                    <form action="{{ route('purchaseReportsOtptionGen') }}" class="form-horizontal add-form" id="" method="GET">
+                                    <form action="{{ route('purchaseReportsOtptionGen') }}" class="form-horizontal add-form" id="" method="GET" target="_blank">
                                         @csrf
                                         <div class="form-group">
                                             <div class="form-row">
@@ -79,8 +79,14 @@
                                                 </div>
                                                 <input type="hidden" id="selected_account_id" name="selected_account_id">
                                                 <div class="col-md-6">
-                                                    <label>Date Acquired:</label>
-                                                    <input type="date" name="date_acquired" class="form-control">
+                                                    <label>Date Range:</label>
+                                                    <div class="input-group">
+                                                        <input type="date" name="start_date_acquired" class="form-control" placeholder="Start Date">
+                                                        <div class="input-group-prepend input-group-append">
+                                                            <span class="input-group-text">to</span>
+                                                        </div>
+                                                        <input type="date" name="end_date_acquired" class="form-control" placeholder="End Date">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -152,6 +158,17 @@ function categor(val) {
 }
 </script>
 
+<script>
+    document.getElementById('generate-btn').addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        // Get the form's action URL
+        //var formAction = '{{ route('purchaseReportsOtptionGen') }}';
+
+        // Open the URL in a new tab
+        window.open(formAction, '_blank');
+    });
+</script>
 
 
 @endsection

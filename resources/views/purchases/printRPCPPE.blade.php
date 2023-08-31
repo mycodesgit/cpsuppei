@@ -98,19 +98,19 @@
 	<div class="text1">(Type of Property, Plant and Equipment)</div>
 	<div class="text2">As at ________________________________</div>
 	<div class="text3">Fund Cluster : ________________________________</div>
-	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on <u>Aug 15,2018</u>.</div>
+	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
 
 	<div class="table-responsive">
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
 				<tr>
-					<th rowspan="2">ARTICLE</th>
+					<th rowspan="2" width="10">ARTICLE</th>
 					<th rowspan="2">DESCRIPTION</th>
 					<th rowspan="2">PROPERTY NO.</th>
-					<th rowspan="2">UNIT OF MEASURE</th>
-					<th rowspan="2">UNIT VALUE</th>
-					<th rowspan="2">QUANTITY <br>PER<br> PROPERTY CARD</th>
-					<th rowspan="2">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
+					<th rowspan="2" width="30">UNIT OF MEASURE</th>
+					<th rowspan="2" width="30">UNIT VALUE</th>
+					<th rowspan="2" width="30">QUANTITY <br>PER<br> PROPERTY CARD</th>
+					<th rowspan="2" width="30">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
 					<th colspan="2">SHORTAGE<br>OVERAGE</th>
 					<th rowspan="2">REMARKS</th>
 					<th colspan="1">LOCATION</th>

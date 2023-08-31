@@ -241,7 +241,8 @@ class PurchaseController extends Controller
         $propertiesId = $request->query('properties_id');
         $categoriesId = $request->query('categories_id');
         $propId = $request->query('property_id');
-        $dateAcquired = $request->query('date_acquired');
+        $startDate = $request->query('start_date_acquired');
+        $endDate = $request->query('end_date_acquired');
         $selectId = $request->query('selected_account_id');
 
         $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
@@ -251,11 +252,21 @@ class PurchaseController extends Controller
                 ->where('purchases.categories_id', $categoriesId)
                 ->where('purchases.property_id', $propId)
                 ->where('purchases.selected_account_id', $selectId)
-                ->where('purchases.date_acquired', $dateAcquired)
+                ->where(function ($query) use ($startDate, $endDate) {
+                    if ($startDate && $endDate) {
+                        $query->whereBetween('purchases.date_acquired', [$startDate, $endDate]);
+                    } elseif ($startDate) {
+                        $query->where('purchases.date_acquired', '>=', $startDate);
+                    } elseif ($endDate) {
+                        $query->where('purchases.date_acquired', '<=', $endDate);
+                    }
+                })
                 ->get();
 
         $data = [
-            'purchase' => $purchase
+            'purchase' => $purchase,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
         ];
 
         $pdf = PDF::loadView('purchases.printRPCPPE', $data)->setPaper('Legal', 'landscape');
