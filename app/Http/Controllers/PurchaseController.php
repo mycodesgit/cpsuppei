@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Setting;
 use App\Models\Purchases;
 use App\Models\Office;
-use App\Models\Property;
+use App\Models\property;
 use App\Models\Properties;
 use App\Models\Unit;
 use App\Models\Item;

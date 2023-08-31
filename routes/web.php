@@ -10,7 +10,7 @@ use App\Http\Controllers\RpcppeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PropertyTypeController;
-use App\Http\Controllers\PropertyTypelowController;
+use App\Http\Controllers\PropertyTypeLowController;
 use App\Http\Controllers\PropertyTypeHighController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ItemController;
