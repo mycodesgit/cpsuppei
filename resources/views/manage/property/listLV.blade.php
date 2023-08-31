@@ -25,6 +25,7 @@
                                     <th>Category</th>
                                     <th>Account Title</th>
                                     <th>Account Number</th>
+                                    <th>Abbreviation</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -36,6 +37,7 @@
                                 <td>{{ $prolv->cat_name }}</td>
                                 <td>{{ $prolv->account_title }}</td>
                                 <td>{{ $prolv->account_number }}</td>
+                                <td>{{ $prolv->account_title_abbr }}</td>
                                 <td>
                                     <a href="{{ route('lvEdit', $prolv->id) }}" class="btn btn-info btn-xs"><i class="fas fa-info-circle"></i></a>
                                     <button value="{{ $prolv->id }}" class="btn btn-danger btn-xs property-delete"><i class="fas fa-trash"></i></button>
