@@ -55,10 +55,10 @@ class PropertyTypeHighController extends Controller
                 'code' => 'required|string|max:100',
             ]);
 
-            $existingAccountNumber = Properties::where('account_number', $request->input('account_number'))->first();
-            if ($existingAccountNumber) {
-                return redirect()->back()->with('error', 'The account number already exists.');
-            }
+            // $existingAccountNumber = Properties::where('account_number', $request->input('account_number'))->first();
+            // if ($existingAccountNumber) {
+            //     return redirect()->back()->with('error', 'The account number already exists.');
+            // }
 
             try {
                 Properties::create([
