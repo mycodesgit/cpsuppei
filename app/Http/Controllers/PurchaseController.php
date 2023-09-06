@@ -74,6 +74,8 @@ class PurchaseController extends Controller
 
         if ($dateAcquired) {
             $formattedDate = date('Y', strtotime($dateAcquired));
+        } else {
+            $formattedDate = $date->format('Y');
         }
 
         if ($request->input('item_cost') >= 50001) {
@@ -169,9 +171,11 @@ class PurchaseController extends Controller
         $office = Office::where('id', $purchase->office_id)->first();
         $date = Carbon::now();
         $dateAcquired = $request->input('date_acquired');
-        
+
         if ($dateAcquired) {
             $formattedDate = date('Y', strtotime($dateAcquired));
+        } else {
+            $formattedDate = $date->format('Y');
         }
 
         if ($request->input('item_cost') >= 50001) {

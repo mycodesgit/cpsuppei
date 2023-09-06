@@ -169,8 +169,8 @@
                                 <div class="col-md-12 mt-3">
                                     <label>Price Status:</label>
                                     <select class="form-control" name="price_stat" id="price_stat">
-                                        <option value="Uncertain" @if($purchase->price_stat == 'Uncertain') selected @endif>Uncertain</option>
                                         <option value="Certain" @if ($purchase->price_stat == 'Certain') selected @endif>Certain</option>
+                                        <option value="Uncertain" @if($purchase->price_stat == 'Uncertain') selected @endif>Uncertain</option>
                                     </select>
                                 </div>
 
