@@ -173,6 +173,11 @@
                                         <option value="Certain" @if ($purchase->price_stat == 'Certain') selected @endif>Certain</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-12 mt-3">
+                                    <label>Accountable Person:</label>
+                                    <input type="text" name="person_accnt" value="{{ $purchase->person_accnt }}" class="form-control">
+                                </div>
                             </div>
                         </div>
                         

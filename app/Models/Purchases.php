@@ -30,6 +30,7 @@ class Purchases extends Model
         'date_acquired',	
         'date_stat',
         'price_stat',
+        'person_accnt',
         'print_stat'
     ];
     

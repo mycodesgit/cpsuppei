@@ -70,7 +70,7 @@ class PurchaseController extends Controller
         $purchase = Purchases::all();
         $office = Office::where('id', $request->office_id)->first();
         $date = Carbon::now();
-        $formattedDate = $date->format('Y');
+        $formattedDate = $request->date_acquired->format('Y');
 
         if ($request->input('item_cost') >= 50001) {
             $propertyCode = "06";
@@ -124,6 +124,7 @@ class PurchaseController extends Controller
                     'selected_account_id' => $request->input('selected_account_id'),
                     'remarks' => $request->input('remarks'),
                     'price_stat' => $request->input('price_stat'),
+                    'person_accnt' => $request->input('person_accnt'),
                 ]);
 
                 return redirect()->route('purchaseREAD')->with('success', 'Purchase Item  stored successfully!');
@@ -218,6 +219,7 @@ class PurchaseController extends Controller
                 'selected_account_id' => $request->input('selected_account_id'),
                 'remarks' => $request->input('remarks'),
                 'price_stat' => $request->input('price_stat'),
+                'person_accnt' => $request->input('person_accnt'),
             ]);
 
             return redirect()->route('purchaseEdit', ['id' => $purchase->id])->with('success', 'Updated Successfully');

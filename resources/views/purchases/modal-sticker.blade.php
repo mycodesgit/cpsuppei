@@ -196,7 +196,13 @@
 					<th>Acquisition Date: <span class="dataText">{{ $purchase->date_acquired  }}</span></th>
 				</tr>
 				<tr>
-					<th>Person Accountable: <span class="dataText">{{ $purchase->office_officer  }}</span></th>
+					<th>Person Accountable: <span class="dataText">
+						@if ($purchase->person_accnt == NULL)
+					        {{ $purchase->office_officer }}
+					    @else
+					        {{ $purchase->person_accnt }}
+					    @endif
+					</span></th>
 				</tr>
 				<tr>
 					<th>Assignment: <span class="dataText">{{ $purchase->office_name  }}</span></th>

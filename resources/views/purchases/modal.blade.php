@@ -162,9 +162,14 @@
                                 <div class="col-md-12 mt-3">
                                     <label>Price Status:</label>
                                     <select class="form-control" name="price_stat" id="price_stat">
-                                        <option value="n/a">---Select---</option>
+                                        <option value="Certain">Certain</option>
                                         <option value="Uncertain">Uncertain</option>
                                     </select>
+                                </div>
+
+                                <div class="col-md-12 mt-3">
+                                    <label>Accountable Person:</label>
+                                    <input type="text" name="person_accnt" class="form-control">
                                 </div>
                             </div>
                         </div>
