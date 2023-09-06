@@ -70,7 +70,11 @@ class PurchaseController extends Controller
         $purchase = Purchases::all();
         $office = Office::where('id', $request->office_id)->first();
         $date = Carbon::now();
-        $formattedDate = $request->date_acquired->format('Y');
+        $dateAcquired = $request->input('date_acquired');
+
+        if ($dateAcquired) {
+            $formattedDate = date('Y', strtotime($dateAcquired));
+        }
 
         if ($request->input('item_cost') >= 50001) {
             $propertyCode = "06";
@@ -164,7 +168,11 @@ class PurchaseController extends Controller
         $purchase = Purchases::find($request->id);
         $office = Office::where('id', $purchase->office_id)->first();
         $date = Carbon::now();
-        $formattedDate = $date->format('Y');
+        $dateAcquired = $request->input('date_acquired');
+        
+        if ($dateAcquired) {
+            $formattedDate = date('Y', strtotime($dateAcquired));
+        }
 
         if ($request->input('item_cost') >= 50001) {
             $propertyCode = "06";
@@ -191,7 +199,6 @@ class PurchaseController extends Controller
             'item_id' => 'required',
             'item_descrip' => 'required',
             'serial_number' => 'required',
-            'date_acquired' => 'required',
             'unit_id' => 'required',
             'qty' => 'required',
             'item_cost' => 'required',
