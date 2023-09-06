@@ -158,6 +158,14 @@
                                         <option value="Not used since purchase">Not used since purchase</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-12 mt-3">
+                                    <label>Price Status:</label>
+                                    <select class="form-control" name="price_stat" id="price_stat">
+                                        <option value="n/a">---Select---</option>
+                                        <option value="Uncertain">Uncertain</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         

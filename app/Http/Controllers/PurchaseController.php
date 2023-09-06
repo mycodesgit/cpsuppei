@@ -31,7 +31,8 @@ class PurchaseController extends Controller
         $property = Property::whereIn('id', [1, 2, 3])->get();
         $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
                             ->join('property', 'purchases.properties_id', '=', 'property.id')
-                            ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation')
+                            ->join('items', 'purchases.item_id', '=', 'items.id')
+                            ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
                             ->get();
         return view('purchases.list', compact('setting', 'office', 'item', 'unit', 'property', 'currentPrice','category', 'purchase'));
     }
@@ -67,7 +68,7 @@ class PurchaseController extends Controller
     public function purchaseCreate(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $purchase = Purchases::all();
-        $office = Office::find($request->office_id)->first();
+        $office = Office::where('id', $request->office_id)->first();
         $date = Carbon::now();
         $formattedDate = $date->format('Y');
 
@@ -122,6 +123,7 @@ class PurchaseController extends Controller
                     'property_no_generated' => $propertyCodeGen,
                     'selected_account_id' => $request->input('selected_account_id'),
                     'remarks' => $request->input('remarks'),
+                    'price_stat' => $request->input('price_stat'),
                 ]);
 
                 return redirect()->route('purchaseREAD')->with('success', 'Purchase Item  stored successfully!');
@@ -147,12 +149,41 @@ class PurchaseController extends Controller
         $selectedAccId = $purchase->property_id;
         $selectedPropId = $purchase->properties_id;
 
+        $category1 = Category::where('id', $selectedCatId)->first();
+        $catcode = $category1->cat_code;
+
+        $property1 = Properties::where('category_id', $catcode)->get();
+
         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
 
-        return view('purchases.edit-purchase', compact('setting', 'property', 'purchase', 'office', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
+        return view('purchases.edit-purchase', compact('setting', 'property', 'property1', 'purchase', 'office', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
     }
 
     public function purchaseUpdate(Request $request) {
+        $purchase = Purchases::find($request->id);
+        $office = Office::where('id', $purchase->office_id)->first();
+        $date = Carbon::now();
+        $formattedDate = $date->format('Y');
+
+        if ($request->input('item_cost') >= 50001) {
+            $propertyCode = "06";
+        } else {
+            $propertyCode = "04";
+        }
+        $categoriesCode = $request->categories_id;
+        $propertiesCode = $request->property_id;
+        $accountID = $request->id;
+
+        $lastItemNumber = Purchases::where([
+            'item_id' => $request->input('item_id'),
+            'property_id' => $request->input('property_id'),
+        ])->max('item_number');
+        $newItemNumber = str_pad($lastItemNumber + 1, 3, '0', STR_PAD_LEFT);
+
+        $officeCode = $office->office_code;
+        $propertyCodeGen = $formattedDate.'-'.$propertyCode.'-'.$categoriesCode.'-'.$propertiesCode.'-'.$purchase->item_number.'-'.$officeCode;
+
+
         $request->validate([
             'id' => 'required',
             'office_id' => 'required',
@@ -183,8 +214,10 @@ class PurchaseController extends Controller
                 'properties_id' => $request->input('properties_id'),
                 'categories_id' => $request->input('categories_id'),
                 'property_id' => $request->input('property_id'),
+                'property_no_generated' => $propertyCodeGen,
                 'selected_account_id' => $request->input('selected_account_id'),
                 'remarks' => $request->input('remarks'),
+                'price_stat' => $request->input('price_stat'),
             ]);
 
             return redirect()->route('purchaseEdit', ['id' => $purchase->id])->with('success', 'Updated Successfully');

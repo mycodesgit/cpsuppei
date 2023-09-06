@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Setting;
-use App\Models\Property;
+use App\Models\property;
 use App\Models\Properties;
 use App\Models\Category;
 use Carbon\Carbon;

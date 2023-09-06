@@ -146,6 +146,9 @@
                                 <div id="account-div" class="col-md-6 desc-column mt-3">
                                     <label for="exampleInputName">Select Account Title</label>
                                     <select id="account_title" name="property_id" data-placeholder="Select Account Title" class="form-control select2bs4" style="width: 100%;">
+                                        @foreach ($property1 as $data)
+                                            <option value="{{ $data->code }}" {{ $data->code == $selectedAccId ? 'selected' : '' }}>{{ $data->code }} - {{ $data->account_title }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <input type="hidden" id="selected_account_id" name="selected_account_id">
@@ -153,14 +156,22 @@
                                 <div class="col-md-12 mt-3">
                                     <label>Remarks:</label>
                                     <select class="form-control" name="remarks" id="remarks">
-                                        <option value="Good Condition" @if ($purchase == 'Good Condition') selected @endif>Good Condition</option>
-                                        <option value="Needing Repair" @if ($purchase == 'Needing Repair') selected @endif>Needing Repair</option>
-                                        <option value="Unserviceable" @if ($purchase == 'Unserviceable') selected @endif>Unserviceable</option>
-                                        <option value="Obsolete" @if ($purchase == 'Obsolete') selected @endif>Obsolete</option>
-                                        <option value="No Longer Needed" @if ($purchase == 'No Longer Needed') selected @endif>No Longer Needed</option>
-                                        <option value="Not used since purchase" @if ($purchase == 'Not used since purchase') selected @endif>Not used since purchase</option>
+                                        <option value="Good Condition" @if($purchase->remarks == 'Good Condition') selected @endif>Good Condition</option>
+                                        <option value="Needing Repair" @if($purchase->remarks == 'Needing Repair') selected @endif>Needing Repair</option>
+                                        <option value="Unserviceable" @if($purchase->remarks == 'Unserviceable') selected @endif>Unserviceable</option>
+                                        <option value="Obsolete" @if($purchase->remarks == 'Obsolete') selected @endif>Obsolete</option>
+                                        <option value="No Longer Needed" @if($purchase->remarks == 'No Longer Needed') selected @endif>No Longer Needed</option>
+                                        <option value="Not used since purchase" @if($purchase->remarks == 'Not used since purchase') selected @endif>Not used since purchase</option>
                                     </select>
 
+                                </div>
+
+                                <div class="col-md-12 mt-3">
+                                    <label>Price Status:</label>
+                                    <select class="form-control" name="price_stat" id="price_stat">
+                                        <option value="Uncertain" @if($purchase->price_stat == 'Uncertain') selected @endif>Uncertain</option>
+                                        <option value="Certain" @if ($purchase->price_stat == 'Certain') selected @endif>Certain</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

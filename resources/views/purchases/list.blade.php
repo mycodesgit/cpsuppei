@@ -40,6 +40,7 @@
                                     <th>Property No.</th>
                                     <th>Office</th>
                                     <th>Item No.</th>
+                                    <th>Item</th>
                                     <th>Item Desc.</th>
                                     <th>Serial No.</th>
                                     <th>Item Price</th>
@@ -59,9 +60,17 @@
                                     <td>{{ $data->property_no_generated }}</td>
                                     <td>{{ $data->office_abbr }}</td>
                                     <td>{{ $data->item_number }}</td>
+                                    <td>{{ $data->item_name }}</td>
                                     <td>{{ $data->item_descrip }}</td>
                                     <td>{{ $data->serial_number }}</td>
-                                    <td>{{ $data->item_cost }}</td>
+                                    <td>
+                                        @if($data->price_stat === 'Uncertain')
+                                            <span style="color: red;">{{ $data->item_cost }}</span>
+                                        @else
+                                            <span>{{ $data->item_cost }}</span>
+                                        @endif
+                                    </td>
+
                                     <td>{{ $data->qty }}</td>
                                     <td>{{ $data->total_cost }}</td>
                                     <td>{{ $data->date_acquired }}</td>

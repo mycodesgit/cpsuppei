@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Setting;
-use App\Models\Property;
+use App\Models\property;
 use App\Models\Properties;
 use App\Models\Category;
 use Carbon\Carbon;
@@ -107,12 +107,12 @@ class PropertyTypeHighController extends Controller
         ]);
 
         try {
-            $AccountCodeName = $request->input('account_number');
-            $existingAccountCode = Properties::where('account_number', $AccountCodeName)->where('id', '!=', $request->input('id'))->first();
+            // $AccountCodeName = $request->input('account_number');
+            // $existingAccountCode = Properties::where('account_number', $AccountCodeName)->where('id', '!=', $request->input('id'))->first();
 
-            if ($existingAccountCode) {
-                return redirect()->back()->with('error', 'Account number already exists!');
-            }
+            // if ($existingAccountCode) {
+            //     return redirect()->back()->with('error', 'Account number already exists!');
+            // }
 
             $accountCode = Properties::findOrFail($request->input('id'));
             $accountCode->update([

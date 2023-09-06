@@ -29,6 +29,7 @@ class Purchases extends Model
         'remarks',
         'date_acquired',	
         'date_stat',
+        'price_stat',
         'print_stat'
     ];
     
