@@ -140,7 +140,7 @@
                                             <option value="{{ $data->cat_code }}" {{ $data->id == $selectedCatId ? 'selected' : '' }}>
                                                 {{ $data->cat_code }} - {{ $data->cat_name }}
                                             </option>
-                                        @endforeach
+                                        @endforeach 
                                     </select>
                                 </div>
                                 <div id="account-div" class="col-md-6 desc-column mt-3">
@@ -151,7 +151,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <input type="hidden" id="selected_account_id" name="selected_account_id">
+                                <input type="hidden" id="selected_account_id" name="selected_account_id" value="{{ $purchase->selected_account_id }}">
 
                                 <div class="col-md-12 mt-3">
                                     <label>Remarks:</label>
@@ -176,7 +176,12 @@
 
                                 <div class="col-md-12 mt-3">
                                     <label>Accountable Person:</label>
-                                    <input type="text" name="person_accnt" value="{{ $purchase->person_accnt }}" class="form-control">
+                                    <select class="form-control select2bs4" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
+                                        <option value=""> </option>
+                                        @foreach ($accnt as $data)
+                                            <option value="{{ $data->id }}" {{ $data->id == $selectedPerson ? 'selected' : '' }}>{{ $data->person_accnt }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -189,7 +194,7 @@
                                         Close
                                     </button>
                                     <button type="submit" name="btn-submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Updated
+                                        <i class="fas fa-save"></i> Update
                                     </button>
                                 </div>
                             </div>

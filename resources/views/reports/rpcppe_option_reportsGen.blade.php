@@ -88,12 +88,14 @@
 	</header>
 
 	<div class="text-type">
-		@if ($purchase === 'All' || empty($categoriesId))
-    		<u>ALL</u>
+		@if (request('categories_id') === 'All' || empty($categoriesId))
+		    @if (request('categories_id') === 'All')
+		        <u>ALL</u>
+		    @else
+		        <u>{{ $purchase->first()->account_title_abbr }}</u>
+		    @endif
 		@elseif ($purchase->isEmpty())
 		    ____________________
-		@else
-		    {{ $purchase->first()->account_title_abbr }}
 		@endif
 
 	</div>
@@ -122,13 +124,18 @@
 					<th>Value</th>
 					<th>Whereabout</th>
 				</tr>
+				<tr>
+					<th colspan="4">Balance Forwarded</th>
+					<th colspan="7" style="text-align: left">525, 050</th>
+				</tr>
 			</thead>
 			<tbody>
 				@if ($purchase->isEmpty())
 				<tr>
-				    <td colspan="11" align="center">No purchase data available.</td></tr>
+				    <td colspan="11" align="center">No purchase data available.</td>
+				</tr>
 				@else
-					@php $no = 1; @endphp
+					@php $no = 1; $grandTotal = 0; @endphp
 				    @foreach ($purchase as $purchaseData)
 				        <tr>
 				            <td>{{ $no++ }}</td>
@@ -143,7 +150,15 @@
 				            <td>{{ $purchaseData->remarks }}</td>
 				            <td>{{ $purchaseData->office_name }}</td>
 				        </tr>
+				        @if (is_numeric(str_replace(',', '', $purchaseData->item_cost)))
+					        @php $grandTotal += str_replace(',', '', $purchaseData->item_cost); @endphp
+					    @endif
 				    @endforeach
+				    <tr>
+			        	<td colspan="4" style="text-align: right"><strong>Grand Total</strong></td>
+			        	<td colspan="7"><strong>{{ number_format($grandTotal) }}</strong></td>
+
+			        </tr>
 				@endif
 			</tbody>
 			<tfoot>

@@ -26,7 +26,7 @@
                             <tbody id="tbody">
                                 @php $no = 1; @endphp
                                 @foreach($user as $data)
-                                <tr id="tr-{{ $data->id }}" class="{{ $cr === 'userEdit' ? $data->id == $selectedUser->id ? 'bg-selectEdit' : '' : ''}}">
+                                <tr id="tr-{{ $data->uid }}" class="{{ $cr === 'userEdit' ? $data->uid == $selectedUser->uid ? 'bg-selectEdit' : '' : ''}}">
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->campus_name }}</td>
                                     <td>{{ $data->lname }}</td>
@@ -35,10 +35,10 @@
                                     <td>{{ $data->username }}</td>
                                     <td>{{ $data->role }}</td>
                                     <td>
-                                        <a href="{{ route('userEdit', $data->id) }}" class="btn btn-info btn-xs btn-edit">
+                                        <a href="{{ route('userEdit', $data->uid) }}" class="btn btn-info btn-xs btn-edit" data-id="{{ $data->id }}">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </a>
-                                        <button value="{{ $data->id }}" class="btn btn-danger btn-xs users-delete">
+                                        <button value="{{ $data->uid }}" class="btn btn-danger btn-xs users-delete">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -55,14 +55,19 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-plus"></i> {{ $cr == 'userEdit' ? 'Edit' : 'Add'}}
+                        <i class="fas fa-{{ $cr == 'userEdit' ? 'pen' : 'plus'}}"></i> {{ $cr == 'userEdit' ? 'Edit' : 'Add'}}
                     </h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse" title="Collapse">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ $cr == 'userEdit' ? route('userUpdate', ['id' => $selectedUser->id]) : route('userCreate') }}" class="form-horizontal add-form-user" method="POST" id="addUser">
+                    <form action="{{ $cr == 'userEdit' ? route('userUpdate', ['id' => $selectedUser->uid]) : route('userCreate') }}" class="form-horizontal add-form-user" method="POST" id="addUser">
                         @csrf
                         @if ($cr == 'userEdit')
-                            <input type="hidden" name="id" value="{{ $selectedUser->id }}">
+                            <input type="hidden" name="id" value="{{ $selectedUser->uid }}">
                         @endif
                         <div class="form-group">
                             <div class="form-row">
@@ -112,7 +117,7 @@
                                     <select class="form-control select2bs4" name="campus_id">
                                         <option value=""> --- Select Here --- </option>
                                         @foreach ($camp as $cp)
-                                            <option value="{{ $cp->id }}">{{ $cp->campus_name }}</option>
+                                            <option value="{{ $cp->id }}" @if($cr === 'userEdit' && $cp->id === $selectedUser->campus_id) selected @endif>{{ $cp->campus_name }}</option>
                                         @endforeach
                                     </select>
                                </div>
@@ -124,10 +129,10 @@
                                     <label for="exampleInputName">Role:</label>
                                     <select class="form-control select_camp" name="role">
                                         <option value=""> --- Select Role --- </option>
-                                        <option value="Administrator">Administrator</option>
-                                        <option value="Supply Officer">Supply Officer</option>
-                                        <option value="Campus Admin">Campus Admin</option>
-                                        <option value="Supply Staff">Supply Staff</option>
+                                        <option value="Administrator" @if($cr === 'userEdit' && $selectedUser->role == 'Administrator' ? 'selected' : '' ) selected @endif>Administrator</option>
+                                        <option value="Supply Officer" @if($cr === 'userEdit' && $selectedUser->role == 'Supply Officer' ? 'selected' : '' ) selected @endif>Supply Officer</option>
+                                        <option value="Campus Admin" @if($cr === 'userEdit' && $selectedUser->role == 'Campus Admin' ? 'selected' : '' ) selected @endif>Campus Admin</option>
+                                        <option value="Supply Staff" @if($cr === 'userEdit' && $selectedUser->role == 'Supply Staff' ? 'selected' : '' ) selected @endif>Supply Staff</option>
                                     </select>
                                 </div>
                             </div>
@@ -139,7 +144,7 @@
                                         Close
                                     </button>
                                     <button type="submit" name="btn-submit" class="btn btn-primary">
-                                        <i class="fas fa-save"></i> Save
+                                        <i class="fas fa-save"></i> {{ $cr == 'userEdit' ? 'Update' : 'Save'}}
                                     </button>
                                 </div>
                             </div>

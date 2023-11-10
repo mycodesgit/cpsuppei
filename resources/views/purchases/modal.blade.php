@@ -169,7 +169,12 @@
 
                                 <div class="col-md-12 mt-3">
                                     <label>Accountable Person:</label>
-                                    <input type="text" name="person_accnt" class="form-control">
+                                    <select class="form-control select2bs4" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
+                                        <option value=""> </option>
+                                        @foreach ($accnt as $data)
+                                            <option value="{{ $data->id }}">{{ $data->person_accnt }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>

@@ -18,6 +18,6 @@ class RpcppeController extends Controller
     public function inventory_RPCPPEpdf() {
         $pdf = PDF::loadView('inventory.printRPCPPE')->setPaper('Legal', 'landscape');
         return $pdf->stream();
-        return view('inventory.printRPCPPE');
+        //return view('inventory.printRPCPPE');
     }
 }

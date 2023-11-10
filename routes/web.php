@@ -15,6 +15,8 @@ use App\Http\Controllers\PropertyTypeHighController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficeController;
+use App\Http\Controllers\EnduserController;
+use App\Http\Controllers\ReportsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,20 +88,31 @@ Route::group(['middleware'=>['login_auth']],function(){
             Route::post('list/update', [OfficeController::class, 'officeUpdate'])->name('officeUpdate');
             Route::get('list/delete/{id}', [OfficeController::class, 'officeDelete'])->name('officeDelete');
         });
+
+        Route::prefix('/accntperson')->group(function () {
+            Route::get('/list', [EnduserController::class, 'accountableRead'])->name('accountableRead');
+            Route::post('/list', [EnduserController::class, 'accountableCreate'])->name('accountableCreate');
+            Route::get('list/edit/{id}', [EnduserController::class, 'accountableEdit'])->name('accountableEdit');
+            Route::post('list/update', [EnduserController::class, 'accountableUpdate'])->name('accountableUpdate');
+            Route::get('list/delete/{id}', [EnduserController::class, 'accountableDelete'])->name('accountableDelete');
+        });
     });
 
     //Purchase
     Route::prefix('/purchases')->group(function () {
-        Route::get('/list', [PurchaseController::class, 'purchaseREAD'])->name('purchaseREAD');
-        Route::post('/list', [PurchaseController::class, 'purchaseCreate'])->name('purchaseCreate');
+        Route::get('/list/all', [PurchaseController::class, 'purchaseREAD'])->name('purchaseREAD');
+        Route::get('/list/ppe', [PurchaseController::class, 'purchaseppeREAD'])->name('purchaseppeREAD');
+        Route::get('/list/high', [PurchaseController::class, 'purchasehighREAD'])->name('purchasehighREAD');
+        Route::get('/list/low', [PurchaseController::class, 'purchaselowREAD'])->name('purchaselowREAD');
+        Route::post('/list/add', [PurchaseController::class, 'purchaseCreate'])->name('purchaseCreate');
         Route::get('/list/edit/{id}', [PurchaseController::class, 'purchaseEdit'])->name('purchaseEdit');
         Route::post('/list/update', [PurchaseController::class, 'purchaseUpdate'])->name('purchaseUpdate');
         Route::get('/list/cat/{id}/{mode}', [PurchaseController::class, 'purchaseCat'])->name('purchaseCat');
         Route::get('/list/prnt/{id}', [PurchaseController::class, 'purchasePrntSticker'])->name('purchasePrntSticker');
         Route::get('/list/delete/{id}', [PurchaseController::class, 'purchaseDelete'])->name('purchaseDelete');
 
-        Route::get('/list/reports', [PurchaseController::class, 'purchaseReportsOtption'])->name('purchaseReportsOtption');
-        Route::get('/list/reportGen', [PurchaseController::class, 'purchaseReportsOtptionGen'])->name('purchaseReportsOtptionGen');
+        Route::get('/list/sticker', [PurchaseController::class, 'purchaseStickerTemplate'])->name('purchaseStickerTemplate');
+        Route::get('/list/sticker/pdf', [PurchaseController::class, 'purchaseStickerTemplatePDF'])->name('purchaseStickerTemplatePDF');
     });
 
     //Inventory
@@ -108,6 +121,19 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/invRpcppeReports', [RpcppeController::class, 'inventory_RPCPPEreports'])->name('inventory_RPCPPEreports');
         Route::get('/invRpcppePDF', [RpcppeController::class, 'inventory_RPCPPEpdf'])->name('inventory_RPCPPEpdf');
 
+    });
+
+    //Reports
+    Route::prefix('/reports')->group(function () {
+        Route::get('/rpcppe/option', [ReportsController::class, 'rpcppeOption'])->name('rpcppeOption');
+        Route::get('/rpcppe/reports/gen', [ReportsController::class, 'rpcppeOptionReportGen'])->name('rpcppeOptionReportGen');
+        Route::get('/rpcsep/option', [ReportsController::class, 'rpcsepOption'])->name('rpcsepOption');
+        Route::get('/rpcsep/reports/gen', [ReportsController::class, 'rpcsepOptionReportGen'])->name('rpcsepOptionReportGen');
+        Route::get('/ics/option', [ReportsController::class, 'icsOption'])->name('icsOption');
+        Route::get('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
+        Route::get('/par/option', [ReportsController::class, 'parOption'])->name('parOption');
+        Route::post('/par/reports/gen', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
+        Route::get('/par/itemList/{id}', [ReportsController::class, 'itemList'])->name('itemList');
     });
 
 
@@ -123,6 +149,8 @@ Route::group(['middleware'=>['login_auth']],function(){
     //Settings
     Route::prefix('/settings')->group(function () {
         Route::get('/account-settings',[SettingsController::class,'user_settings'])->name('user_settings');
+        Route::post('/account-settings/update',[SettingsController::class,'profileUpdate'])->name('profileUpdate');
+        Route::post('/acccount-settings/updatePass',[SettingsController::class,'profilePassUpdate'])->name('profilePassUpdate');
         Route::get('/system-name',[SettingsController::class,'setting_list'])->name('setting_list');
         Route::post('/system-name',[SettingsController::class,'upload'])->name('upload');
     });

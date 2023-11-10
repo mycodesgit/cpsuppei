@@ -6,28 +6,35 @@
 .hidden {
     display: none;
 }
+.dropdown-item:hover {
+    background-color: #06601f;
+    color: #fff;
+}
 </style>
 
 <div class="container-fluid">
     <div class="row" style="padding-top: 100px;">
-        <div class="col-lg-12">
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size: 17pt"></h5>
+                    @include('partials.control_purchasesSidebar')
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-employee">
                             <i class="fas fa-plus"></i> Add New
                         </button>
-
-                        <a href="{{ route('purchaseReportsOtption') }}" class="btn btn-success btn-sm">
-                            <i class="fas fa-file-pdf"></i> Reports
-                        </a>
                     </h3>
                 </div>
 
                 <!-- Modal -->
                 @include('purchases.modal')
                 @include('purchases.modal-prntSticker')
-                
                 <!-- /End Modal -->
 
                 <div class="card-body">
@@ -61,8 +68,8 @@
                                     <td>{{ $data->office_abbr }}</td>
                                     <td>{{ $data->item_number }}</td>
                                     <td>{{ $data->item_name }}</td>
-                                    <td>{{ $data->item_descrip }}</td>
-                                    <td>{{ $data->serial_number }}</td>
+                                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 8ch;">{{ $data->item_descrip }}</td>
+                                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 8ch;">{{ $data->serial_number }}</td>
                                     <td>
                                         @if($data->price_stat === 'Uncertain')
                                             <span style="color: red;">{{ $data->item_cost }}</span>
@@ -76,17 +83,17 @@
                                     <td>{{ $data->date_acquired }}</td>
                                     <td>{{ $data->remarks }}</td>
                                     <td>
-                                        <a href="{{ route('purchaseEdit', ['id' => $data->id] ) }}" class="btn btn-info btn-xs btn-edit" title="View/Edit">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                        </a>
-
-                                        <button id="{{ $data->id }}" onclick="printSticker(this.id)" class="btn btn-success btn-xs btn-print" title="Print Sticker">
-                                            <i class="fas fa-print"></i>
-                                        </button>
-
-                                        <button value="{{ $data->id }}" class="btn btn-danger btn-xs purchase-delete" title="Delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        <div class="btn-group">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a href="{{ route('purchaseEdit', ['id' => $data->id] ) }}" class="dropdown-item btn-edit" href="#"><i class="fas fa-exclamation-circle"></i> Edit</a>
+                                                    <button id="{{ $data->id }}" onclick="printSticker(this.id)" class="dropdown-item btn-print" href="#"><i class="fas fa-print"></i> Sticker</button>
+                                                    <button value="{{ $data->id }}" class="dropdown-item purchase-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -181,9 +188,14 @@ function categor(val) {
             success: function(response) {
                 
                 $('#modal-prntSticker .modal-body').html(response);
-
                 
-                $('#modal-prntSticker').modal('show');    
+                $('#modal-prntSticker').modal('show');  
+
+                console.log(response);
+
+                $(".downloadStickerButton").each(function() {
+                    $(this).val(purchase_id);
+                });
             }
         });
     }

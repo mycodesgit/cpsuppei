@@ -6,6 +6,7 @@
     $unitActive = in_array($curr_route, ['unitRead', 'unitEdit']) ? 'active' : '';
     $itemtActive = in_array($curr_route, ['itemRead', 'itemEdit']) ? 'active' : '';
     $officeActive = in_array($curr_route, ['officeRead', 'officeEdit']) ? 'active' : '';
+    $accountableActive = in_array($curr_route, ['accountableRead', 'accountableEdit']) ? 'active' : '';
 @endphp
 
 <ul class="nav nav-pills nav-sidebar nav-compact flex-column">
@@ -48,7 +49,13 @@
     
     <li class="nav-item mb-1">
         <a href="{{ route('officeRead') }}" class="nav-link2 {{ $officeActive }}" style="color: #000;">
-            Offices
+            Campus & Offices
+        </a>
+    </li>
+
+    <li class="nav-item mb-1">
+        <a href="{{ route('accountableRead') }}" class="nav-link2 {{ $accountableActive }}" style="color: #000;">
+            Accountable Person
         </a>
     </li>
 </ul>

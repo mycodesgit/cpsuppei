@@ -14,7 +14,7 @@
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-body">
-                    {{-- <iframe src="{{ route('inventory_RPCPPEpdf') }}" width="100%" height="500"></iframe> --}}
+                    <iframe src="{{ route('inventory_RPCPPEpdf') }}" width="100%" height="500"></iframe>
                     <div class="card card-gray card-tabs">
                         <div class="card-header p-0 pt-1">
                             <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">

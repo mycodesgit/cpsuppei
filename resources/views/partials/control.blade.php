@@ -17,8 +17,12 @@
                 <i class="fas fa-server"></i> Purchases
             </a>
 
-            <a href="{{ route('inventoryRead') }}" class="btn btn-app {{ request()->is('inventory*') ? 'active' : '' }}">
+            {{-- <a href="{{ route('inventoryRead') }}" class="btn btn-app {{ request()->is('inventory*') ? 'active' : '' }}">
                 <i class="fas fa-box"></i> Inventory
+            </a> --}}
+
+            <a href="{{ route('rpcppeOption') }}" class="btn btn-app {{ request()->is('reports*') ? 'active' : '' }}">
+                <i class="fas fa-file-pdf"></i> Reports
             </a>
 
             @if(auth()->user()->role=='Administrator')

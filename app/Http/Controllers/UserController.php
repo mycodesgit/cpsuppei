@@ -70,9 +70,15 @@ class UserController extends Controller
     public function userEdit($id) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $camp = Campus::all();
-        $user = User::all();
+        
+        $user = User::join("campuses", "users.campus_id", "=", "campuses.id")
+            ->select('users.id as uid', 'users.*', 'campuses.*')
+            ->get();
 
-        $selectedUser = User::findOrFail($id);
+        $selectedUser = User::join("campuses", "users.campus_id", "=", "campuses.id")
+            ->select('users.id as uid', 'users.*', 'campuses.*')
+            ->where('users.id', $id) 
+            ->first();
 
         return view('users.list', compact('setting', 'user', 'camp', 'selectedUser'));
     }
@@ -113,6 +119,14 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Failed to update User!');
         }
     }
+    public function userDelete($id){
+        $users = User::find($id);
+        $users->delete();
 
+        return response()->json([
+            'status'=>200,
+            'uid'=>$id,
+        ]);
+    }
 
 }

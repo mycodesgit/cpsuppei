@@ -33,7 +33,7 @@
                 <th class="bdleft">Department/Office</th> <th class="bdright">{{ $purchase->office_name  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Person Accountable</th> <th class="bdright">{{ $purchase->office_officer  }}</th>
+                <th class="bdleft">Person Accountable</th> <th class="bdright">{{ $purchase->person_accnt  }}</th>
             </tr>
         </thead>
     </table>

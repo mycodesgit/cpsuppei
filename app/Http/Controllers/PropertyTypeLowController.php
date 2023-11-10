@@ -118,14 +118,14 @@ class PropertyTypeLowController extends Controller
             $accountCode->update([
                 'property_id' => $request->input('property_id'),
                 'category_id' => $request->input('category_id'), 
-                'account_number' => $AccountCodeName,
+                'account_number' => $request->input('account_number'),
                 'account_title' => $request->input('account_title'),
                 'account_title_abbr' => $request->input('account_title_abbr'),
             ]);
 
             return redirect()->route('lvEdit', ['id' => $accountCode->id])->with('success', 'Updated Successfully');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update Office!');
+            return redirect()->back()->with('error', 'Failed to update Property!');
         }
     }
 

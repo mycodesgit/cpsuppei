@@ -44,6 +44,21 @@
                                 <div class="tab-pane fade show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                                     <form action="{{ route('purchaseReportsOtptionGen') }}" class="form-horizontal add-form" id="" method="GET" target="_blank">
                                         @csrf
+                                        
+                                        <div class="form-group">
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    <label>Campus or Office:</label>
+                                                    <select class="form-control select2bs4" id="office_id" name="office_id" style="width: 100%;">
+                                                        <option value=""> ---Select Campus or Office Type--- </option>
+                                                        @foreach ($office as $data)
+                                                            <option value="{{ $data->id }}">{{ $data->office_abbr }} - {{ $data->office_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <div class="form-row">
                                                 <div class="col-md-6">
@@ -60,6 +75,8 @@
                                                     <label>Category:</label>
                                                     <select id="category_id" name="categories_id" onchange="categor(this.value)" data-placeholder="---Select Category---" class="form-control select2bs4" style="width: 100%;">
                                                         <option></option>
+                                                        
+                                                        <option value="All">All</option>
                                                         @foreach ($category as $data)
                                                             <option value="{{ $data->cat_code }}">
                                                                 {{ $data->cat_code }} - {{ $data->cat_name }}

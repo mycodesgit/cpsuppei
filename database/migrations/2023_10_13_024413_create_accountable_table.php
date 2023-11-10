@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('property', function (Blueprint $table) {
+        Schema::create('accountable', function (Blueprint $table) {
             $table->id();
+            $table->string('person_accnt');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('property');
+        Schema::dropIfExists('accountable');
     }
 };

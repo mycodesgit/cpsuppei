@@ -19,6 +19,8 @@
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('template/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="{{ asset('template/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
@@ -53,13 +55,14 @@
         }
 
         .container-fluid {
-            padding-right: 0 !important;
-            padding-left: 0 !important;
+            padding-right: 2 !important;
+            padding-left: 2 !important;
             margin-right: auto !important;
             margin-left: auto !important;
         }
         .btn-app{
             color: #1f5036;
+            box-shadow: 5px 8px 10px rgba(0, 0, 0, 0.2) !important;
         }
         .btn-app:hover{
             background-color: #187744;
@@ -114,7 +117,7 @@
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand-md navbar-light bg-greenn">
             <div class="container-fluid">
-                <a href="" class="navbar-brand">
+                <a href="" class="mt-2">
                     @if($setting->photo_filename)
                         <img src="{{ asset('uploads/'. $setting->photo_filename) }}" class="brand-image img-circle" alt="System Photo" style="box-shadow: 0 0 4px white;">
                     @else
@@ -122,9 +125,9 @@
                     @endif
 
                     @if($setting->system_name)
-                        <span class="brand-text text-light">{{ $setting->system_name }}</span>
+                        <span class="brand-text text-light text-bold">{{ $setting->system_name }}</span>
                     @else
-                        <span class="brand-text text-light"> Name of System</span>
+                        <span class="brand-text text-light text-bold"> Name of System</span>
                     @endif
                 </a>
 
@@ -147,7 +150,7 @@
             
             <div class="content-wrapper">
                 <div class="content-header">
-                    <div class="container-fluid" style="margin-top: auto">
+                    <div class="container-fluid" style="margin-top: -5px">
                         @include('partials.control')
                     </div>
                 </div>
@@ -193,6 +196,8 @@
 
 <!-- Select2 -->
 <script src="{{ asset('template/plugins/select2/js/select2.full.min.js') }}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{{ asset('template/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
 
 <!-- DataTables  & Plugins -->
 <script src="{{ asset('template/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -211,6 +216,9 @@
 <!-- jquery-validation -->
 <script src="{{ asset('template/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('template/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+
+<script src="{{ asset('js/validation/passValidation.js') }}"></script>
+<script src="{{ asset('js/validation/parValidation.js') }}"></script>
 
 <script>
     @if(Session::has('error'))
@@ -264,10 +272,12 @@
         }).buttons().container().appendTo('#example3_wrapper .col-md-6:eq(0)');
         $('.select2').select2()
 
-    //Initialize Select2 Elements
-    $('.select2bs4').select2({
-      theme: 'bootstrap4'
-    })
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+        //Bootstrap Duallistbox
+        $('.duallistbox').bootstrapDualListbox()
     });
 </script>
 

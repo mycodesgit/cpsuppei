@@ -16,7 +16,7 @@
                 
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" rel="noopener" id="downloadStickerButton">
+                    <button type="button" class="btn btn-primary downloadStickerButton" rel="noopener" data-id="" id="downloadStickerButton">
                         <i class="fas fa-download"></i> Download PNG
                     </button>
 
