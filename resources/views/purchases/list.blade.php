@@ -201,6 +201,18 @@ function categor(val) {
     }
 </script>
 
+<script>
+    $(document).ready(function() {
+        $('#accountableSelect').change(function() {
+            var selectedValue = $(this).val();
+            if (!selectedValue) {
+                var officeId = $('#officeSelect option:selected').data('office-id');
+                $('#officeSelect').val(officeId).trigger('change.select2');
+            }
+        });
+    });
+</script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 

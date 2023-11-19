@@ -219,6 +219,33 @@
 
 <script src="{{ asset('js/validation/passValidation.js') }}"></script>
 <script src="{{ asset('js/validation/parValidation.js') }}"></script>
+<script src="{{ asset('js/validation/rpcppeValidation.js') }}"></script>
+<script src="{{ asset('js/validation/rpcsepValidation.js') }}"></script>
+
+{{-- <script>
+    $(function () {
+        var table = $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('getPurchase') }}", // Update the route to match the controller method
+            responsive: true,
+            lengthChange: true, 
+            autoWidth: true,
+            columns: [
+                {data: 'total_cost'},
+                {data: 'property_no_generated'},
+                {data: 'office_id'},
+                {data: 'item_descrip'},
+                {data: 'item_number'},
+                {data: 'item_name'},
+                {
+                    "mData": null,
+                    "bSortable": false,
+                }
+            ]
+        }); 
+    });
+</script> --}}
 
 <script>
     @if(Session::has('error'))
@@ -319,6 +346,7 @@
 @include('../script.unit_script')
 @include('../script.item_script')
 @include('../script.office_script')
+@include('../script.accnt_script')
 <!-- end of manage/view script -->
 
 @include('../script.purchase_script')

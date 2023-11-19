@@ -31,6 +31,7 @@ class Purchases extends Model
         'date_stat',
         'price_stat',
         'person_accnt',
+        'person_accnt_name',
         'print_stat'
     ];
     

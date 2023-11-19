@@ -38,6 +38,34 @@ class PurchaseController extends Controller
         return view('purchases.list', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice','category', 'purchase'));
     }
 
+    // public function getPurchase(Request $request) {
+    //     if ($request->ajax()) {
+    //         $setting = Setting::firstOrNew(['id' => 1]);
+    //         $office = Office::all();
+    //         $accnt = Accountable::all();
+    //         $item = Item::all();
+    //         $unit = Unit::all();
+    //         $category = Category::all();
+    //         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
+    //         $property = Property::whereIn('id', [1, 2, 3])->get();
+
+    //         $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
+    //             ->join('property', 'purchases.properties_id', '=', 'property.id')
+    //             ->join('items', 'purchases.item_id', '=', 'items.id')
+    //             ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
+    //             ->get();
+
+    //         $purchase = $purchase->map(function ($data) {
+    //             // You can format data or perform other modifications here if needed
+    //             return $data;
+    //         });
+
+    //         return DataTables::of($purchase)->make(true);
+    //     }
+
+    //     return view('purchases.list', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice', 'category'));
+    // }
+
     public function purchaseppeREAD(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $office = Office::all();
@@ -122,10 +150,11 @@ class PurchaseController extends Controller
     public function purchasePrntSticker($id) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $user = User::where('role', '=', 'Supply Officer')->first();
-        $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
-            ->join('items', 'purchases.item_id', '=', 'items.id')
-            ->join('properties', 'purchases.selected_account_id', '=', 'properties.id')
-            ->select('purchases.*', 'purchases.id as pid', 'offices.*', 'items.*', 'properties.*')
+        $purchase = Purchases::leftJoin('offices', 'purchases.office_id', '=', 'offices.id')
+            ->leftJoin('items', 'purchases.item_id', '=', 'items.id')
+            ->leftJoin('properties', 'purchases.selected_account_id', '=', 'properties.id')
+            ->leftJoin('accountable', 'purchases.person_accnt', '=', 'accountable.id')
+            ->select('purchases.*', 'purchases.id as pid', 'offices.*', 'items.*', 'properties.*', 'accountable.*' )
             ->findOrFail($id);
             $propertiesId = $purchase->properties_id;
         return view('purchases.modal-sticker', compact('setting', 'purchase', 'user', 'propertiesId'));

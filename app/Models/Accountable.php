@@ -12,6 +12,7 @@ class Accountable extends Model
     protected $table = 'accountable';
 
     protected $fillable = [
-        'person_accnt'
+        'person_accnt',
+        'off_id'
     ];
 }

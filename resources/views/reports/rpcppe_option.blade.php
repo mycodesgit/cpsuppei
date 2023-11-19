@@ -17,7 +17,7 @@
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('rpcppeOptionReportGen') }}" class="form-horizontal add-form" id="" method="GET" target="_blank">
+                    <form action="{{ route('rpcppeOptionReportGen') }}" class="form-horizontal add-form" id="rpcppeReport" method="GET" target="_blank">
                         @csrf
                         
                         <div class="form-group">
@@ -39,7 +39,7 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <label>Property Type:</label>
-                                    <select class="form-control select2bs4" id="property_id" name="properties_id" style="width: 100%;">
+                                    <select class="form-control select2bs4" id="properties_id" name="properties_id" style="width: 100%;">
                                         @foreach ($property as $data)
                                             <option value="{{ $data->id }}">{{ $data->abbreviation }} - {{ $data->property_name }}</option>
                                         @endforeach
@@ -73,11 +73,12 @@
                                 <div class="col-md-6">
                                     <label>Date Range:</label>
                                     <div class="input-group">
-                                        <input type="date" name="start_date_acquired" class="form-control" placeholder="Start Date">
-                                        <div class="input-group-prepend input-group-append">
-                                            <span class="input-group-text">to</span>
+                                        <div class="sdate col-md-6">
+                                            <input type="date" name="start_date_acquired" class="form-control" placeholder="Start Date">
                                         </div>
-                                        <input type="date" name="end_date_acquired" class="form-control" placeholder="End Date">
+                                        <div class="edate col-md-6">
+                                            <input type="date" name="end_date_acquired" class="form-control" placeholder="End Date">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

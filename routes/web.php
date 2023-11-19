@@ -101,6 +101,7 @@ Route::group(['middleware'=>['login_auth']],function(){
     //Purchase
     Route::prefix('/purchases')->group(function () {
         Route::get('/list/all', [PurchaseController::class, 'purchaseREAD'])->name('purchaseREAD');
+        Route::get('/list/all/ajax', [PurchaseController::class, 'getPurchase'])->name('getPurchase');
         Route::get('/list/ppe', [PurchaseController::class, 'purchaseppeREAD'])->name('purchaseppeREAD');
         Route::get('/list/high', [PurchaseController::class, 'purchasehighREAD'])->name('purchasehighREAD');
         Route::get('/list/low', [PurchaseController::class, 'purchaselowREAD'])->name('purchaselowREAD');
@@ -133,7 +134,8 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
         Route::get('/par/option', [ReportsController::class, 'parOption'])->name('parOption');
         Route::post('/par/reports/gen', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
-        Route::get('/par/itemList/{id}', [ReportsController::class, 'itemList'])->name('itemList');
+        //Route::get('/par/itemList/{id}', [ReportsController::class, 'itemList'])->name('itemList');
+        Route::post('/par/itemList', [ReportsController::class, 'genOption'])->name('genOption');
     });
 
 

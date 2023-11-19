@@ -102,11 +102,10 @@
 				</tr>
 				<tr>
 					<th>Person Accountable: <span class="dataText">
-						@if (!empty($purchase->person_accnt))
-	                        {{ $purchase->person_accnt }}
-	                    @else
-	                        {{ $purchase->office_officer }}
-	                    @endif
+						@php
+					        $accountable = $purchase->person_accnt ?? $purchase->office_officer ?? null;
+					        echo is_null($accountable) ? 'N/A' : $accountable;
+					    @endphp
 					</span></th>
 				</tr>
 				<tr>

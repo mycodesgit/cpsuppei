@@ -26,7 +26,7 @@
                                     <select class="form-control select2bs4" name="office_id" data-placeholder=" ---Select Office--- " style="width: 100%;">
                                         <option value=""> --- Select Office Here --- </option>
                                         @foreach ($office as $data)
-                                            <option value="{{ $data->id }}">{{ $data->office_name }}</option>
+                                            <option value="{{ $data->id }}" data-office-id="{{ $data->id }}">{{ $data->office_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -169,7 +169,7 @@
 
                                 <div class="col-md-12 mt-3">
                                     <label>Accountable Person:</label>
-                                    <select class="form-control select2bs4" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
+                                    <select class="form-control select2bs4" id="accountableSelect" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
                                         <option value=""> </option>
                                         @foreach ($accnt as $data)
                                             <option value="{{ $data->id }}">{{ $data->person_accnt }}</option>

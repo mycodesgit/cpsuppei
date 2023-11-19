@@ -108,7 +108,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-save"></i> Save
+                                        <i class="fas fa-save"></i> {{ $cr == 'lvEdit' ? 'Update' : 'Save'}}
                                     </button>
                                 </div>
                             </div>

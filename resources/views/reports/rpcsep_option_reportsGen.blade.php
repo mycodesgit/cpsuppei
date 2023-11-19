@@ -114,6 +114,7 @@
 					<th rowspan="2" width="30">UNIT OF MEASURE</th>
 					<th rowspan="2" width="30">UNIT VALUE</th>
 					<th rowspan="2" width="30">QUANTITY <br>PER<br> PROPERTY CARD</th>
+					<th rowspan="2" width="30">Total Cost</th>
 					<th rowspan="2" width="30">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
 					<th colspan="2">SHORTAGE<br>OVERAGE</th>
 					<th rowspan="2">REMARKS</th>
@@ -124,18 +125,18 @@
 					<th>Value</th>
 					<th>Whereabout</th>
 				</tr>
-				<tr>
-					<th colspan="4">Balance Forwarded</th>
-					<th colspan="7" style="text-align: left"></th>
-				</tr>
 			</thead>
+			<tr>
+				<th colspan="6" style="text-align: right">Balance Brought Forwarded</th>
+				<th colspan="6" style="text-align: left"></th>
+			</tr>
 			<tbody>
 				@if ($purchase->isEmpty())
 				<tr>
 				    <td colspan="11" align="center">No purchase data available.</td>
 				</tr>
 				@else
-					@php $no = 1; $grandTotal = 0; @endphp
+					@php $no = 1; $overallTotal = 0; @endphp
 				    @foreach ($purchase as $purchaseData)
 				        <tr>
 				            <td>{{ $no++ }}</td>
@@ -144,26 +145,30 @@
 				            <td>{{ $purchaseData->unit_name }}</td>
 				            <td>{{ $purchaseData->item_cost }}</td>
 				            <td>{{ $purchaseData->qty }}</td>
+				            <td>{{ $purchaseData->total_cost }}</td>
 				            <td></td>
 				            <td>{{ $purchaseData->qty }}</td>
 				            <td></td>
 				            <td>{{ $purchaseData->remarks }}</td>
 				            <td>{{ $purchaseData->office_name }}</td>
 				        </tr>
-				        @if (is_numeric(str_replace(',', '', $purchaseData->item_cost)))
-					        @php $grandTotal += str_replace(',', '', $purchaseData->item_cost); @endphp
+				        @if (is_numeric(str_replace(',', '', $purchaseData->total_cost)))
+					        @php $overallTotal += str_replace(',', '', $purchaseData->total_cost); @endphp
 					    @endif
 				    @endforeach
 				    <tr>
-			        	<td colspan="4" style="text-align: right"><strong>Grand Total</strong></td>
-			        	<td colspan="7"><strong>{{ number_format($grandTotal) }}</strong></td>
-
+			        	<td colspan="6" style="text-align: right"><strong>Total</strong></td>
+			        	<td colspan="6"><strong>{{ number_format($overallTotal) }}</strong></td>
+			        </tr>
+			        <tr>
+			        	<td colspan="6" style="text-align: right"><strong>Grand Total</strong></td>
+			        	<td colspan="6"><strong></strong></td>
 			        </tr>
 				@endif
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="10" class="sign">
+					<td colspan="11" class="sign">
 				        <div class="footer-cell">
 							<div class="footer-cell-title">Certified Correct by:</div>
 							<div class="footer-cell-sign">MA. SOCORRO T. LLAMAS</div>

@@ -1,16 +1,20 @@
-@if(in_array($cur_viewSidebar_route, ['itemRead', 'itemEdit']))
-
 <script>
     $(function () {
-        $('#addItem').validate({
+        $('#addAccnt').validate({
             rules: {
-                item_name: {
+                person_accnt: {
+                    required: true
+                },
+                off_id: {
                     required: true
                 },
             },
             messages: {
-                item_name: {
-                    required: "Please Enter Item"
+                person_accnt: {
+                    required: "Please Enter Person Accountable"
+                },
+                off_id: {
+                    required: "Select Campus or Office"
                 },
             },
             errorElement: 'span',
@@ -28,8 +32,11 @@
     });
 </script>
 
+
+@if(in_array($cur_viewSidebar_route, ['accountableRead', 'accountableEdit']))
+
 <script>
-    $(document).on('click', '.item-delete', function(e){
+    $(document).on('click', '.accnt-delete', function(e){
         var id = $(this).val();
         $.ajaxSetup({
             headers: {
@@ -48,7 +55,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('itemDelete', ":id") }}".replace(':id', id),
+                    url: "{{ route('accountableDelete', ":id") }}".replace(':id', id),
                         success: function (response) {  
                         $("#tr-"+id).delay(1000).fadeOut();
                         Swal.fire({

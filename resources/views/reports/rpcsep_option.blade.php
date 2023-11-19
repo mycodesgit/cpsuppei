@@ -17,7 +17,7 @@
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('rpcsepOptionReportGen') }}" class="form-horizontal add-form" id="" method="GET" target="_blank">
+                    <form action="{{ route('rpcsepOptionReportGen') }}" class="form-horizontal add-form" id="rpcsepReport" method="GET" target="_blank">
                         @csrf
                         
                         <div class="form-group">
@@ -74,11 +74,12 @@
                                 <div class="col-md-6">
                                     <label>Date Range:</label>
                                     <div class="input-group">
-                                        <input type="date" name="start_date_acquired" class="form-control" placeholder="Start Date">
-                                        <div class="input-group-prepend input-group-append">
-                                            <span class="input-group-text">to</span>
+                                        <div class="sdate col-md-6">
+                                            <input type="date" name="start_date_acquired" class="form-control" placeholder="Start Date">
                                         </div>
-                                        <input type="date" name="end_date_acquired" class="form-control" placeholder="End Date">
+                                        <div class="edate col-md-6">
+                                            <input type="date" name="end_date_acquired" class="form-control" placeholder="End Date">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

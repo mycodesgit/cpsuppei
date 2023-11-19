@@ -44,6 +44,9 @@ class ReportsController extends Controller
         $endDate = $request->query('end_date_acquired');
         $selectId = $request->query('selected_account_id');
 
+        $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
+        $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
+
         $cond = ($categoriesId == 'All') ? '!=' : '=';
         $allOffice = ($officeId == 'All') ? '!=' : '=';
 
@@ -71,13 +74,56 @@ class ReportsController extends Controller
             })
             ->get();
 
+        $purchase1 = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
+            ->join('properties', 'purchases.selected_account_id', '=', 'properties.id')
+            ->join('units', 'purchases.unit_id', '=', 'units.id')
+            ->where('purchases.office_id', $allOffice, $officeId)
+            ->where('purchases.properties_id', $propertiesId)
+            ->where('purchases.categories_id', $cond, $categoriesId)
+            ->where('purchases.property_id', $cond, $propId)
+            ->where('purchases.selected_account_id', $cond, $selectId)
+            ->where(function ($query) use ($startDate) {
+                if ($startDate) {
+                    $query->where('purchases.date_acquired', '<', $startDate);
+                }
+            })
+            ->get();
+
+
+        $purchase2 = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
+            ->join('properties', 'purchases.selected_account_id', '=', 'properties.id')
+            ->join('units', 'purchases.unit_id', '=', 'units.id')
+            ->where('purchases.office_id', $allOffice, $officeId)
+            ->where('purchases.properties_id', $propertiesId)
+            ->where('purchases.categories_id', $cond, $categoriesId)
+            ->where('purchases.property_id', $cond, $propId)
+            ->where('purchases.selected_account_id', $cond, $selectId)
+            ->where(function ($query) use ($endDate) {
+                if ($endDate) {
+                    $query->where('purchases.date_acquired', '>', $endDate);
+                }
+            })
+            ->get();
+
+        $bforward = $purchase1->sum(function ($purchase) {
+            return str_replace(',', '', $purchase->total_cost);
+        });
+
+        // Ensure $purchase2 is not null or empty before attempting to use it
+        $bforward1 = $purchase2->isEmpty() ? 0 : $purchase2->sum(function ($purchase) {
+            return str_replace(',', '', $purchase->total_cost);
+        });
+
+
 
         $data = [
             'purchase' => $purchase,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'startDate' => $formattedStartDate,
+            'endDate' => $formattedEndDate,
             'selectedPropertyId' => $selectId,
-            'category_id' => $purchase
+            'category_id' => $purchase,
+            'bforward' => $bforward, 
+            'bforward1' => $bforward1, 
         ];
 
         $pdf = PDF::loadView('reports.rpcppe_option_reportsGen', $data)->setPaper('Legal', 'landscape');
@@ -107,6 +153,9 @@ class ReportsController extends Controller
         $startDate = $request->query('start_date_acquired');
         $endDate = $request->query('end_date_acquired');
         $selectId = $request->query('selected_account_id');
+
+        $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
+        $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
 
         $cond = ($categoriesId == 'All') ? '!=' : '=';
         $allOffice = ($officeId == 'All') ? '!=' : '=';
@@ -138,8 +187,8 @@ class ReportsController extends Controller
 
         $data = [
             'purchase' => $purchase,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'startDate' => $formattedStartDate,
+            'endDate' => $formattedEndDate,
             'selectedPropertyId' => $selectId,
             'category_id' => $purchase
         ];
@@ -174,6 +223,9 @@ class ReportsController extends Controller
         $endDate = $request->query('end_date_acquired');
         $selectId = $request->query('selected_account_id');
 
+        $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
+        $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
+
         $cond = ($categoriesId == 'All') ? '!=' : '=';
 
         $propId = ($categoriesId == 'All') ? $propId = '0' : $propId;
@@ -202,8 +254,8 @@ class ReportsController extends Controller
 
         $data = [
             'purchase' => $purchase,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
+            'startDate' => $formattedStartDate,
+            'endDate' => $formattedEndDate,
             'selectedPropertyId' => $selectId,
             'category_id' => $purchase
         ];
@@ -215,30 +267,39 @@ class ReportsController extends Controller
     public function parOption() {
         $setting = Setting::firstOrNew(['id' => 1]);
         $office = Office::all();
-        $itemPurchase = Purchases::join('items', 'purchases.item_id', '=', 'items.id')
-                            ->select('purchases.*', 'items.item_name')
-                            ->get();
-        $accnt = Accountable::all();
-        return view('reports.par_option', compact('setting', 'office', 'itemPurchase', 'accnt'));
+        
+        return view('reports.par_option', compact('setting', 'office'));
     }
 
     public function parOptionReportGen(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
          
-        $officeId = $request->office_id;
-        $userId = $request->person_accnt;
+        $id = $request->person_accnt;
         $itemId = $request->item_id;
+        $pAccountable = $request->pAccountable;
 
         $selectedItem = Item::whereIn('id', $itemId)->get();
+        $condAccnt = ($pAccountable == 'accountable') ? 'purchases.person_accnt' : 'purchases.office_id';
 
-        $relatedItems = Item::join('purchases', 'items.id', '=', 'purchases.item_id')
+        if($pAccountable == 'accountable'){
+            $relatedItems = Item::join('purchases', 'items.id', '=', 'purchases.item_id')
+                ->join('units', 'purchases.unit_id', '=', 'units.id')
+                ->join('offices', 'purchases.office_id', '=', 'offices.id')
+                ->join('accountable', 'purchases.person_accnt', '=', 'accountable.id')
+                ->select('purchases.*', 'items.*', 'offices.*', 'items.id as itemid', 'units.*', 'accountable.person_accnt')
+                ->whereIn('purchases.id', $itemId)
+                ->where($condAccnt, $id)
+                ->get();
+        }
+        else{
+         $relatedItems = Purchases::join('items', 'purchases.item_id', '=', 'items.id')
             ->join('units', 'purchases.unit_id', '=', 'units.id')
-            ->join('accountable', 'purchases.person_accnt', '=', 'accountable.id')
             ->join('offices', 'purchases.office_id', '=', 'offices.id')
-            ->select('purchases.*', 'items.*', 'items.id as itemid', 'units.*', 'accountable.person_accnt', 'offices.office_abbr')
+            ->select('purchases.*', 'items.*', 'offices.*', 'offices.id as oid', 'items.id as itemid', 'units.*', 'offices.office_abbr', 'offices.office_officer')
             ->whereIn('purchases.id', $itemId)
-            ->where('purchases.person_accnt', $userId)
+            ->where($condAccnt, $id)
             ->get();
+        }
 
         $data = [
             'selectedItem' => $selectedItem,
@@ -249,21 +310,51 @@ class ReportsController extends Controller
         return $pdf->stream();
     }
 
-    public function itemList($id) {
-        $itempar = Purchases::where('person_accnt', $id)
-            ->join('items', 'items.id', '=', 'purchases.item_id')
-            ->select('purchases.*', 'items.*', 'purchases.id as pid')
-            ->get();
-        
-        $options = "";
-        foreach ($itempar as $parItem) {
-            $options .= "<option value='".$parItem->pid."'>".$parItem->item_name.' '.$parItem->item_descrip."</option>";
+    public function genOption(Request $request) {
+        $id = $request->id;
+        $type = $request->type;
+        $pAccountable = $request->pAccountable;
+
+        if ($type == 'campus') {
+            $userAccountable = Accountable::where('off_id', $id)
+                ->select('person_accnt', 'id')
+                ->get();
+
+            $officeAccountable = Office::where('id', $id)
+                ->select('office_officer', 'id')
+                ->get();
+
+            $options = "";
+            foreach ($userAccountable as $accnt) {
+                $options .= "<option value='".$accnt->id."' data-person-cat='accountable' data-account-id='".$accnt->id."'>".$accnt->person_accnt."</option>";
+            }
+            foreach ($officeAccountable as $officeAccount) {
+                $options .= "<option value='".$officeAccount->id."' data-person-cat='officeAccountable' data-account-id='".$officeAccount->id."'>".$officeAccount->office_officer."- Office Head</option>";
+            }
+
+
+        } else {
+            if($pAccountable == 'officeAccountable'){
+                $itempar = Purchases::join('items', 'items.id', '=', 'purchases.item_id')
+                ->select('purchases.*', 'items.*', 'purchases.id as pid')
+                ->where('office_id', $id)
+                ->get();
+            }else{
+                 $itempar = Purchases::where('person_accnt', $id)
+                ->join('items', 'items.id', '=', 'purchases.item_id')
+                ->select('purchases.*', 'items.*', 'purchases.id as pid')
+                ->get();
+            }
+
+            $options = "";
+            foreach ($itempar as $parItem) {
+                $options .= "<option value='".$parItem->pid."'>".$parItem->item_name.' '.$parItem->item_descrip."</option>";
+            }
         }
 
         return response()->json([
             "options" => $options,
         ]);
-
     }
 
 }

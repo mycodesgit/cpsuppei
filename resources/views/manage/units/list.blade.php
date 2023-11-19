@@ -56,7 +56,7 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ $cr == 'unitEdit' ? route('unitUpdate', ['id' => $selectedUnit->id]) : route('unitCreate') }}" class="form-horizontal" method="post" id="unitForm">
+                    <form action="{{ $cr == 'unitEdit' ? route('unitUpdate', ['id' => $selectedUnit->id]) : route('unitCreate') }}" class="form-horizontal" method="post" id="addUnit">
 
                         @csrf
                         <div class="form-group">
@@ -76,7 +76,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-save"></i> Save
+                                        <i class="fas fa-save"></i> {{ $cr == 'unitEdit' ? 'Update' : 'Save'}}
                                     </button>
                                 </div>
                             </div>

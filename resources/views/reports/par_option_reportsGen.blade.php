@@ -103,7 +103,9 @@
 			        Entity Name: {{ $relatedItems[0]->office_abbr }}
 			    </p>
 			@else
-			    <p>No related items found.</p>
+			    <p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">
+			    	No related items found
+			    </p>
 			@endif
 
 		</p>
@@ -172,10 +174,14 @@
 					<td colspan="3" class="sign" style="text-align: center;">
 						<span class="text-receivedby" style="float: left">Received by:</span><br>
 						 <span class="footer-cell">
-							<span class="footer-cell-sign" style="text-decoration: underline;">{{ $relatedItem->person_accnt }}</span><br>
+							<span class="footer-cell-sign" style="text-decoration: underline;">
+								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->person_accnt : $relatedItems[0]->office_officer; }}
+							</span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
-							<span class="footer-cell-sign">____________________</span><br>
+							<span class="footer-cell-sign" style="text-decoration: underline;">
+								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->office_name : $relatedItems[0]->office_name; }}
+							</span><br>
 							<span class="footer-cell-text">Positon / Office</span><br><br>
 
 							<span class="footer-cell-sign">____________________</span><br>

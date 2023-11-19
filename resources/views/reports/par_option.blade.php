@@ -24,10 +24,10 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>Campus or Office:</label>
-                                    <select class="form-control select2bs4" id="campus_id" name="campus_id" style="width: 100%;">
+                                    <select class="form-control select2bs4" id="campus_id" name="campus_id" style="width: 100%;" onchange="genOption(this.value, 'campus', this.options[this.selectedIndex].getAttribute('data-person-cat'))">
                                         <option disabled selected value=""> --- Select Campus or Office Type --- </option>
                                         @foreach ($office as $data)
-                                            <option value="{{ $data->id }}">{{ $data->office_abbr }} - {{ $data->office_name }}</option>
+                                            <option value="{{ $data->id }}"  data-person-cat='none'>{{ $data->office_abbr }} - {{ $data->office_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -38,11 +38,10 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>End User:</label>
-                                    <select onchange="selItem(this.value)" class="form-control select2bs4" id="person_accnt" name="person_accnt" style="width: 100%;">
-                                        <option disabled selected value=""> --- Select End User --- </option>
-                                        @foreach ($accnt as $data)
-                                            <option value="{{ $data->id }}">{{ $data->person_accnt }}</option>
-                                        @endforeach
+                                    <input type="text" id="accountType" name="pAccountable" hidden>
+                                    <select class="form-control select2bs4" id="person_accnt" data-placeholder="Select Accountable" onchange="genOption(this.value, 'user', this.options[this.selectedIndex].getAttribute('data-person-cat'))" name="person_accnt" style="width: 100%;">
+                                        <option></option>
+                                     
                                     </select>
                                 </div>
                             </div>
@@ -52,7 +51,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>Item:</label>
-                                    <select class="form-control select2bs4" multiple="multiple" id="item_id" name="item_id[]" style="width: 100%;" required>
+                                    <select class="select2bs4" multiple="multiple" data-placeholder="Select Items" id="item_id" name="item_id[]" style="width: 100%;">
                                        
                                     </select>
                                 </div>
@@ -79,21 +78,44 @@
 </div>
 
 <script>
+function genOption(val, type, pAccountable) {
+    var endUserID = val;
 
-function selItem(val) {
-    var urlTemplate = "{{ route('itemList', [':id']) }}";
-    var url = urlTemplate.replace(':id', val);
-
-    $.ajax({
-        url: url,
-        type: "GET",
-        success: function(response) {
-            //console.log(response);
-            $('#item_list').empty();
-            $('#item_list').append(response.options);
-        }
-    });
-}
+    var urlTemplate = "{{ route('genOption') }}";
+    var csrfToken = '{{ csrf_token() }}'; 
+    if(pAccountable != "none"){
+        $('#accountType').val(pAccountable);
+    }
+    //alert(pAccountable);
+    if (endUserID) {
+        $.ajax({
+            url: urlTemplate,
+            type: "POST",
+            data: {
+                'id': endUserID,
+                'type': type,
+                'pAccountable': pAccountable,
+            },
+            headers: {
+                'X-CSRF-TOKEN': csrfToken 
+            },
+            success: function(response) {
+                console.log(response);
+                if(type == 'campus'){
+                    $('#person_accnt').empty();
+                    $('#person_accnt').append("<option value=''></option>");
+                    $('#person_accnt').append(response.options);
+                }else{
+                     $('#item_id').empty();
+                     $('#item_id').append("<option value=''></option>");
+                     $('#item_id').append(response.options);
+                }
+            }
+        });
+        
+    }
+};
 </script>
+
 
 @endsection

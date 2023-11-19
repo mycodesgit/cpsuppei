@@ -23,6 +23,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Accountable Person</th>
+                                    <th>Campus/Office</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -32,11 +33,12 @@
                                 <tr id="tr-{{ $data->id }}" class="{{ $cr === 'accountableEdit' ? $data->id == $selectedAccnt->id ? 'bg-selectEdit' : '' : ''}}">
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->person_accnt }}</td>
+                                    <td>{{ $data->office_name }}</td>
                                     <td>
                                         <a href="{{ route('accountableEdit', $data->id) }}" class="btn btn-info btn-xs btn-edit">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </a>
-                                        <button value="{{ $data->id}}" class="btn btn-danger btn-xs item-delete">
+                                        <button value="{{ $data->id}}" class="btn btn-danger btn-xs accnt-delete">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -52,11 +54,11 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">
-                        <i class="fas fa-plus"></i> {{ $cr == 'acccountableEdit' ? 'Edit' : 'Add'}}
+                        <i class="fas fa-{{ $cr == 'accountableEdit' ? 'pen' : 'plus'}}"></i> {{ $cr == 'accountableEdit' ? 'Edit' : 'Add'}}
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ $cr == 'accountableEdit' ? route('accountableUpdate', ['id' => $selectedAccnt->id]) : route('accountableCreate') }}" class="form-horizontal" method="post" id="">
+                    <form action="{{ $cr == 'accountableEdit' ? route('accountableUpdate', ['id' => $selectedAccnt->id]) : route('accountableCreate') }}" class="form-horizontal" method="post" id="addAccnt">
                         @csrf
                         <div class="form-group">
                             <div class="form-row">
@@ -73,8 +75,22 @@
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-12">
+                                    <label>Campus / Office:</label>
+                                    <select class="form-control select2bs4" id="off_id" name="off_id" style="width: 100%;">
+                                        <option disabled selected> --- Select here --- </option>
+                                        @foreach ($office as $data)
+                                            <option value="{{ $data->id }}" @if($cr === 'accountableEdit' && $data->id === $selectedAccnt->off_id) selected @endif>{{ $data->office_abbr }} - {{ $data->office_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-md-12">
                                     <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-save"></i> Save
+                                        <i class="fas fa-save"></i> {{ $cr == 'accountableEdit' ? 'Update' : 'Save'}}
                                     </button>
                                 </div>
                             </div>
@@ -85,4 +101,7 @@
         </div>
     </div>
 </div>
+
+
+
 @endsection

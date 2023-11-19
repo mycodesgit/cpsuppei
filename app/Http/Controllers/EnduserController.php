@@ -8,13 +8,17 @@ use Carbon\Carbon;
 
 use App\Models\Setting;
 use App\Models\Accountable;
+use App\Models\Office;
 
 class EnduserController extends Controller
 {
     public function accountableRead() {
         $setting = Setting::firstOrNew(['id' => 1]);
-        $accnt = Accountable::all();
-        return view('manage.enduser.accntlist', compact('setting', 'accnt'));
+        $office = Office::all();
+        $accnt = Accountable::join('offices', 'accountable.off_id', '=', 'offices.id')
+                ->select('accountable.*', 'offices.office_name', 'accountable.id as aid')
+                ->get();
+        return view('manage.enduser.accntlist', compact('setting', 'accnt', 'office'));
     }
 
     public function accountableCreate(Request $request) {
@@ -24,6 +28,7 @@ class EnduserController extends Controller
         if ($request->isMethod('post')) {
             $request->validate([
                 'person_accnt' => 'required|string|max:255',
+                'off_id' => 'required',
             ]);
 
             $accntName = $request->input('person_accnt');
@@ -36,6 +41,7 @@ class EnduserController extends Controller
             try {
                 Accountable::create([
                     'person_accnt' => $request->input('person_accnt'),
+                    'off_id' => $request->input('off_id'),
                 ]);
 
                 return redirect()->route('accountableRead')->with('success', 'Item stored successfully!');
@@ -47,17 +53,25 @@ class EnduserController extends Controller
 
     public function accountableEdit($id) {
         $setting = Setting::firstOrNew(['id' => 1]);
-        $accnt = Accountable::all();
+        $office = Office::all();
 
-        $selectedAccnt = Accountable::findOrFail($id);
+        $accnt = Accountable::join('offices', 'accountable.off_id', '=', 'offices.id')
+                ->select('accountable.*', 'offices.office_name', 'accountable.id as aid')
+                ->get();
 
-        return view('manage.enduser.accntlist', compact('setting', 'accnt', 'selectedAccnt'));
+        $selectedAccnt = Accountable::join('offices', 'accountable.off_id', '=', 'offices.id')
+                ->select('accountable.*', 'offices.office_name', 'accountable.id as aid')
+                ->where('accountable.id', $id)
+                ->first();
+
+        return view('manage.enduser.accntlist', compact('setting', 'accnt', 'selectedAccnt', 'office'));
     }
 
     public function accountableUpdate(Request $request) {
         $request->validate([
             'id' => 'required',
             'person_accnt' => 'required',
+            'off_id' => 'required',
         ]);
 
         try {
@@ -71,6 +85,7 @@ class EnduserController extends Controller
             $accnt = Accountable::findOrFail($request->input('id'));
             $accnt->update([
                 'person_accnt' => $accntName,
+                'off_id' => $request->input('off_id'),
             ]);
 
             return redirect()->route('accountableEdit', ['id' => $accnt->id])->with('success', 'Updated Successfully');
