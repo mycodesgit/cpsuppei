@@ -171,7 +171,7 @@
     <!-- Main Footer -->
     <footer class="main-footer">
         <div class="float-right d-none d-sm-inline ">
-            Procurement Management System
+            PPEI Management System
         </div>
         Developed and Maintain by <i>Management Information System Office</i>.
     </footer>
