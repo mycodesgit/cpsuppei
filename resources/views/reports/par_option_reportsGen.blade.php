@@ -100,7 +100,7 @@
 		<p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
 			@if (!$relatedItems->isEmpty())
 			    <p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">
-			        Entity Name: {{ $relatedItems[0]->office_abbr }}
+			        Entity Name: {{ $relatedItems[0]->office_name }}
 			    </p>
 			@else
 			    <p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">
@@ -129,6 +129,7 @@
 			        $maxRows = 20;
 			        $rowCount = 0;
 			        $overallTotal = 0;
+			        $grandTotal = 0;
 			    @endphp
 
 			    @foreach ($relatedItems as $relatedItem)
@@ -141,7 +142,12 @@
 			            <td align="right"><b>{{ $relatedItem->item_cost }}</b></td>
 
 			            @if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
-			                @php $overallTotal += str_replace(',', '', $relatedItem->item_cost); @endphp
+			                {{-- @php $overallTotal += str_replace(',', '', $relatedItem->item_cost); @endphp --}}
+			                @php 
+				                $itemTotal = $relatedItem->qty * str_replace(',', '', $relatedItem->item_cost);
+				                $overallTotal += $itemTotal;
+				                $grandTotal += $itemTotal; // Add to grand total
+				            @endphp
 			            @endif
 			        </tr>
 
@@ -164,6 +170,14 @@
 			            <td></td>
 			        </tr>
 			    @endfor
+			    	<tr>
+			            <td height="13"></td>
+			            <td></td>
+			            <td></td>
+			            <td></td>
+			            <td style="text-align: right">Grand Total:</td>
+			            <td style="text-align: right"><strong>{{ number_format($grandTotal, 2) }}</strong></td>
+			        </tr>
 				<tr>
 			    	<td colspan="3" style="text-align: right"><b class="text-total">Supplier:</b></td>
 			    	<td colspan="3" style="text-align: left"><b class="text-total"></b></td>

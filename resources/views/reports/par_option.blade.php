@@ -16,6 +16,11 @@
         </div>
         <div class="col-lg-10">
             <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-pdf"></i> PAR Reports
+                    </h3>
+                </div>
                 <div class="card-body">
                     <form action="{{ route('parOptionReportGen') }}" class="form-horizontal add-form" id="parReport" method="POST" target="_blank">
                         @csrf
@@ -51,7 +56,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>Item:</label>
-                                    <select class="select2bs4" multiple="multiple" data-placeholder="Select Items" id="item_id" name="item_id[]" style="width: 100%;">
+                                    <select class="select2bs4" multiple="multiple" data-placeholder="Select Items" id="item_id" name="item_id[]" style="width: 100%;" required>
                                        
                                     </select>
                                 </div>

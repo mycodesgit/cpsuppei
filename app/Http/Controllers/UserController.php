@@ -109,7 +109,7 @@ class UserController extends Controller
                 'fname' => $request->input('fname'),
                 'mname' => $request->input('mname'),
                 'username' => $userName,
-                'password' => $request->input('password'),
+                'password' => Hash::make($request->input('password')),
                 'campus_id' => $request->input('campus_id'),
                 'role' => $request->input('role'), 
             ]);

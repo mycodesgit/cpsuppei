@@ -10,9 +10,6 @@ $(function () {
             categories_id: {
                 required: true,
             },
-            property_id: {
-                required: true,
-            },
             start_date_acquired: {
                 required: true,
             },
@@ -29,9 +26,6 @@ $(function () {
             },
             categories_id: {
                 required: "Select Category",
-            },
-            property_id: {
-                required: "Select Account Title",
             },
             start_date_acquired: {
                 required: "Select Date",

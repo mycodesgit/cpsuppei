@@ -105,6 +105,7 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/list/ppe', [PurchaseController::class, 'purchaseppeREAD'])->name('purchaseppeREAD');
         Route::get('/list/high', [PurchaseController::class, 'purchasehighREAD'])->name('purchasehighREAD');
         Route::get('/list/low', [PurchaseController::class, 'purchaselowREAD'])->name('purchaselowREAD');
+
         Route::post('/list/add', [PurchaseController::class, 'purchaseCreate'])->name('purchaseCreate');
         Route::get('/list/edit/{id}', [PurchaseController::class, 'purchaseEdit'])->name('purchaseEdit');
         Route::post('/list/update', [PurchaseController::class, 'purchaseUpdate'])->name('purchaseUpdate');
@@ -128,13 +129,16 @@ Route::group(['middleware'=>['login_auth']],function(){
     Route::prefix('/reports')->group(function () {
         Route::get('/rpcppe/option', [ReportsController::class, 'rpcppeOption'])->name('rpcppeOption');
         Route::get('/rpcppe/reports/gen', [ReportsController::class, 'rpcppeOptionReportGen'])->name('rpcppeOptionReportGen');
+
         Route::get('/rpcsep/option', [ReportsController::class, 'rpcsepOption'])->name('rpcsepOption');
         Route::get('/rpcsep/reports/gen', [ReportsController::class, 'rpcsepOptionReportGen'])->name('rpcsepOptionReportGen');
+
         Route::get('/ics/option', [ReportsController::class, 'icsOption'])->name('icsOption');
-        Route::get('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
+        Route::post('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
+        Route::post('/ics/icsitemList', [ReportsController::class, 'icsgenOption'])->name('icsgenOption');
+
         Route::get('/par/option', [ReportsController::class, 'parOption'])->name('parOption');
         Route::post('/par/reports/gen', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
-        //Route::get('/par/itemList/{id}', [ReportsController::class, 'itemList'])->name('itemList');
         Route::post('/par/itemList', [ReportsController::class, 'genOption'])->name('genOption');
     });
 

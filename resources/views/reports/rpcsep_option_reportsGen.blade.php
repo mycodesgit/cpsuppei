@@ -92,7 +92,7 @@
 		    @if (request('categories_id') === 'All')
 		        <u>ALL</u>
 		    @else
-		        <u>{{ $purchase->first()->account_title_abbr }}</u>
+		        <u>{{ isset($purchase->first()->account_title_abbr) ? $purchase->first()->account_title_abbr : '' }}</u>
 		    @endif
 		@elseif ($purchase->isEmpty())
 		    ____________________
@@ -100,15 +100,15 @@
 
 	</div>
 	<div class="text1">(Type of Property, Plant and Equipment)</div>
-	<div class="text2">As at ________________________________</div>
+	<div class="text2">As at <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
 	<div class="text3">Fund Cluster : ________________________________</div>
-	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
+	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on______________.</div>
 
 	<div class="table-responsive">
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
 				<tr>
-					<th rowspan="2" width="10">ARTICLE</th>
+					<th rowspan="2">ARTICLE</th>
 					<th rowspan="2">DESCRIPTION</th>
 					<th rowspan="2">PROPERTY NO.</th>
 					<th rowspan="2" width="30">UNIT OF MEASURE</th>
@@ -128,7 +128,7 @@
 			</thead>
 			<tr>
 				<th colspan="6" style="text-align: right">Balance Brought Forwarded</th>
-				<th colspan="6" style="text-align: left"></th>
+				<th colspan="6" style="text-align: left">{{ number_format($bforward, 2) }}</th>
 			</tr>
 			<tbody>
 				@if ($purchase->isEmpty())
@@ -139,7 +139,7 @@
 					@php $no = 1; $overallTotal = 0; @endphp
 				    @foreach ($purchase as $purchaseData)
 				        <tr>
-				            <td>{{ $no++ }}</td>
+				            <td>{{ $purchaseData->item_name }}</td>
 				            <td>{{ $purchaseData->item_descrip }}</td>
 				            <td>{{ $purchaseData->property_no_generated }}</td>
 				            <td>{{ $purchaseData->unit_name }}</td>
@@ -158,17 +158,17 @@
 				    @endforeach
 				    <tr>
 			        	<td colspan="6" style="text-align: right"><strong>Total</strong></td>
-			        	<td colspan="6"><strong>{{ number_format($overallTotal) }}</strong></td>
+			        	<td colspan="6"><strong>{{ number_format($overallTotal, 2) }}</strong></td>
 			        </tr>
 			        <tr>
-			        	<td colspan="6" style="text-align: right"><strong>Grand Total</strong></td>
-			        	<td colspan="6"><strong></strong></td>
+			        	<td colspan="6" style="text-align: right"><strong>Grand Total {{ number_format($bforward1, 2) }}</strong></td>
+			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward + $bforward1, 2) }}</strong></td>
 			        </tr>
 				@endif
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="11" class="sign">
+					<td colspan="12" class="sign">
 				        <div class="footer-cell">
 							<div class="footer-cell-title">Certified Correct by:</div>
 							<div class="footer-cell-sign">MA. SOCORRO T. LLAMAS</div>
@@ -187,7 +187,7 @@
 							<div class="footer-cell-text">Signature over Printed Name of COA Representative</div>
 						</div>
 					</td>
-					<td rowspan=""></td>
+					{{-- <td rowspan=""></td> --}}
 				</tr>
 			</tfoot>
 		</table>

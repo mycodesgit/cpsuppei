@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('accountable', function (Blueprint $table) {
             $table->id();
             $table->string('person_accnt');
+            $table->string('off_id');
             $table->timestamps();
         });
     }

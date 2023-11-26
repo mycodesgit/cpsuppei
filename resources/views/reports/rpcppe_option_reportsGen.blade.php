@@ -31,15 +31,16 @@
 		  	border-collapse: collapse;
 		  	width: 100%;
 		  	margin-top: 20px;
+		  	margin-left: -10px;
 		}
 
 		#rpcppe td {
 			border: 1px solid #000;
-		  	padding: 8px;
+			padding: 2px;
+		  	font-size: 8pt;
 		} 
 		#rpcppe th {
 		  	border: 2px solid #000;
-		  	padding: 8px;
 		}
 
 		#rpcppe tfoot {
@@ -56,7 +57,7 @@
 		  	padding-bottom: 12px;
 		  	text-align: center;
 		  	background-color: #fff;
-		  	font-size: 10pt;
+		  	font-size: 8pt;
 		}
 		.footer-cell {
 			width: 32%;
@@ -100,27 +101,27 @@
 
 	</div>
 	<div class="text1">(Type of Property, Plant and Equipment)</div>
-	<div class="text2">As at ________________________________</div>
+	<div class="text2">As at <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
 	<div class="text3">Fund Cluster : ________________________________</div>
-	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
+	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on______________.</div>
 
 	<div class="table-responsive">
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
-				<tr>
-					<th rowspan="2" width="10">ARTICLE</th>
+				<tr style="padding: 2px">
+					<th rowspan="2" width="6">ARTICLE</th>
 					<th rowspan="2">DESCRIPTION</th>
 					<th rowspan="2">PROPERTY NO.</th>
-					<th rowspan="2" width="30">UNIT OF MEASURE</th>
+					<th rowspan="2" width="30">UNIT <br>OF MEASURE</th>
 					<th rowspan="2" width="30">UNIT VALUE</th>
 					<th rowspan="2" width="30">QUANTITY <br>PER<br> PROPERTY CARD</th>
 					<th rowspan="2" width="30">Total Cost</th>
 					<th rowspan="2" width="30">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
 					<th colspan="2">SHORTAGE<br>OVERAGE</th>
 					<th rowspan="2">REMARKS</th>
-					<th colspan="1">LOCATION</th>
+					<th colspan="1" width="10">LOCATION</th>
 				</tr>
-				<tr>
+				<tr style="padding: 2px">
 					<th>Quantity</th>	
 					<th>Value</th>
 					<th>Whereabout</th>
@@ -128,21 +129,21 @@
 			</thead>
 			<tr>
 				<th colspan="6" style="text-align: right">Balance Brought Forwarded</th>
-				<th colspan="6" style="text-align: left">{{ number_format($bforward, 2) }}</th>
+				<th colspan="6" style="text-align: left"> {{ number_format($bforward, 2) }}</th>
 			</tr>
 			<tbody>
 				@if ($purchase->isEmpty())
 				<tr>
-				    <td colspan="11" align="center">No purchase data available.</td>
+				    <td colspan="12" align="center">No purchase data available.</td>
 				</tr>
 				@else
 					@php $no = 1; $overallTotal = 0; @endphp
 				    @foreach ($purchase as $purchaseData)
 				        <tr>
-				            <td>{{ $no++ }}</td>
+				            <td>{{ $purchaseData->item_name }}</td>
 				            <td>{{ $purchaseData->item_descrip }}</td>
 				            <td>{{ $purchaseData->property_no_generated }}</td>
-				            <td>{{ $purchaseData->unit_name }}</td>
+				            <td style="text-align: center;">{{ $purchaseData->unit_name }}</td>
 				            <td>{{ $purchaseData->item_cost }}</td>
 				            <td>{{ $purchaseData->qty }}</td>
 				            <td>{{ $purchaseData->total_cost }}</td>
@@ -168,7 +169,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="11" class="sign">
+					<td colspan="12" class="sign">
 				        <div class="footer-cell">
 							<div class="footer-cell-title">Certified Correct by:</div>
 							<div class="footer-cell-sign">MA. SOCORRO T. LLAMAS</div>
@@ -187,7 +188,7 @@
 							<div class="footer-cell-text">Signature over Printed Name of COA Representative</div>
 						</div>
 					</td>
-					<td rowspan=""></td>
+					{{-- <td rowspan=""></td> --}}
 				</tr>
 			</tfoot>
 		</table>

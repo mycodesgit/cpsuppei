@@ -170,10 +170,10 @@
 
     <!-- Main Footer -->
     <footer class="main-footer">
-        <div class="float-right d-none d-sm-inline mt-2">
-            
+        <div class="float-right d-none d-sm-inline ">
+            Procurement Management System
         </div>
-        <strong>Maintain and Manage by <a href="#">MIS</a>.</strong> All rights reserved.
+        Developed and Maintain by <i>Management Information System Office</i>.
     </footer>
 </div>
 <!-- ./wrapper -->
@@ -213,39 +213,23 @@
 <script src="{{ asset('template/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('template/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
+<!-- ChartJS -->
+<script src="{{ asset('template/plugins/chart.js/Chart.min.js') }}"></script>
+<script src="{{ asset('js/chartjs/dashboardChart.js') }}"></script>
+<script src="{{ asset('js/chartjs/Bar.js') }}"></script>
+<script src="{{ asset('js/chartjs/MainBar.js') }}"></script>
+
 <!-- jquery-validation -->
 <script src="{{ asset('template/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('template/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
+<script src="{{ asset('js/validation/purchaseValidation.js') }}"></script>
 <script src="{{ asset('js/validation/passValidation.js') }}"></script>
-<script src="{{ asset('js/validation/parValidation.js') }}"></script>
 <script src="{{ asset('js/validation/rpcppeValidation.js') }}"></script>
 <script src="{{ asset('js/validation/rpcsepValidation.js') }}"></script>
+<script src="{{ asset('js/validation/icsValidation.js') }}"></script>
+<script src="{{ asset('js/validation/parValidation.js') }}"></script>
 
-{{-- <script>
-    $(function () {
-        var table = $('.data-table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('getPurchase') }}", // Update the route to match the controller method
-            responsive: true,
-            lengthChange: true, 
-            autoWidth: true,
-            columns: [
-                {data: 'total_cost'},
-                {data: 'property_no_generated'},
-                {data: 'office_id'},
-                {data: 'item_descrip'},
-                {data: 'item_number'},
-                {data: 'item_name'},
-                {
-                    "mData": null,
-                    "bSortable": false,
-                }
-            ]
-        }); 
-    });
-</script> --}}
 
 <script>
     @if(Session::has('error'))
@@ -349,6 +333,7 @@
 @include('../script.accnt_script')
 <!-- end of manage/view script -->
 
-@include('../script.purchase_script')
+
+@include('../script.purchaseAll_script')
 </body>
 </html>

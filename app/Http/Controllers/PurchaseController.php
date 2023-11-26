@@ -35,36 +35,8 @@ class PurchaseController extends Controller
                             ->join('items', 'purchases.item_id', '=', 'items.id')
                             ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
                             ->get();
-        return view('purchases.list', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice','category', 'purchase'));
+        return view('purchases.listajax', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice','category', 'purchase'));
     }
-
-    // public function getPurchase(Request $request) {
-    //     if ($request->ajax()) {
-    //         $setting = Setting::firstOrNew(['id' => 1]);
-    //         $office = Office::all();
-    //         $accnt = Accountable::all();
-    //         $item = Item::all();
-    //         $unit = Unit::all();
-    //         $category = Category::all();
-    //         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
-    //         $property = Property::whereIn('id', [1, 2, 3])->get();
-
-    //         $purchase = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
-    //             ->join('property', 'purchases.properties_id', '=', 'property.id')
-    //             ->join('items', 'purchases.item_id', '=', 'items.id')
-    //             ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
-    //             ->get();
-
-    //         $purchase = $purchase->map(function ($data) {
-    //             // You can format data or perform other modifications here if needed
-    //             return $data;
-    //         });
-
-    //         return DataTables::of($purchase)->make(true);
-    //     }
-
-    //     return view('purchases.list', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice', 'category'));
-    // }
 
     public function purchaseppeREAD(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
@@ -100,6 +72,15 @@ class PurchaseController extends Controller
                             ->where('purchases.properties_id', '=', '1')
                             ->get();
         return view('purchases.list', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice','category', 'purchase'));
+    }
+
+    public function getPurchase() {
+        $data = Purchases::join('offices', 'purchases.office_id', '=', 'offices.id')
+                        ->join('property', 'purchases.properties_id', '=', 'property.id')
+                        ->join('items', 'purchases.item_id', '=', 'items.id')
+                        ->select('purchases.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
+                        ->get();
+        return response()->json(['data' => $data]);
     }
 
     public function purchaselowREAD(Request $request) {
@@ -165,8 +146,11 @@ class PurchaseController extends Controller
         $purchase = Purchases::all();
         $office = Office::where('id', $request->office_id)->first();
         $accnt = Accountable::all();
+        $accnt1 = Accountable::find($request->person_accnt);
         $date = Carbon::now();
         $dateAcquired = $request->input('date_acquired');
+        
+        $accountablePer = !isset($request->person_accnt) ? $office->office_officer : $accnt1->person_accnt;
 
         if ($dateAcquired) {
             $formattedDate = date('Y', strtotime($dateAcquired));
@@ -228,6 +212,7 @@ class PurchaseController extends Controller
                     'remarks' => $request->input('remarks'),
                     'price_stat' => $request->input('price_stat'),
                     'person_accnt' => $request->input('person_accnt'),
+                    'person_accnt_name' => $accountablePer,
                 ]);
 
                 return redirect()->route('purchaseREAD')->with('success', 'Purchase Item  stored successfully!');

@@ -10,9 +10,6 @@ $(function () {
             categories_id: {
                 required: true,
             },
-            property_id: {
-                required: true,
-            },
             start_date_acquired: {
                 required: true,
             },
@@ -30,9 +27,6 @@ $(function () {
             categories_id: {
                 required: "Select Category",
             },
-            property_id: {
-                required: "Select Account Title",
-            },
             start_date_acquired: {
                 required: "Select Date",
             },
@@ -43,7 +37,8 @@ $(function () {
         errorElement: 'span',
         errorPlacement: function (error, element) {
             error.addClass('invalid-feedback');
-            element.closest('.col-md-6, .col-md-12, .sdate, .edate').append(error);        },
+            element.closest('.col-md-6, .col-md-12, .sdate, .edate').append(error);        
+        },
         highlight: function (element, errorClass, validClass) {
             $(element).addClass('is-invalid');
         },

@@ -9,25 +9,25 @@
 
 <ul class="nav nav-pills nav-sidebar nav-compact flex-column">
     <li class="nav-item mb-1">
-        <a href="{{ route('purchaseREAD') }}" class="nav-link2 {{ $allActive }}">
+        <a href="{{ route('purchaseREAD') }}" class="nav-link2 {{ $allActive }}" id="allButton">
             All
         </a>
     </li>
 
     <li class="nav-item mb-1">
-        <a href="{{ route('purchaseppeREAD') }}" class="nav-link2 {{ $ppeActive }}">
+        <a href="{{ route('purchaseppeREAD') }}" class="nav-link2 {{ $ppeActive }}" id="ppeButton">
             PPE
         </a>
     </li>
 
     <li class="nav-item mb-1">
-        <a href="{{ route('purchasehighREAD') }}" class="nav-link2 {{ $highActive }}">
+        <a href="{{ route('purchasehighREAD') }}" class="nav-link2 {{ $highActive }}" id="highButton">
             High Value
         </a>
     </li>
 
     <li class="nav-item mb-1">
-        <a href="{{ route('purchaselowREAD') }}" class="nav-link2 {{ $lowActive }}">
+        <a href="{{ route('purchaselowREAD') }}" class="nav-link2 {{ $lowActive }}" id="lowButton">
             Low Value
         </a>
     </li>

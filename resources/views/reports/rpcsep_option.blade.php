@@ -16,6 +16,11 @@
         </div>
         <div class="col-lg-10">
             <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-pdf"></i> RPCSEP Reports
+                    </h3>
+                </div>
                 <div class="card-body">
                     <form action="{{ route('rpcsepOptionReportGen') }}" class="form-horizontal add-form" id="rpcsepReport" method="GET" target="_blank">
                         @csrf

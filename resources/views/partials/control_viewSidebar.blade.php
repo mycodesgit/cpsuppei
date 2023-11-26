@@ -10,11 +10,11 @@
 @endphp
 
 <ul class="nav nav-pills nav-sidebar nav-compact flex-column">
-    <li class="nav-item mb-1">
-        <a href="#propertySubmenu" data-toggle="collapse" aria-expanded="false" class="nav-link2 {{ ($ppeActive || $lvActive || $hvActive) ? 'active' : '' }}" style="color: #000;" onclick="toggleSubmenu(this)">
+    <li class="nav-item mb-1 {{ $ppeActive  || $lvActive || $hvActive ? 'menu-open' : '' }}">
+        <a href="#" data-toggle="collapse" aria-expanded="false" class="nav-link2 {{ ($ppeActive || $lvActive || $hvActive) ? 'active' : '' }}" style="color: #000;" onclick="toggleSubmenu(this)">
             Property Type <i class="fas fa-angle-down right float-right"></i> 
         </a>
-        <ul class="collapse list-unstyled" id="propertySubmenu">
+        <ul class="nav nav-treeview">
             <li class="nav-item mb-1 mt-1">
                 <a href="{{ route('ppeRead') }}" class="nav-link2 {{ $ppeActive }}" style="color: #000;">
                     <i class="fas fa-minus nav-icon"></i> PPE

@@ -46,7 +46,7 @@
                                     <th>Property Type</th>
                                     <th>Property No.</th>
                                     <th>Office</th>
-                                    <th>Item No.</th>
+                                    {{-- <th>Item No.</th> --}}
                                     <th>Item</th>
                                     <th>Item Desc.</th>
                                     <th>Serial #.</th>

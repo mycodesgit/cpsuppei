@@ -116,29 +116,37 @@
 					$maxRows = 30;
 					$rowCount = 0;
 					$overallTotal = 0;
+					$grandTotal = 0;
+					$no = 1;
 				@endphp
 
-				@if (!$purchase->isEmpty())
-					@php $no = 1; $rowCount = 0;  @endphp
-					@foreach ($purchase as $purchaseData)
-						<tr>
-							<td>{{ $no++ }}</td>
-						    <td>{{ $purchaseData->qty }}</td>
-						    <td>{{ $purchaseData->unit_name }}</td>
-						    <td>{{ $purchaseData->item_descrip }}</td>
-						    <td>{{ $purchaseData->item_cost }}</td>
-						    <td>{{ $purchaseData->date_acquired }}</td>
-						    <td>{{ $purchaseData->property_no_generated }}</td>
-						    <td></td>
-						    @if (is_numeric(str_replace(',', '', $purchaseData->item_cost)))
-						        @php $overallTotal += str_replace(',', '', $purchaseData->item_cost); @endphp
+				 @foreach ($relatedItems as $relatedItem)
+					<tr>
+						<td>{{ $no++ }}</td>
+					    <td>{{ $relatedItem->qty }}</td>
+					    <td>{{ $relatedItem->unit_name }}</td>
+					    <td>{{ $relatedItem->item_name }} - {{ $relatedItem->item_descrip }}</td>
+					    <td>{{ $relatedItem->item_cost }}</td>
+					    <td>
+					    	@if($relatedItem->date_acquired)
+						        {{ \Carbon\Carbon::parse($relatedItem->date_acquired)->format('M. j, Y') }}
 						    @endif
-						</tr>
-					@if (is_numeric(str_replace(',', '', $purchaseData->item_cost)))
+					    </td>
+					    <td>{{ $relatedItem->property_no_generated }}</td>
+					    <td></td>
+						    @if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
+			                {{-- @php $overallTotal += str_replace(',', '', $relatedItem->item_cost); @endphp --}}
+			                @php 
+				                $itemTotal = $relatedItem->qty * str_replace(',', '', $relatedItem->item_cost);
+				                $overallTotal += $itemTotal;
+				                $grandTotal += $itemTotal; // Add to grand total
+				            @endphp
+			            @endif
+					</tr>
+					@if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
 					    @php $rowCount++; @endphp
 					@endif
-					@endforeach
-				@endif
+				@endforeach
 
 				@php
 					$emptyRows = $maxRows - $rowCount;
@@ -158,7 +166,7 @@
 				@endfor
 				<tr>
 			    	<th colspan="4" style="text-align: right"><b class="text-total">Total:</b></th>
-			    	<th colspan="4" style="text-align: left"><b class="text-total">{{ number_format($overallTotal) }}</b></th>
+			    	<th colspan="4" style="text-align: left"><b class="text-total">{{ number_format($grandTotal, 2) }}</b></th>
 			    </tr>
 			</tbody>
 			<tfoot>
@@ -166,10 +174,14 @@
 					<td colspan="4" class="sign" style="text-align: center;">
 						<span class="text-receivedby" style="float: left">Received by:</span><br>
 						 <span class="footer-cell">
-							<span class="footer-cell-sign">____________________</span><br>
+							<span class="footer-cell-sign" style="text-decoration: underline;">
+								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->person_accnt : $relatedItems[0]->office_officer; }}
+							</span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
-							<span class="footer-cell-sign">____________________</span><br>
+							<span class="footer-cell-sign" style="text-decoration: underline;">
+								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->office_name : $relatedItems[0]->office_name; }}
+							</span><br>
 							<span class="footer-cell-text">Positon / Office</span><br><br>
 
 							<span class="footer-cell-sign">____________________</span><br>
