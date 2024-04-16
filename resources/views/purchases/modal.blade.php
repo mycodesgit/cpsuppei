@@ -203,7 +203,7 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <label>Property No.</label>
-                                    <input type="text" name="purchase_id" id="purchase_id" hidden>
+                                    <input type="text" name="purch_id" id="purchase_id" hidden>
                                     <input type="text" id="png" hidden>
                                     <input type="text" name="itemnum" id="itemnum" hidden>
                                     <input type="text" id="property_no_generated" name="property_no_generated" autocomplete="off" class="form-control" readonly>
