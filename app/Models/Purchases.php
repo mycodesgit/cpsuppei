@@ -9,6 +9,7 @@ class Purchases extends Model
 {
     protected $table = 'purchases';
     protected $fillable = [
+        'po_number',
         'property_id',	
         'categories_id',
         'properties_id',	
@@ -22,6 +23,7 @@ class Purchases extends Model
         'unit_id',	
         'item_cost',	
         'qty',	
+        'qty_release',
         'total_cost',	
         'property_no_generated',
         'selected_account_id',

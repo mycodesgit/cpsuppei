@@ -56,7 +56,7 @@
 
 <body class="hold-transition login-page">
     <div id="particles-js"></div>
-    <div class="login-box">
+    <div class="login-box">x
     
         <div class="card">
             <div class="card-body">

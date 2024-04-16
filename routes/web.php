@@ -4,14 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ViewController;
-use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RpcppeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\PropertyTypeLowController;
-use App\Http\Controllers\PropertyTypeHighController;
+use App\Http\Controllers\PropertyTypeHighController; 
+use App\Http\Controllers\PropertyTypeIntController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficeController;
@@ -36,7 +37,9 @@ Route::get('/', function () {
 //Login
 Route::get('/login',[LoginController::class,'getLogin'])->name('getLogin');
 Route::post('/login',[LoginController::class,'postLogin'])->name('postLogin');
-
+Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
+Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
+Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
 //Middleware
 Route::group(['middleware'=>['login_auth']],function(){
     Route::get('/dashboard',[MasterController::class,'dashboard'])->name('dashboard');
@@ -44,7 +47,6 @@ Route::group(['middleware'=>['login_auth']],function(){
     //View
     Route::prefix('/view')->group(function () {
         // Route::get('/', [ViewController::class, 'index'])->name('manage-index');
-
         Route::prefix('/property')->group(function () {
             Route::post('list/create', [PropertyTypeController::class, 'ppeCreate'])->name('ppeCreate');
             Route::get('/listPPE', [PropertyTypeController::class, 'ppeRead'])->name('ppeRead');
@@ -63,6 +65,12 @@ Route::group(['middleware'=>['login_auth']],function(){
             Route::get('list/{id}/HVedit', [PropertyTypeHighController::class, 'hvEdit'])->name('hvEdit');
             Route::post('listHV/update', [PropertyTypeHighController::class, 'hvUpdate'])->name('hvUpdate');
             Route::get('listHV/delete/{id}', [PropertyTypeHighController::class, 'hvDelete'])->name('hvDelete');
+
+            Route::post('listINT/create', [PropertyTypeIntController::class, 'intCreate'])->name('intCreate');
+            Route::get('/listINT', [PropertyTypeIntController::class, 'intRead'])->name('intRead');
+            Route::get('list/{id}/INTedit', [PropertyTypeIntController::class, 'intEdit'])->name('intEdit');
+            Route::post('listINT/update', [PropertyTypeIntController::class, 'intUpdate'])->name('intUpdate');
+            Route::get('listINT/delete/{id}', [PropertyTypeIntController::class, 'intDelete'])->name('intDelete');
         });
 
         Route::prefix('/unit')->group(function () {
@@ -98,31 +106,35 @@ Route::group(['middleware'=>['login_auth']],function(){
         });
     });
 
-    //Purchase
-    Route::prefix('/purchases')->group(function () {
+    //purchases
+    Route::prefix('/purchases')->group(function() {
         Route::get('/list/all', [PurchaseController::class, 'purchaseREAD'])->name('purchaseREAD');
-        Route::get('/list/all/ajax', [PurchaseController::class, 'getPurchase'])->name('getPurchase');
-        Route::get('/list/ppe', [PurchaseController::class, 'purchaseppeREAD'])->name('purchaseppeREAD');
-        Route::get('/list/high', [PurchaseController::class, 'purchasehighREAD'])->name('purchasehighREAD');
-        Route::get('/list/low', [PurchaseController::class, 'purchaselowREAD'])->name('purchaselowREAD');
-
         Route::post('/list/add', [PurchaseController::class, 'purchaseCreate'])->name('purchaseCreate');
-        Route::get('/list/edit/{id}', [PurchaseController::class, 'purchaseEdit'])->name('purchaseEdit');
-        Route::post('/list/update', [PurchaseController::class, 'purchaseUpdate'])->name('purchaseUpdate');
-        Route::get('/list/cat/{id}/{mode}', [PurchaseController::class, 'purchaseCat'])->name('purchaseCat');
-        Route::get('/list/prnt/{id}', [PurchaseController::class, 'purchasePrntSticker'])->name('purchasePrntSticker');
-        Route::get('/list/delete/{id}', [PurchaseController::class, 'purchaseDelete'])->name('purchaseDelete');
-
-        Route::get('/list/sticker', [PurchaseController::class, 'purchaseStickerTemplate'])->name('purchaseStickerTemplate');
-        Route::get('/list/sticker/pdf', [PurchaseController::class, 'purchaseStickerTemplatePDF'])->name('purchaseStickerTemplatePDF');
+        Route::get('/list/delete/{id}', [PurchaseController::class, 'purchaseRelDel'])->name('purchaseRelDel');
+        
+        Route::get('/list/purchase-get/{id}', [PurchaseController::class, 'purchaseReleaseGet'])->name('purchaseReleaseGet');
+        Route::post('/list/purchase-post', [PurchaseController::class, 'purchaseReleasePost'])->name('purchaseReleasePost');
+        Route::get('/list/all/ajax', [PurchaseController::class, 'getPurchase'])->name('getPurchase');
     });
 
-    //Inventory
+    //inventory
     Route::prefix('/inventory')->group(function () {
-        Route::get('/invlist', [InventoryController::class, 'inventoryRead'])->name('inventoryRead');
-        Route::get('/invRpcppeReports', [RpcppeController::class, 'inventory_RPCPPEreports'])->name('inventory_RPCPPEreports');
-        Route::get('/invRpcppePDF', [RpcppeController::class, 'inventory_RPCPPEpdf'])->name('inventory_RPCPPEpdf');
+        Route::get('/list/all', [InventoryController::class, 'inventoryREAD'])->name('inventoryREAD');
+        Route::get('/list/all/ajax', [InventoryController::class, 'getInventory'])->name('getInventory');
+        Route::get('/list/ppe', [InventoryController::class, 'inventoryppeREAD'])->name('inventoryppeREAD');
+        Route::get('/list/high', [InventoryController::class, 'inventoryhighREAD'])->name('inventoryhighREAD');
+        Route::get('/list/low', [InventoryController::class, 'inventorylowREAD'])->name('inventorylowREAD');
+        Route::get('/list/intangible', [InventoryController::class, 'inventoryintangibleREAD'])->name('inventoryintangibleREAD');
 
+        Route::post('/list/add', [InventoryController::class, 'inventoryCreate'])->name('inventoryCreate');
+        Route::get('/list/edit/{id}', [InventoryController::class, 'inventoryEdit'])->name('inventoryEdit');
+        Route::post('/list/update', [InventoryController::class, 'inventoryUpdate'])->name('inventoryUpdate');
+        Route::get('/list/cat/{id}/{mode}', [InventoryController::class, 'inventoryCat'])->name('inventoryCat');
+        Route::get('/list/prnt/{id}', [InventoryController::class, 'inventoryPrntSticker'])->name('inventoryPrntSticker');
+        Route::get('/list/delete/{id}', [InventoryController::class, 'inventoryDelete'])->name('inventoryDelete'); 
+
+        Route::get('/list/sticker', [InventoryController::class, 'inventoryStickerTemplate'])->name('inventoryStickerTemplate');
+        Route::get('/list/sticker/pdf', [InventoryController::class, 'inventoryStickerTemplatePDF'])->name('inventoryStickerTemplatePDF');
     });
 
     //Reports
@@ -131,7 +143,7 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/rpcppe/reports/gen', [ReportsController::class, 'rpcppeOptionReportGen'])->name('rpcppeOptionReportGen');
 
         Route::get('/rpcsep/option', [ReportsController::class, 'rpcsepOption'])->name('rpcsepOption');
-        Route::get('/rpcsep/reports/gen', [ReportsController::class, 'rpcsepOptionReportGen'])->name('rpcsepOptionReportGen');
+        Route::post('/rpcsep/reports/gen', [ReportsController::class, 'rpcsepOptionReportGen'])->name('rpcsepOptionReportGen');
 
         Route::get('/ics/option', [ReportsController::class, 'icsOption'])->name('icsOption');
         Route::post('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');

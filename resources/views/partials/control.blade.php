@@ -14,12 +14,12 @@
             </a>
 
             <a href="{{ route('purchaseREAD') }}" class="btn btn-app {{ request()->is('purchases*') ? 'active' : '' }}">
-                <i class="fas fa-server"></i> Purchases
+                <i class="fas fa-shopping-cart"></i> Purchases
             </a>
 
-            {{-- <a href="{{ route('inventoryRead') }}" class="btn btn-app {{ request()->is('inventory*') ? 'active' : '' }}">
-                <i class="fas fa-box"></i> Inventory
-            </a> --}}
+            <a href="{{ route('inventoryREAD') }}" class="btn btn-app {{ request()->is('inventory*') ? 'active' : '' }}">
+                <i class="fas fa-server"></i> Inventory
+            </a>
 
             <a href="{{ route('rpcppeOption') }}" class="btn btn-app {{ request()->is('reports*') ? 'active' : '' }}">
                 <i class="fas fa-file-pdf"></i> Reports

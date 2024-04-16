@@ -91,6 +91,18 @@
                         
                         <div class="form-group">
                             <div class="form-row">
+                                <div class="col-md-6">
+                                    <label>File Type:</label>
+                                    <select class="form-control" id="file_type" name="file_type" style="width: 100%;">
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">EXCEL</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-row">
                                 <div class="col-md-12">
                                     <button type="reset" class="btn btn-danger" data-dismiss="modal">
                                         Reset
@@ -124,7 +136,7 @@ function categor(val) {
         modeval = 3; 
     }
 
-    var urlTemplate = "{{ route('purchaseCat', [':id', ':mode']) }}";
+    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
     
     if (categoryId) {
@@ -147,4 +159,7 @@ function categor(val) {
     }
 }
 </script>
+
+
+
 @endsection

@@ -101,7 +101,8 @@
 
 	</div>
 	<div class="text1">(Type of Property, Plant and Equipment)</div>
-	<div class="text2">As at <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
+	{{-- <div class="text2">As of <u>{{ $startDate }} to {{ $endDate }}</u>.</div> --}}
+	<div class="text2">As of <u>{{ $endDate }}</u>.</div>
 	<div class="text3">Fund Cluster : ________________________________</div>
 	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on______________.</div>
 
@@ -109,14 +110,14 @@
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
 				<tr style="padding: 2px">
-					<th rowspan="2" width="6">ARTICLE</th>
-					<th rowspan="2">DESCRIPTION</th>
-					<th rowspan="2">PROPERTY NO.</th>
-					<th rowspan="2" width="30">UNIT <br>OF MEASURE</th>
-					<th rowspan="2" width="30">UNIT VALUE</th>
-					<th rowspan="2" width="30">QUANTITY <br>PER<br> PROPERTY CARD</th>
-					<th rowspan="2" width="30">Total Cost</th>
-					<th rowspan="2" width="30">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
+					<th rowspan="2" width="100">ARTICLE</th>
+					<th rowspan="2" >DESCRIPTION</th>
+					<th rowspan="2" width="100">PROPERTY NO.</th>
+					<th rowspan="2" width="50">UNIT <br>OF MEASURE</th>
+					<th rowspan="2" width="50">UNIT VALUE</th>
+					<th rowspan="2" width="50">QUANTITY <br>PER<br> PROPERTY CARD</th>
+					<th rowspan="2" width="50">Total Cost</th>
+					<th rowspan="2" width="50">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
 					<th colspan="2">SHORTAGE<br>OVERAGE</th>
 					<th rowspan="2">REMARKS</th>
 					<th colspan="1" width="10">LOCATION</th>
@@ -124,17 +125,17 @@
 				<tr style="padding: 2px">
 					<th>Quantity</th>	
 					<th>Value</th>
-					<th>Whereabout</th>
+					<th width="100">Whereabout</th>
 				</tr>
 			</thead>
 			<tr>
-				<th colspan="6" style="text-align: right">Balance Brought Forwarded</th>
+				<th colspan="6" style="text-align: right">Balance Brought Forwarded - {{ number_format($countBforward, 2) }}</th>
 				<th colspan="6" style="text-align: left"> {{ number_format($bforward, 2) }}</th>
 			</tr>
 			<tbody>
 				@if ($purchase->isEmpty())
 				<tr>
-				    <td colspan="12" align="center">No purchase data available.</td>
+				    <td colspan="12" style="text-align:center;">No purchase data available.</td>
 				</tr>
 				@else
 					@php $no = 1; $overallTotal = 0; @endphp
@@ -162,8 +163,8 @@
 			        	<td colspan="6"><strong>{{ number_format($overallTotal, 2) }}</strong></td>
 			        </tr>
 			        <tr>
-			        	<td colspan="6" style="text-align: right"><strong>Grand Total {{ number_format($bforward1, 2) }}</strong></td>
-			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward + $bforward1, 2) }}</strong></td>
+			        	<td colspan="6" style="text-align: right"><strong>Grand Total</strong></td>
+			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward, 2) }}</strong></td>
 			        </tr>
 				@endif
 			</tbody>
@@ -183,9 +184,9 @@
 						</div>
 
 						<div class="footer-cell">
-							<div class="footer-cell-title">Verify by:</div>
-							<div class="footer-cell-sign">&nbsp;</div>
-							<div class="footer-cell-text">Signature over Printed Name of COA Representative</div>
+							<div class="footer-cell-title">Verified by</div>
+							<div class="footer-cell-sign">JEREMIAS G. AGUI</div>
+							<div class="footer-cell-text">State Auditor IV</div>
 						</div>
 					</td>
 					{{-- <td rowspan=""></td> --}}

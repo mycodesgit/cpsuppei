@@ -121,15 +121,15 @@ function addCommas(text) {
   }
 
   function extractLastThree() {
-		var inputString = document.getElementById("account_number").value;
-		var lastThreeDigits = inputString.split("-").pop();
-		document.getElementById("code").value = lastThreeDigits;
-	}
+        var inputString = document.getElementById("account_number").value;
+        var lastThreeDigits = inputString.split("-").pop();
+        document.getElementById("code").value = lastThreeDigits;
+    }
 
   function extractLastThree1() {
-		var inputString = document.getElementById("account_number_id").value;
-		var lastThreeDigits = inputString.split("-").pop();
-		document.getElementById("code_edit").value = lastThreeDigits;
-	}
+        var inputString = document.getElementById("account_number_id").value;
+        var lastThreeDigits = inputString.split("-").pop();
+        document.getElementById("code_edit").value = lastThreeDigits;
+    }
 </script>
 @endif

@@ -8,14 +8,31 @@ use Carbon\Carbon;
 
 use App\Models\Setting;
 use App\Models\Item;
+use App\Models\Inventory;
+use App\Models\Campus;
+use App\Models\Office;
 
 class ItemController extends Controller
 {
     //
-    public function itemRead(){
+    public function itemRead(Request $request){
+        $off = $request->off;
         $setting = Setting::firstOrNew(['id' => 1]);
         $item = Item::all();
-        return view('manage.items.list', compact('setting', 'item'));
+        $campus = Campus::all();
+        $office = Office::all();
+
+        $inventoryCount = [];
+
+        foreach ($item as $ite) {
+            $query = Inventory::where('item_id', $ite->id);
+            if (isset($off)) {
+                $query->where('office_id', $off);
+            }
+            $inventoryCount[$ite->id] = $query->count();
+        }
+
+        return view('manage.items.list', compact('setting', 'item', 'inventoryCount', 'campus', 'office'));
     }
 
     public function itemCreate(Request $request) {
@@ -46,13 +63,26 @@ class ItemController extends Controller
         }
     }
 
-    public function itemEdit($id) {
+    public function itemEdit(Request $request, $id) {
+        $off = $request->off;
         $setting = Setting::firstOrNew(['id' => 1]);
         $item = Item::all();
+        $campus = Campus::all();
+        $office = Office::all();
+
+        $inventoryCount = [];
+
+        foreach ($item as $ite) {
+            $query = Inventory::where('item_id', $ite->id);
+            if (isset($off)) {
+                $query->where('office_id', $off);
+            }
+            $inventoryCount[$ite->id] = $query->count();
+        }
 
         $selectedItem = Item::findOrFail($id);
 
-        return view('manage.items.list', compact('setting', 'item', 'selectedItem'));
+        return view('manage.items.list', compact('setting', 'item', 'selectedItem', 'inventoryCount', 'campus', 'office'));
     }
 
     public function itemUpdate(Request $request) {

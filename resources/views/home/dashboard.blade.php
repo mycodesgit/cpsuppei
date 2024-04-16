@@ -98,7 +98,7 @@
         <div class="col-lg-9">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Bar Chart Property Type of All Campuses</h3>
+                    <h3 class="card-title">Bar Chart Property Type of All Extension Campuses</h3>
                     <div class="card-tools">
                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -109,9 +109,6 @@
                     <div class="chart">
                         <div class="position-relative mb-4">
                             <canvas id="sales-chart"
-                                    {{-- data-main="{!! $MainPpeCount !!}"
-                                    data-main-high="{!! $MainHighCount !!}" 
-                                    data-main-low="{!! $MainLowCount !!}" --}}
                                     data-ilog="{!! $IlogPpeCount !!}"
                                     data-ilog-high="{!! $IlogHighCount !!}" 
                                     data-ilog-low="{!! $IlogLowCount !!}"
@@ -171,9 +168,9 @@
                         <div class="col-md-8">
                             <div class="chart-responsive pt-1">
                                 <canvas id="pieChart"
-                                        data-ppe="{{ $purchasePPECount }}"
-                                        data-high="{{ $purchaseHighCount }}"
-                                        data-low="{{ $purchaseLowCount }}"
+                                        data-ppe="{{ $inventoryPPECount }}"
+                                        data-high="{{ $inventoryHighCount }}"
+                                        data-low="{{ $inventoryLowCount }}"
                                         style="min-height: 500;">
                                 </canvas>
                             </div>

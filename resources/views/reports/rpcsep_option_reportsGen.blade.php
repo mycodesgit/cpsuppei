@@ -161,8 +161,8 @@
 			        	<td colspan="6"><strong>{{ number_format($overallTotal, 2) }}</strong></td>
 			        </tr>
 			        <tr>
-			        	<td colspan="6" style="text-align: right"><strong>Grand Total {{ number_format($bforward1, 2) }}</strong></td>
-			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward + $bforward1, 2) }}</strong></td>
+			        	<td colspan="6" style="text-align: right"><strong>Grand Total </strong></td>
+			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward, 2) }}</strong></td>
 			        </tr>
 				@endif
 			</tbody>

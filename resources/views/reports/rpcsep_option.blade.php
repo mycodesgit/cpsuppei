@@ -22,7 +22,7 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('rpcsepOptionReportGen') }}" class="form-horizontal add-form" id="rpcsepReport" method="GET" target="_blank">
+                    <form action="{{ route('rpcsepOptionReportGen') }}" class="form-horizontal add-form" id="rpcsepReport" method="POST" target="_blank">
                         @csrf
                         
                         <div class="form-group">
@@ -46,6 +46,7 @@
                                     <label>Property Type:</label>
                                     <select class="form-control select2bs4" id="property_id" name="properties_id" style="width: 100%;">
                                         <option value=""> ---Select--- </option>
+                                        <option>All</option>
                                         @foreach ($property as $data)
                                             <option value="{{ $data->id }}">{{ $data->abbreviation }} - {{ $data->property_name }}</option>
                                         @endforeach
@@ -56,7 +57,6 @@
                                     <label>Category:</label>
                                     <select id="category_id" name="categories_id" onchange="categor(this.value)" data-placeholder="---Select Category---" class="form-control select2bs4" style="width: 100%;">
                                         <option></option>
-                                        
                                         <option value="All">All</option>
                                         @foreach ($category as $data)
                                             <option value="{{ $data->cat_code }}">
@@ -73,6 +73,7 @@
                                 <div class="col-md-6" id="account-div">
                                     <label>Account Title:</label>
                                     <select id="account_title" name="property_id" data-placeholder="---Select Account Title---" class="form-control select2bs4" style="width: 100%;">
+                                        
                                     </select>
                                 </div>
                                 <input type="hidden" id="selected_account_id" name="selected_account_id">
@@ -86,6 +87,18 @@
                                             <input type="date" name="end_date_acquired" class="form-control" placeholder="End Date">
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label>File Type:</label>
+                                    <select class="form-control" id="file_type" name="file_type" style="width: 100%;">
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">EXCEL</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +138,7 @@ function categor(val) {
         modeval = 3; 
     }
 
-    var urlTemplate = "{{ route('purchaseCat', [':id', ':mode']) }}";
+    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
     
     if (categoryId) {

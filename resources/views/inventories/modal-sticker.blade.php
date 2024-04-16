@@ -61,11 +61,11 @@
 </head>
 <body>
 	@php
-		$serialNumbers = explode(';', $purchase->serial_number);
+		$serialNumbers = explode(';', $inventory->serial_number);
 	@endphp
 
 	@foreach ($serialNumbers as $serial)
-	<div class="colortable{{ $purchase->pid }}" style="background-color: {{ $propertiesId == 3 ? 'yellow' : ($propertiesId == 2 ? 'lightgreen' : ($propertiesId == 1 ? 'green' : '')) }}">
+	<div class="colortable{{ $inventory->pid }}" style="background-color: {{ $propertiesId == 3 ? 'yellow' : ($propertiesId == 2 ? 'lightgreen' : ($propertiesId == 1 ? 'green' : '')) }}">
 		<table id="sticker">
 			<thead>
 				<tr>
@@ -80,36 +80,36 @@
 				</tr>
 				<tr>
 					<th rowspan="10" class="sticker-text-label"><canvas id="qrcode{{ $loop->iteration }}" class="elevation-3"></canvas></th>
-					<th><b class="sticker-label">Property No.:</b> <span class="dataText">{{ $purchase->property_no_generated  }}</span class=""></th>
+					<th><b class="sticker-label">Property No.:</b> <span class="dataText">{{ $inventory->property_no_generated  }}</span class=""></th>
 				</tr>
 				<tr>
-					<th>Item: <span class="dataText">{{ $purchase->item_name  }}</span></th>
+					<th>Item: <span class="dataText">{{ $inventory->item_name  }}</span></th>
 				</tr>
 				<tr>
-					<th>Classification: <span class="dataText">{{ $purchase->account_title_abbr  }}</span></th>
+					<th>Classification: <span class="dataText">{{ $inventory->account_title_abbr  }}</span></th>
 				</tr>
 				<tr>
-					<th>Model/Brand: <span class="dataText">{{ $purchase->item_model  }}</span></th>
+					<th>Model/Brand: <span class="dataText">{{ $inventory->item_model  }}</span></th>
 				</tr>
 				<tr>
 					<th>Serial No.: <span class="dataText">{{ trim($serial) }}</span></th>
 				</tr>
 				<tr>
-					<th>Acquisition Cost: <span class="dataText">{{ $purchase->item_cost  }}</span></th>
+					<th>Acquisition Cost: <span class="dataText">{{ $inventory->item_cost  }}</span></th>
 				</tr>
 				<tr>
-					<th>Acquisition Date: <span class="dataText">{{ $purchase->date_acquired  }}</span></th>
+					<th>Acquisition Date: <span class="dataText">{{ $inventory->date_acquired  }}</span></th>
 				</tr>
 				<tr>
 					<th>Person Accountable: <span class="dataText">
 						@php
-					        $accountable = $purchase->person_accnt ?? $purchase->office_officer ?? null;
+					        $accountable = $inventory->person_accnt ?? $inventory->office_officer ?? null;
 					        echo is_null($accountable) ? 'N/A' : $accountable;
 					    @endphp
 					</span></th>
 				</tr>
 				<tr>
-					<th>Assignment: <span class="dataText">{{ $purchase->office_name  }}</span></th>
+					<th>Assignment: <span class="dataText">{{ $inventory->office_name  }}</span></th>
 				</tr>
 				<tr>
 					<th>Validation Sign: <span class="dataText"></span></th>
@@ -123,11 +123,11 @@
 		</table>
 	</div>
 	@php
-    	$qrCodeValue = $purchase->property_no_generated . '-' . trim($serial);
+    	$qrCodeValue = $inventory->property_no_generated . '-' . trim($serial);
 	@endphp
 
 	<script>
-	    var inputText = "{{ $purchase->property_no_generated }}";
+	    var inputText = "{{ $inventory->property_no_generated }}";
 	    var qr = new QRious({
 	        element: document.getElementById("qrcode{{ $loop->iteration }}"),
 	        value: inputText,
@@ -139,7 +139,7 @@
 
 
 <script>
-    var inputText= "{{ $purchase->property_no_generated  }}";
+    var inputText= "{{ $inventory->property_no_generated  }}";
     var qr = new QRious({
         element: document.getElementById("qrcode1"),
         value: inputText,

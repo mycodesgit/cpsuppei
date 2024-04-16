@@ -14,14 +14,14 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" style="font-size: 17pt"></h5>
-                    @include('partials.control_purchasesSidebar')
+                    @include('partials.control_inventorySidebar')
                 </div>
             </div>
         </div>
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-body">
-                    <iframe src="{{ route('purchaseStickerTemplatePDF') }}" width="100%" height="510"></iframe>
+                    <iframe src="{{ route('inventoryStickerTemplatePDF') }}" width="100%" height="510"></iframe>
                 </div>
             </div>
         </div>

@@ -30,7 +30,7 @@ class EnduserController extends Controller
                 'person_accnt' => 'required|string|max:255',
                 'off_id' => 'required',
             ]);
-
+            
             $accntName = $request->input('person_accnt');
             $existingAccnt = Accountable::where('person_accnt', $accntName)->first();
 

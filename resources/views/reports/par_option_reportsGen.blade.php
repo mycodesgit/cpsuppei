@@ -136,7 +136,12 @@
 			        <tr>
 			            <td>{{ $relatedItem->qty }}</td>
 			            <td>{{ $relatedItem->unit_name }}</td>
-			            <td>{{ $relatedItem->item_name }} {{ $relatedItem->item_descrip }} {{ $relatedItem->item_model }} S/N:{{ $relatedItem->serial_number }}</td>
+						<td>
+							<b>{{ $relatedItem->item_name }}</b>
+							<br><i> {{ $relatedItem->item_descrip }}</i><br>
+							<b>MODEL:</b>{{ $relatedItem->item_model ? str_replace('Model:', '', $relatedItem->item_model) : '' }}<br>
+							<b>SN : </b> {{ $relatedItem->serial_number }}
+						</td>
 			            <td>{{ $relatedItem->property_no_generated }}</td>
 			            <td>{{ $relatedItem->date_acquired }}</td>
 			            <td align="right"><b>{{ $relatedItem->item_cost }}</b></td>

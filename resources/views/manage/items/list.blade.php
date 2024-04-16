@@ -17,30 +17,55 @@
         <div class="col-lg-7">
             <div class="card">
                 <div class="card-body">
+                    <div class="container mb-3" style="margin-left: 58%;">
+                        <form action="" method="GET" >
+                            <div class="row">
+                        
+                                <div class="col-4">
+                                    <select class="form-control form-control-sm" name="off">
+                                        <option value="">All</option>
+                                        @foreach($office as $off)
+                                            <option value="{{ $off->id }}" @if(request('off') == $off->id) selected @endif>{{ $off->office_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                        
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-secondary btn-sm">Filter <i class="fas fa-filter fa-sm"></i> </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="table-responsive">
                         <table id="example1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Item Name</th>
+                                    <th>Count</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php $no = 1; @endphp
                                 @foreach($item as $data)
-                                <tr id="tr-{{ $data->id }}" class="{{ $cr === 'itemEdit' ? $data->id == $selectedItem->id ? 'bg-selectEdit' : '' : ''}}">
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $data->item_name }}</td>
-                                    <td>
-                                        <a href="{{ route('itemEdit', $data->id) }}" class="btn btn-info btn-xs btn-edit">
-                                            <i class="fas fa-exclamation-circle"></i>
-                                        </a>
-                                        <button value="{{ $data->id}}" class="btn btn-danger btn-xs item-delete">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                    <tr id="tr-{{ $data->id }}" class="{{ $cr === 'itemEdit' ? $data->id == $selectedItem->id ? 'bg-selectEdit' : '' : ''}}">
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $data->item_name }}</td>
+                                        <td>
+                                            @if(isset($inventoryCount[$data->id]))
+                                                 {{ $inventoryCount[$data->id] }}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('itemEdit', $data->id) }}?off={{ request('off') }}" class="btn btn-info btn-xs btn-edit">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </a>
+                                            <button value="{{ $data->id }}" class="btn btn-danger btn-xs item-delete">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>

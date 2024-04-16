@@ -60,7 +60,7 @@
                             </thead>
                             <tbody>
                                 @php $no = 1; @endphp
-                                @foreach($purchase as $data)
+                                @foreach($inventory as $data)
                                 <tr id="tr-{{ $data->id }}" class="">
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->abbreviation }}</td>
@@ -90,7 +90,7 @@
                                                 <div class="dropdown-menu">
                                                     <a href="{{ route('purchaseEdit', ['id' => $data->id] ) }}" class="dropdown-item btn-edit" href="#"><i class="fas fa-exclamation-circle"></i> Edit</a>
                                                     <button id="{{ $data->id }}" onclick="printSticker(this.id)" class="dropdown-item btn-print" href="#"><i class="fas fa-print"></i> Sticker</button>
-                                                    <button value="{{ $data->id }}" class="dropdown-item purchase-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
+                                                    <button value="{{ $data->id }}" class="dropdown-item inventory-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
                                                 </div>
                                             </div>
                                         </div>

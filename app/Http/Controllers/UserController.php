@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
@@ -129,4 +131,24 @@ class UserController extends Controller
         ]);
     }
 
+    public function appLogin(Request $request)
+    {
+        $credentials = $request->only('uname', 'pass');
+        $uname = $credentials['uname'];
+        $pass = $credentials['pass'];
+
+        if (Auth::attempt(['username' => $uname, 'password' => $pass])) {
+            $user = Auth::user();
+
+            $token = ([
+                'id' => $user->id,
+                'fname' => $user->fname,
+                'lname' => $user->lname
+            ]);
+    
+            return response()->json(['token' => $token]);
+        }
+
+        return response()->json(['error' => '0'], 401);
+    }
 }

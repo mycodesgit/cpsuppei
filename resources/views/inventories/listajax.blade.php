@@ -18,7 +18,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" style="font-size: 17pt"></h5>
-                    @include('partials.control_purchasesSidebar')
+                    @include('partials.control_inventorySidebar')
                 </div>
             </div>
         </div>
@@ -26,31 +26,31 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-employee">
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-inventory">
                             <i class="fas fa-plus"></i> Add New
                         </button>
                     </h3>
                 </div>
 
                 <!-- Modal -->
-                @include('purchases.modal')
-                @include('purchases.modal-prntSticker')
+                @include('inventories.modal')
+                @include('inventories.modal-prntSticker')
                 <!-- /End Modal -->
-
+                
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-hover">
+                        <table id="example" class="table table-bordered table-hover inventory-table">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Property Type</th>
                                     <th>Property No.</th>
                                     <th>Office</th>
-                                    <th>Item No.</th>
+                                    <th>Model</th>
                                     <th>Item</th>
-                                    <th>Item Desc.</th>
+                                    <th>Desc.</th>
                                     <th>Serial #.</th>
-                                    <th>Item Price</th>
+                                    <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total Cost</th>
                                     <th>Date Acq.</th>
@@ -59,44 +59,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $no = 1; @endphp
-                                @foreach($purchase as $data)
-                                <tr id="tr-{{ $data->id }}" class="">
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $data->abbreviation }}</td>
-                                    <td>{{ $data->property_no_generated }}</td>
-                                    <td>{{ $data->office_abbr }}</td>
-                                    <td>{{ $data->item_number }}</td>
-                                    <td>{{ $data->item_name }}</td>
-                                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 8ch;">{{ $data->item_descrip }}</td>
-                                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 8ch;">{{ $data->serial_number }}</td>
-                                    <td>
-                                        @if($data->price_stat === 'Uncertain')
-                                            <span style="color: red;">{{ $data->item_cost }}</span>
-                                        @else
-                                            <span>{{ $data->item_cost }}</span>
-                                        @endif
-                                    </td>
-
-                                    <td>{{ $data->qty }}</td>
-                                    <td>{{ $data->total_cost }}</td>
-                                    <td>{{ $data->date_acquired }}</td>
-                                    <td>{{ $data->remarks }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a href="{{ route('purchaseEdit', ['id' => $data->id] ) }}" class="dropdown-item btn-edit" href="#"><i class="fas fa-exclamation-circle"></i> Edit</a>
-                                                    <button id="{{ $data->id }}" onclick="printSticker(this.id)" class="dropdown-item btn-print" href="#"><i class="fas fa-print"></i> Sticker</button>
-                                                    <button value="{{ $data->id }}" class="dropdown-item purchase-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                
                             </tbody>
                         </table>
                     </div>
@@ -155,7 +118,7 @@ function categor(val) {
     var price = $("#item_cost").val().replace(/,/g, '');
     
     var modeval = (price <= 49000) ? 2 : 3;
-    var urlTemplate = "{{ route('purchaseCat', [':id', ':mode']) }}";
+    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
     
     if (categoryId) {
@@ -183,7 +146,7 @@ function categor(val) {
 <script>
     function printSticker(purchase_id) {
         $.ajax({
-            url: "{{ route('purchasePrntSticker', ':id') }}".replace(':id', purchase_id),
+            url: "{{ route('inventoryPrntSticker', ':id') }}".replace(':id', purchase_id),
             method: 'GET',
             success: function(response) {
                 

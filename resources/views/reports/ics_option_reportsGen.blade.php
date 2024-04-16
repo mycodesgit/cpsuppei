@@ -113,7 +113,7 @@
 			</thead>
 			<tbody>
 				@php
-					$maxRows = 30;
+					$maxRows = 25;
 					$rowCount = 0;
 					$overallTotal = 0;
 					$grandTotal = 0;
@@ -125,7 +125,12 @@
 						<td>{{ $no++ }}</td>
 					    <td>{{ $relatedItem->qty }}</td>
 					    <td>{{ $relatedItem->unit_name }}</td>
-					    <td>{{ $relatedItem->item_name }} - {{ $relatedItem->item_descrip }}</td>
+					    <td>
+							<b>{{ $relatedItem->item_name }}</b>
+							<br><i> {{ $relatedItem->item_descrip }}</i><br>
+							<b>MODEL:</b>{{ $relatedItem->item_model ? str_replace('Model:', '', $relatedItem->item_model) : '' }}<br>
+							<b>SN : </b> {{ $relatedItem->serial_number }}
+						</td>
 					    <td>{{ $relatedItem->item_cost }}</td>
 					    <td>
 					    	@if($relatedItem->date_acquired)

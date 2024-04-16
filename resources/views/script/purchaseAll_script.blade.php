@@ -1,6 +1,6 @@
 <script>
     $(document).ready(function() {
-        $('#example').DataTable({
+        $('.purchase-table').DataTable({
             "ajax": "{{ route('getPurchase') }}",
             responsive: true,
             lengthChange: true,
@@ -9,9 +9,8 @@
             "columns": [
                 {data: 'id', name: 'id', orderable: false, searchable: false},
                 {data: 'abbreviation'},
-                {data: 'property_no_generated'},
-                {data: 'office_abbr'},
-                // {data: 'item_number'},
+                {data: 'po_number'},
+                {data: 'item_model'},
                 {data: 'item_name'},
                 {data: 'item_descrip',
                     render: function(data, type, row) {
@@ -41,20 +40,19 @@
                     }
                 },
                 {data: 'qty'},
+                {data: 'qty_release'},
                 {data: 'total_cost'},
                 {data: 'date_acquired'},
-                {data: 'remarks'},
                 {data: 'id',
                     render: function(data, type, row) {
                         if (type === 'display') {
-                            var editUrl = "{{ route('purchaseEdit', ['id' => ':id']) }}".replace(':id', data);
+                            var editUrl = "{{ route('inventoryEdit', ['id' => ':id']) }}".replace(':id', data);
                             return `
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown"></button>
                                     <div class="dropdown-menu">
-                                        <a href="${editUrl}" class="dropdown-item btn-edit" href="#"><i class="fas fa-exclamation-circle"></i> Edit</a>
-                                        <button id="${data}" onclick="printSticker(${data})" class="dropdown-item btn-print" href="#"><i class="fas fa-print"></i> Sticker</button>
-                                        <button value="${data}" class="dropdown-item purchase-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
+                                        <button id="${data}" class="dropdown-item" onclick="purchaseReleaseGet(${data})" data-toggle="modal" data-target="#modal-release"><i class="fas fa-paper-plane"></i> Release</button>
+                                        <button value="${data}" class="dropdown-item purchaserel-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
                                     </div>
                                 </div>
                             `;
@@ -79,7 +77,38 @@
 </script>
 
 <script>
-    $(document).on('click', '.purchase-delete', function(e){
+    function purchaseReleaseGet(dataid){
+        $.ajax({
+            type: "GET",
+            url: "{{ route('purchaseReleaseGet', ':id') }}".replace(':id', dataid),
+            success: function (data) {
+                // alert(data);
+                $('#rel_item_name').val(data.purchase.item_name);
+                $('#rel_po_number').val(data.purchase.po_number);
+                $('#purchase_id').val(dataid);
+                $('#rel_qty').attr('max', data.qty_left);
+                $('#qty-left').html('LEFT :'+ data.qty_left);
+                $('#png').val(data.pcode);
+                $('#property_no_generated').val(data.pcode);
+                $('#itemnum').val(data.itemnum);
+                $('#unrel_serial').html(data.unrel_serial);
+            }
+        });
+    }
+</script>
+
+<script>
+    function releasOffice(selectElement){
+        var png = $('#png').val();
+        var selectedOption = selectElement.options[selectElement.selectedIndex];
+        var officeCode = selectedOption.getAttribute('data-officecode');
+        
+        $('#property_no_generated').val(png+'-'+officeCode)
+    }
+</script>
+
+<script>
+    $(document).on('click', '.purchaserel-delete', function(e){
         var id = $(this).val();
         $.ajaxSetup({
             headers: {
@@ -98,7 +127,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('purchaseDelete', ":id") }}".replace(':id', id),
+                    url: "{{ route('purchaseRelDel', ":id") }}".replace(':id', id),
                         success: function (response) {  
                         $("#tr-"+id).delay(1000).fadeOut();
                         Swal.fire({

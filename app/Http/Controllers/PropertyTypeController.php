@@ -31,7 +31,7 @@ class PropertyTypeController extends Controller
 
     public function ppeRead(){
         $setting = Setting::firstOrNew(['id' => 1]);
-        $categories = Category::where('property_id', 3)->get();
+        $categories = Category::all();
         $properties = Properties::join("categories", "properties.category_id", "=", "categories.id")
             ->orderBy('properties.account_number', 'asc')
             ->select('properties.*', 'categories.cat_name')

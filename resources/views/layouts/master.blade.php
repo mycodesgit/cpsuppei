@@ -147,12 +147,11 @@
         </nav>
         <!-- /.navbar -->
 
-            
             <div class="content-wrapper">
                 <div class="content-header">
                     <div class="container-fluid" style="margin-top: -5px">
                         @include('partials.control')
-                    </div>
+                    </div> 
                 </div>
 
                 <!-- Main content -->
@@ -180,8 +179,6 @@
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
-<script src="{{ asset('app.js') }}"></script>
 <!-- jQuery -->
 <script src="{{ asset('template/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
@@ -224,6 +221,7 @@
 <script src="{{ asset('template/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 
 <script src="{{ asset('js/validation/purchaseValidation.js') }}"></script>
+<script src="{{ asset('js/validation/inventoryValidation.js') }}"></script>
 <script src="{{ asset('js/validation/passValidation.js') }}"></script>
 <script src="{{ asset('js/validation/rpcppeValidation.js') }}"></script>
 <script src="{{ asset('js/validation/rpcsepValidation.js') }}"></script>
@@ -263,6 +261,22 @@
     @endif
 </script>
 
+
+@if(Session::has('successcopy'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var downloadLink = document.createElement('a');
+            downloadLink.href = '{{ asset("Downloaded Form/" . session('download')) }}';
+            downloadLink.download = '{{ session('download') }}';
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
+    </script>
+@endif
+
+
 <script>
     $(function () {
         $("#example1").DataTable({
@@ -289,6 +303,36 @@
         })
         //Bootstrap Duallistbox
         $('.duallistbox').bootstrapDualListbox()
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#file_type').on('change', function() {
+            var fileType = $(this).val();
+            var form = $('#rpcppeReport');
+
+            if (fileType === 'EXCEL') {
+                form.attr('target', '');
+            } else {
+                form.attr('target', '_blank');
+            }
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#file_type').on('change', function() {
+            var fileType = $(this).val();
+            var form = $('#rpcsepReport');
+
+            if (fileType === 'EXCEL') {
+                form.attr('target', '');
+            } else {
+                form.attr('target', '_blank');
+            }
+        });
     });
 </script>
 
@@ -327,13 +371,14 @@
 @include('../script.property_script')
 @include('../script.propertylv_script')
 @include('../script.propertyhv_script')
+@include('../script.propertyint_script')
 @include('../script.unit_script')
 @include('../script.item_script')
 @include('../script.office_script')
 @include('../script.accnt_script')
 <!-- end of manage/view script -->
 
-
+@include('../script.inventoryAll_script')
 @include('../script.purchaseAll_script')
 </body>
 </html>

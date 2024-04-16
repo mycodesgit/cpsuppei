@@ -21,15 +21,15 @@
                         <div class="col-md-4"></div>
                         <div class="col-md-8">
                             <button type="button" class="btn btn-default btn-sm float-md-right"> Edit</button>                            
-                            <a href="{{ route('purchaseREAD') }}" class="btn btn-default btn-sm float-md-right pba"> Purchases</a>
+                            <a href="{{ route('inventoryREAD') }}" class="btn btn-default btn-sm float-md-right pba"> Purchases</a>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('purchaseUpdate') }}" class="form-horizontal add-form" id="addpurchase" method="POST">
+                    <form action="{{ route('inventoryUpdate') }}" class="form-horizontal add-form" id="addpurchase" method="POST">
                         @csrf
-                        <input type="hidden" name="id" value="{{ $purchase->id }}">
+                        <input type="hidden" name="id" value="{{ $inventory->id }}">
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-6">
@@ -58,7 +58,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label for="exampleInputName">Item Description:</label>
-                                    <textarea class="form-control" rows="2" name="item_descrip">{{ $purchase->item_descrip }}</textarea>
+                                    <textarea class="form-control" rows="2" name="item_descrip">{{ $inventory->item_descrip }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>Model:</label>
-                                    <textarea class="form-control" rows="2" name="item_model">{{ $purchase->item_model }}</textarea>
+                                    <textarea class="form-control" rows="2" name="item_model">{{ $inventory->item_model }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -76,12 +76,12 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <label for="exampleInputName">Serial Number:</label>
-                                    <input type="text" name="serial_number" value="{{ $purchase->serial_number }}" oninput="this.value = this.value.toUpperCase()" placeholder="Enter Serial Number" class="form-control">
+                                    <input type="text" name="serial_number" value="{{ $inventory->serial_number }}" oninput="this.value = this.value.toUpperCase()" placeholder="Enter Serial Number" class="form-control">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="exampleInputName">Date Purchase:</label>
-                                    <input type="date" name="date_acquired" value="{{ $purchase->date_acquired }}" class="form-control">
+                                    <input type="date" name="date_acquired" value="{{ $inventory->date_acquired }}" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
 
                                 <div class="col-md-6">
                                     <label for="exampleInputName">Quantity:</label>
-                                    <input type="number" name="qty" value="{{ $purchase->qty }}"  class="form-control" onkeyup="calculateTotalCost()">
+                                    <input type="number" name="qty" value="{{ $inventory->qty }}"  class="form-control" onkeyup="calculateTotalCost()">
                                 </div>
                             </div>
                         </div>
@@ -109,12 +109,12 @@
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <label for="exampleInputName">Price:</label>
-                                    <input type="text" id="item_cost" name="item_cost" value="{{ $purchase->item_cost }}" onkeyup="formatNumber(this); calculateTotalCost(); toggleSecondForm(this) "  class="form-control">
+                                    <input type="text" id="item_cost" name="item_cost" value="{{ $inventory->item_cost }}" onkeyup="formatNumber(this); calculateTotalCost(); toggleSecondForm(this) "  class="form-control">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="exampleInputName">Total Cost:</label>
-                                    <input type="text" name="total_cost" value="{{ $purchase->total_cost }}" class="form-control" readonly>
+                                    <input type="text" name="total_cost" value="{{ $inventory->total_cost }}" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                     <label for="exampleInputName">Property Type:</label>
                                     <select class="form-control" name="properties_id" id="item_id" style="pointer-events: none;" onchange="toggleSecondForm(this)">
                                         @foreach ($property as $data)
-                                            <option value="{{ $data->id }}" @if($purchase->properties_id == $data->id) selected @endif>
+                                            <option value="{{ $data->id }}" @if($inventory->properties_id == $data->id) selected @endif>
                                                 {{ $data->property_name }} ({{ $data->abbreviation }})
                                             </option>
                                         @endforeach
@@ -134,7 +134,7 @@
 
                                 <div id="category-div" class="col-md-6 category-column mt-3">
                                     <label for="exampleInputName">Select Category</label>
-                                    <select id="category_id" name="categories_id" onchange="categorEdit(this.value)" data-placeholder="Select Category" class="form-control select2bs4" style="width: 100%;">
+                                    <select id="category_id" name="categories_id"  data-placeholder="Select Category" class="form-control select2bs4" style="width: 100%;">
                                         <option></option>
                                         @foreach ($category as $data)
                                             <option value="{{ $data->cat_code }}" {{ $data->id == $selectedCatId ? 'selected' : '' }}>
@@ -151,17 +151,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <input type="hidden" id="selected_account_id" name="selected_account_id" value="{{ $purchase->selected_account_id }}">
+                                <input type="hidden" id="selected_account_id" name="selected_account_id" value="{{ $inventory->selected_account_id }}">
 
                                 <div class="col-md-12 mt-3">
                                     <label>Remarks:</label>
                                     <select class="form-control" name="remarks" id="remarks">
-                                        <option value="Good Condition" @if($purchase->remarks == 'Good Condition') selected @endif>Good Condition</option>
-                                        <option value="Needing Repair" @if($purchase->remarks == 'Needing Repair') selected @endif>Needing Repair</option>
-                                        <option value="Unserviceable" @if($purchase->remarks == 'Unserviceable') selected @endif>Unserviceable</option>
-                                        <option value="Obsolete" @if($purchase->remarks == 'Obsolete') selected @endif>Obsolete</option>
-                                        <option value="No Longer Needed" @if($purchase->remarks == 'No Longer Needed') selected @endif>No Longer Needed</option>
-                                        <option value="Not used since purchase" @if($purchase->remarks == 'Not used since purchase') selected @endif>Not used since purchase</option>
+                                        <option value="Good Condition" @if($inventory->remarks == 'Good Condition') selected @endif>Good Condition</option>
+                                        <option value="Needing Repair" @if($inventory->remarks == 'Needing Repair') selected @endif>Needing Repair</option>
+                                        <option value="Unserviceable" @if($inventory->remarks == 'Unserviceable') selected @endif>Unserviceable</option>
+                                        <option value="Obsolete" @if($inventory->remarks == 'Obsolete') selected @endif>Obsolete</option>
+                                        <option value="No Longer Needed" @if($inventory->remarks == 'No Longer Needed') selected @endif>No Longer Needed</option>
+                                        <option value="Not used since purchase" @if($inventory->remarks == 'Not used since purchase') selected @endif>Not used since purchase</option>
                                     </select>
 
                                 </div>
@@ -169,8 +169,8 @@
                                 <div class="col-md-12 mt-3">
                                     <label>Price Status:</label>
                                     <select class="form-control" name="price_stat" id="price_stat">
-                                        <option value="Certain" @if ($purchase->price_stat == 'Certain') selected @endif>Certain</option>
-                                        <option value="Uncertain" @if($purchase->price_stat == 'Uncertain') selected @endif>Uncertain</option>
+                                        <option value="Certain" @if ($inventory->price_stat == 'Certain') selected @endif>Certain</option>
+                                        <option value="Uncertain" @if($inventory->price_stat == 'Uncertain') selected @endif>Uncertain</option>
                                     </select>
                                 </div>
 
@@ -209,8 +209,18 @@
 
 <script>
 function formatNumber(input) {
-    const value = input.value.replace(/[^\d]/g, '');
-    const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const value = input.value.replace(/[^\d.]/g, '');
+
+    const [integerPart, ...decimalParts] = value.split('.');
+
+    const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+    let formattedValue = formattedIntegerPart;
+    if (decimalParts.length > 0) {
+        const editedDecimalPart = decimalParts.join('.');
+        formattedValue += `.${editedDecimalPart}`;
+    }
+
     input.value = formattedValue;
 }
 </script>
@@ -245,12 +255,49 @@ function toggleSecondForm(selectElement) {
 </script>
 
 <script>
+    var propertiesId = 4;
+
+    // Dynamically set the onchange attribute
+    var onchangeFunction = (propertiesId === 4) ? 'categorEditINT' : 'categorEdit';
+    document.getElementById('category_id').onchange = function() {
+        window[onchangeFunction](this.value);
+    };
+
 function categorEdit(val) {
     var categoryId = val;
     var price = $("#item_cost").val().replace(/,/g, '');
     
     var modeval = (price <= 49000) ? 2 : 3;
-    var urlTemplate = "{{ route('purchaseCat', [':id', ':mode']) }}";
+    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
+    var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
+    
+    if (categoryId) {
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function(response) {
+                console.log(response);
+                $('#account_title').empty();
+                $('#account_title').append("<option value=''></option>");
+                $('#account_title').append(response.options);
+            }
+        })
+        $("#account_title").on("change", function() {
+            var selectedOption = $(this).find(':selected');
+            var selectedAccountId = selectedOption.val(); // Get the account ID directly from the selected option's value
+            var selectedAccountCode = selectedOption.data('account-id'); // Get the account code from the data attribute
+            $("#selected_account_id").val(selectedAccountCode); // Set account ID to input field
+            // Optionally, do something with the selected account code
+        });
+    }
+};
+
+function categorEditINT(val) {
+    var categoryId = val;
+    var price = $("#item_cost").val().replace(/,/g, '');
+    
+    var modeval = 4;
+    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
     
     if (categoryId) {

@@ -67,7 +67,7 @@
                                         <input type="hidden" name="id" value="{{ $ppeProperties->id }}">
                                     @endif
                                     <input type="hidden" name="property_id" value="{{ $property->id }}">
-                                    <select id="category" name="category_id" class="form-control select2bs4" data-placeholder="Select Category" style="width: 100%;">
+                                    <select id="category" name="category_id" class="form-control select2bs4" data-placeholder="Select Category" style="width: 100%;" onchange="concatenateValue(this)">
                                         <option value="">-- Select --</option>
                                         @foreach ($categories as $cat)
                                         <option value="{{ $cat->cat_code }}" @if($cr === 'ppeEdit' && $cat->cat_code === $ppeProperties->category_id) selected @endif>

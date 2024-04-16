@@ -1,7 +1,7 @@
 $(function () {
     $('#addpurchase').validate({
         rules: {
-            office_id: {
+            po_number: {
                 required: true
             },
             item_id: {
@@ -13,9 +13,6 @@ $(function () {
             item_model: {
                 required: true
             }, 
-            serial_number: {
-                required: true
-            },
             unit_id: {
                 required: true
             },
@@ -39,8 +36,8 @@ $(function () {
             },
         },
         messages: {
-            office_id: {
-                required: "Please Select Ofice"
+            po_number: {
+                required: "Please Enter PO Number"
             },
             item_id: {
                 required: "Please Select Item"
@@ -76,6 +73,55 @@ $(function () {
                 required: "Please Select Property"
             },
 
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.col-md-6').append(error);
+            element.closest('.col-md-12').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+    });
+
+    $('#addrelease').validate({
+        rules: {
+            property_no_generated: {
+                required: true
+            },
+            office_id: {
+                required: true
+            },
+            serial_number: {
+                required: true
+            },
+            qty: {
+                required: true
+            },
+            person_accnt: {
+                required: true
+            },
+        },
+        messages: {
+            property_no_generated: {
+                required: "Please Enter PO Number"
+            },
+            office_id:{
+                required: "Please Select Office",
+            },
+            serial_number:{
+                required: "Please Select Serial Number",
+            },
+            qty:{
+                required: "Please Enter Qty",
+            },
+            person_accnt:{
+                required: "Please Select Accountable Person:",
+            }
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

@@ -88,12 +88,12 @@
 	</header>
 
 	<div class="text-type">
-		@if ($purchase === 'All' || empty($categoriesId))
+		@if ($inventory === 'All' || empty($categoriesId))
     		<u>ALL</u>
-		@elseif ($purchase->isEmpty())
+		@elseif ($inventory->isEmpty())
 		    ____________________
 		@else
-		    {{ $purchase->first()->account_title_abbr }}
+		    {{ $inventory->first()->account_title_abbr }}
 		@endif
 
 	</div>
@@ -124,24 +124,24 @@
 				</tr>
 			</thead>
 			<tbody>
-				@if ($purchase->isEmpty())
+				@if ($inventory->isEmpty())
 				<tr>
 				    <td colspan="11" align="center">No purchase data available.</td></tr>
 				@else
 					@php $no = 1; @endphp
-				    @foreach ($purchase as $purchaseData)
+				    @foreach ($inventory as $inventoryData)
 				        <tr>
 				            <td>{{ $no++ }}</td>
-				            <td>{{ $purchaseData->item_descrip }}</td>
-				            <td>{{ $purchaseData->property_no_generated }}</td>
-				            <td>{{ $purchaseData->unit_name }}</td>
-				            <td>{{ $purchaseData->item_cost }}</td>
-				            <td>{{ $purchaseData->qty }}</td>
+				            <td>{{ $inventoryData->item_descrip }}</td>
+				            <td>{{ $inventoryData->property_no_generated }}</td>
+				            <td>{{ $inventoryData->unit_name }}</td>
+				            <td>{{ $inventoryData->item_cost }}</td>
+				            <td>{{ $inventoryData->qty }}</td>
 				            <td></td>
-				            <td>{{ $purchaseData->qty }}</td>
+				            <td>{{ $inventoryData->qty }}</td>
 				            <td></td>
-				            <td>{{ $purchaseData->remarks }}</td>
-				            <td>{{ $purchaseData->office_name }}</td>
+				            <td>{{ $inventoryData->remarks }}</td>
+				            <td>{{ $inventoryData->office_name }}</td>
 				        </tr>
 				    @endforeach
 				@endif

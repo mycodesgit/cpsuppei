@@ -15,25 +15,25 @@
     <table id="tableprnt" class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th class="col-md-4 bdleft">Property No.</th> <th class="col-md-6 bdright">{{ $purchase->property_no_generated  }}</th>
+                <th class="col-md-4 bdleft">Property No.</th> <th class="col-md-6 bdright">{{ $inventory->property_no_generated  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Description</th> <th class="bdright">{{ $purchase->item_descrip  }}</th>
+                <th class="bdleft">Description</th> <th class="bdright">{{ $inventory->item_descrip  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Serial No.</th> <th class="bdright">{{ $purchase->serial_number  }}</th>
+                <th class="bdleft">Serial No.</th> <th class="bdright">{{ $inventory->serial_number  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Unit Price</th> <th class="bdright">{{ $purchase->item_cost  }}</th>
+                <th class="bdleft">Unit Price</th> <th class="bdright">{{ $inventory->item_cost  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Date Acquired</th> <th class="bdright">{{ $purchase->date_acquired  }}</th>
+                <th class="bdleft">Date Acquired</th> <th class="bdright">{{ $inventory->date_acquired  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Department/Office</th> <th class="bdright">{{ $purchase->office_name  }}</th>
+                <th class="bdleft">Department/Office</th> <th class="bdright">{{ $inventory->office_name  }}</th>
             </tr>
             <tr>
-                <th class="bdleft">Person Accountable</th> <th class="bdright">{{ $purchase->person_accnt  }}</th>
+                <th class="bdleft">Person Accountable</th> <th class="bdright">{{ $inventory->person_accnt  }}</th>
             </tr>
         </thead>
     </table>
@@ -52,7 +52,7 @@
 </div>
 
 <script>
-    var inputText= "{{ $purchase->property_no_generated  }}";
+    var inputText= "{{ $inventory->property_no_generated  }}";
     var qr = new QRious({
         element: document.getElementById("qrcode"),
         value: inputText,
