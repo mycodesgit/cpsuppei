@@ -245,6 +245,7 @@ class PurchaseController extends Controller
             }
         }else{
             Inventory::create([
+                'purch_id' => $request->purch_id,
                 'office_id' => $request->office_id,
                 'item_id' => $purchase->item_id,
                 'item_descrip' => $purchase->item_descrip,
