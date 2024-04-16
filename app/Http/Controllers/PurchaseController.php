@@ -220,7 +220,7 @@ class PurchaseController extends Controller
                 $newItemNum = str_pad($new_part, strlen($part_to_increment), '0', STR_PAD_LEFT);
 
                 Inventory::create([
-                    'purch_id' => $request->purch_id,
+                    'purch_id' => $request->purchase_id,
                     'office_id' => $request->office_id,
                     'item_id' => $purchase->item_id,
                     'item_descrip' => $purchase->item_descrip,
@@ -245,7 +245,7 @@ class PurchaseController extends Controller
             }
         }else{
             Inventory::create([
-                'purch_id' => $request->purch_id,
+                'purch_id' => $request->purchase_id,
                 'office_id' => $request->office_id,
                 'item_id' => $purchase->item_id,
                 'item_descrip' => $purchase->item_descrip,
