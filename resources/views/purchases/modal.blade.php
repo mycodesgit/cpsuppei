@@ -186,7 +186,6 @@
                         
                         <div class="form-group">
                             <div class="form-row">
-
                                 <div class="col-md-6">
                                     <label>PO Number</label>
                                     <input type="text" id="rel_po_number" name="po_number" class="form-control" autocomplete="off" readonly>
@@ -247,7 +246,6 @@
                                 
                                 <div class="col-md-5">
                                     <label>Accountable Person:</label>
-                                    <input type="text" id="accountType" name="pAccountable" hidden>
                                     <select class="form-control select2bs4" id="accountableSelect" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
                                         <option> </option>
                                         @foreach ($accnt as $data)

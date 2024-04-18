@@ -102,9 +102,6 @@ $(function () {
             qty: {
                 required: true
             },
-            person_accnt: {
-                required: true
-            },
         },
         messages: {
             property_no_generated: {
@@ -119,9 +116,6 @@ $(function () {
             qty:{
                 required: "Please Enter Qty",
             },
-            person_accnt:{
-                required: "Please Select Accountable Person:",
-            }
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

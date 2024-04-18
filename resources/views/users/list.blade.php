@@ -105,6 +105,18 @@
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-12">
+                                    <label for="exampleInputName">Gender:</label>
+                                    <select class="form-control select2bs4" name="gender">
+                                        <option value=""> --- Select Here --- </option>
+                                        <option {{ $cr == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option {{ $cr == 'Female' ? 'selected' : '' }}>Female</option>
+                                    </select>
+                               </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-md-12">
                                     <label for="exampleInputName">Password:</label>
                                     <input type="password" name="password" value="{{ $cr === 'userEdit' ? $selectedUser->password : '' }}" placeholder="Enter Password" class="form-control">   
                                 </div>
@@ -133,6 +145,7 @@
                                         <option value="Supply Officer" @if($cr === 'userEdit' && $selectedUser->role == 'Supply Officer' ? 'selected' : '' ) selected @endif>Supply Officer</option>
                                         <option value="Campus Admin" @if($cr === 'userEdit' && $selectedUser->role == 'Campus Admin' ? 'selected' : '' ) selected @endif>Campus Admin</option>
                                         <option value="Supply Staff" @if($cr === 'userEdit' && $selectedUser->role == 'Supply Staff' ? 'selected' : '' ) selected @endif>Supply Staff</option>
+                                        <option value="Technician" @if($cr === 'userEdit' && $selectedUser->role == 'Technician' ? 'selected' : '' ) selected @endif>Technician</option>
                                     </select>
                                 </div>
                             </div>

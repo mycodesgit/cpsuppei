@@ -23,7 +23,7 @@
                 },
                 {data: 'serial_number',
                     render: function(data, type, row) {
-                        if (type === 'display') {
+                        if (type === 'display' && data !== null) {
                             return '<div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 8ch;">' + data + '</div>';
                         } else {
                             return data;

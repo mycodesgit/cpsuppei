@@ -25,6 +25,10 @@
                 <i class="fas fa-file-pdf"></i> Reports
             </a>
 
+            <a href="{{ route('rpcppeOption') }}" class="btn btn-app disabled {{ request()->is('technician*') ? 'active' : '' }}">
+                <i class="fas fa-user"></i> Technician
+            </a>
+
             @if(auth()->user()->role=='Administrator')
             <a href="{{ route('userRead') }}" class="btn btn-app {{$current_route=='userRead' || $current_route=='userEdit' ?'active':''}}">
                 <i class="fas fa-users"></i> Users

@@ -19,7 +19,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use PDF;
 
-
 class PurchaseController extends Controller
 {
     public function getPurchase() {
@@ -103,7 +102,7 @@ class PurchaseController extends Controller
                     'item_id' => $request->input('item_id'),
                     'item_descrip' => $request->input('item_descrip'),
                     'item_model' => $request->input('item_model'),
-                    'serial_number' => $concat_serial_number,
+                    'serial_number' => ($concat_serial_number !== "-unrel") ? $concat_serial_number : null,
                     'date_acquired' => $request->input('date_acquired'),
                     'unit_id' => $request->input('unit_id'),
                     'qty' => $request->input('qty'),
@@ -189,10 +188,12 @@ class PurchaseController extends Controller
 
         //dd($accnt);
         $dateAcquired = $request->date_acquired;
+
+        $total_cost = number_format($request->qty * floatval(str_replace(',', '', $purchase->item_cost)), 2);
     
         $serials = $request->serial_number;
     
-        $accountablePer = $office->office_officer;
+        $accountablePer = ($request->person_accnt == "") ? $office->office_officer : $accnt->person_accnt;
         
         $newItemNum = intval($request->itemnum);
         
@@ -230,7 +231,7 @@ class PurchaseController extends Controller
                     'unit_id' => $purchase->unit_id,
                     'qty' => 1,
                     'item_cost' => $purchase->item_cost,
-                    'total_cost' => $purchase->total_cost,
+                    'total_cost' => $purchase->item_cost,
                     'properties_id' => $purchase->properties_id,
                     'categories_id' => $purchase->categories_id,
                     'property_id' => $purchase->property_id,
@@ -239,7 +240,7 @@ class PurchaseController extends Controller
                     'selected_account_id' => $purchase->selected_account_id,
                     'remarks' => '',
                     'price_stat' => 'certain',
-                    'person_accnt' => $request->person_accnt,
+                    'person_accnt' => ($request->person_accnt == "") ? '' : $request->person_accnt,
                     'person_accnt_name' => $accountablePer,
                 ]);
             }
@@ -251,11 +252,11 @@ class PurchaseController extends Controller
                 'item_descrip' => $purchase->item_descrip,
                 'item_model' => $purchase->item_model,
                 'serial_number' => '',
-                'date_acquired' => $dateAcquiredWithTime,
+                'date_acquired' => $dateAcquired,
                 'unit_id' => $purchase->unit_id,
                 'qty' => $request->qty,
                 'item_cost' => $purchase->item_cost,
-                'total_cost' => $purchase->total_cost,
+                'total_cost' => $total_cost,
                 'properties_id' => $purchase->properties_id,
                 'categories_id' => $purchase->categories_id,
                 'property_id' => $purchase->property_id,
@@ -264,7 +265,7 @@ class PurchaseController extends Controller
                 'selected_account_id' => $purchase->selected_account_id,
                 'remarks' => '',
                 'price_stat' => 'certain',
-                'person_accnt' => $request->person_accnt,
+                'person_accnt' => ($request->person_accnt == "") ? '' : $request->person_accnt,
                 'person_accnt_name' => $accountablePer,
             ]);
         }

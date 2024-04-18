@@ -633,6 +633,20 @@ class ReportsController extends Controller
         }
     }
 
+    public function unserviceForm(){
+        $setting = Setting::firstOrNew(['id' => 1]);
+        $office = Office::all();
+        $property = Property::all();
+        $category = Category::all();
+
+        return view('reports.unserviceable_form', compact('setting', 'office', 'property', 'category'));
+    }
+
+    public function unserviceReport(Request $request){
+        $pdf = PDF::loadView('reports.unserviceable_report')->setPaper('Legal', 'landscape');
+        return $pdf->stream();
+    }
+
     public function icsOption() {
         $setting = Setting::firstOrNew(['id' => 1]);
         $office = Office::all();

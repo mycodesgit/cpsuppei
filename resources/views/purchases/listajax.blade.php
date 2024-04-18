@@ -118,7 +118,9 @@
                     console.log(response);
                     $('#account_title').empty();
                     $('#account_title').append("<option value=''></option>");
-                    $('#account_title').append(response.options);
+                    var optionsWithoutAll = response.options.replace("<option value='All' data-account-id='All' selected>All</option>", '');
+
+                    $('#account_title').append(optionsWithoutAll);
                 }
             })
             $("#account_title").on("change", function() {

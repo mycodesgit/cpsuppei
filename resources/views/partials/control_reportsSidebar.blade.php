@@ -4,6 +4,7 @@
     $rpcsepActive = in_array($curr_route, ['rpcsepOption']) ? 'active' : '';
     $icsActive = in_array($curr_route, ['icsOption']) ? 'active' : '';
     $parActive = in_array($curr_route, ['parOption']) ? 'active' : '';
+    $unservActive = in_array($curr_route, ['unserviceForm']) ? 'active' : '';
 @endphp
 
 <ul class="nav nav-pills nav-sidebar nav-compact flex-column">
@@ -30,5 +31,12 @@
             PAR Reports
         </a>
     </li>
+
+    <li class="nav-item mb-1">
+        <a href="{{ route('unserviceForm') }}" class="nav-link2 {{ $unservActive }}" style="color: #000;">
+            Unserviceable Reports
+        </a>
+    </li>
+    
 </ul>
 

@@ -149,6 +149,9 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::post('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
         Route::post('/ics/icsitemList', [ReportsController::class, 'icsgenOption'])->name('icsgenOption');
 
+        Route::get('/unserviceable-form', [ReportsController::class, 'unserviceForm'])->name('unserviceForm');
+        Route::post('/unserviceable-report', [ReportsController::class, 'unserviceReport'])->name('unserviceReport');
+        
         Route::get('/par/option', [ReportsController::class, 'parOption'])->name('parOption');
         Route::post('/par/reports/gen', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
         Route::post('/par/itemList', [ReportsController::class, 'genOption'])->name('genOption');
