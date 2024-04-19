@@ -29,7 +29,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>Campus or Office:</label>
-                                    <select class="form-control select2bs4" id="campus_id" name="campus_id" style="width: 100%;" onchange="genOption(this.value, 'campus', this.options[this.selectedIndex].getAttribute('data-person-cat'))">
+                                    <select class="form-control select2bs4" id="campus_id" name="campus_id" style="width: 100%;" onchange="genUnserviceable(this.value, 'campus', this.options[this.selectedIndex].getAttribute('data-person-cat'))">
                                         <option disabled selected value=""> --- Select Campus or Office Type --- </option>
                                         @foreach ($office as $data)
                                             <option value="{{ $data->id }}"  data-person-cat='none'>{{ $data->office_abbr }} - {{ $data->office_name }}</option>
@@ -43,8 +43,8 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>End User:</label>
-                                    <input type="text" id="accountType" name="pAccountable" hidden>
-                                    <select class="form-control select2bs4" id="person_accnt" data-placeholder="Select Accountable" onchange="genOption(this.value, 'user', this.options[this.selectedIndex].getAttribute('data-person-cat'))" name="person_accnt" style="width: 100%;">
+                                    <input type="text" id="accountType" name="pAccountable" >
+                                    <select class="form-control select2bs4" id="person_accnt" data-placeholder="Select Accountable" onchange="genUnserviceable(this.value, 'user', this.options[this.selectedIndex].getAttribute('data-person-cat'))" name="person_accnt" style="width: 100%;">
                                         <option></option>
                                      
                                     </select>
@@ -57,7 +57,7 @@
                                 <div class="col-md-12">
                                     <label>Item:</label>
                                     <select class="select2bs4" multiple="multiple" data-placeholder="Select Items" id="item_id" name="item_id[]" style="width: 100%;" required>
-                                       
+                                        <option value='All'>All</option>
                                     </select>
                                 </div>
                             </div>
@@ -83,7 +83,7 @@
 </div>
 
 <script>
-function genOption(val, type, pAccountable) {
+function genUnserviceable(val, type, pAccountable) {
     var endUserID = val;
 
     var urlTemplate = "{{ route('genOption') }}";
@@ -108,7 +108,7 @@ function genOption(val, type, pAccountable) {
                 console.log(response);
                 if(type == 'campus'){
                     $('#person_accnt').empty();
-                    $('#person_accnt').append("<option value=''></option>");
+                    $('#person_accnt').append("<option value='All'>All</option>");
                     $('#person_accnt').append(response.options);
                 }else{
                      $('#item_id').empty();

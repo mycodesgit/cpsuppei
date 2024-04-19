@@ -14,17 +14,17 @@
 		}
 		.text1 {
 			text-align: center;
-			font-size: 10pt;
+			font-size: 12pt;
 		}
 		.text2 {
 			text-align: center;
 		}
 		.text3 {
-			font-size: 10pt;
+			font-size: 12pt;
 			margin-top: 10px;
 		}
 		.text4 {
-			font-size: 10pt;
+			font-size: 12pt;
 		}
 
 		#unserve {
@@ -49,7 +49,7 @@
 		  	padding: 8px;
 		}
 
-		#unserve tr:nth-child(even){background-color: #f2f2f2;}
+
 
 		#unserve tr:hover {background-color: #ddd;}
 
@@ -87,23 +87,42 @@
 	<header style="margin-top: -40px; margin-left: 250px;">
 		<img src="{{ asset('template/img/unserviceable-header.png') }}">
 	</header>
-
-	<table style="width: 100%; font-size: 14px;">
-			<th><b style="float: left; margin-left: -13px;">Entity Name : <span style="display: inline-block; margin-bottom: -3px; width: 250px; text-align:left; border-bottom: 1px solid black;"> </span></th>
-			<th><b style="float: right; margin-right: 10px;">Entity Name : <span style="display: inline-block; margin-bottom: -3px; width: 250px; text-align:left; border-bottom: 1px solid black;"> </span></th>
+	<div style="text-align: center; font-size: 12px;" ><b>As of: {{ \Carbon\Carbon::now()->format('F d, Y') }}</b></div>
+	<table style="width: 100%; font-size: 12px;">
+		<tr>
+			<th><b style="float: left; margin-left: -13px;">Entity Name : <span style="display: inline-block; margin-bottom: -3px; width: 260px; text-align:left; border-bottom: 1px solid black;"> CENTRAL PHILIPPINES STATE UNIVERSITY </span></th>
+			<th><b style="float: right; margin-right: 10px;">Fund Cluster : <span style="display: inline-block; margin-bottom: -3px; width: 250px; text-align:left; border-bottom: 1px solid black;"> </span></th>
+		</tr>
+	</table>
+	<table style="width: 100%; font-size: 12px; margin-top: 35px;">
+		<tr>
+			<th style="text-align: center;">
+				<span style="display: inline-block; margin-bottom: -3px; width: 160px; "></b>CHIM C. MISAJON</span>
+				<br>
+				<i>Campus Administrator</i>
+			</th>
+			<th>
+				<span style="display: inline-block; margin-bottom: -3px; width: 160px; "></b>CAMPUS ADMINISTRATOR</span>
+				<br>
+				<i>(Designation)</i>
+			</th>
+			<th>
+				<span style="display: inline-block; margin-bottom: -3px; width: 160px; "><b>CANDONI CAMPUS</span>
+				<br>
+				<i>Station</i>
+			</th>
 		</tr>
 	</table>
 	<div class="table-responsive">
 		<table id="unserve" class="table">
 			<thead>
 				<tr>
-					<th colspan="11">INVENTORY</th>
+					<th colspan="10">INVENTORY</th>
 					<th colspan="8">INSPECTION and DISPOSAL</th>
 				</tr>
 				<tr style="padding: 2px">
-					<th rowspan="2" width="100">Date Acquired</th>
-					<th rowspan="2" >Particulars / Article</th>
-					<th rowspan="2" >PROPERTY NO.</th>
+					<th rowspan="2" width="50">Date Acquired</th>
+					<th rowspan="2" width="100">Particulars / Article</th>
 					<th rowspan="2" >Property No. / Serial Number</th>
 					<th rowspan="2" >Qty</th>
 					<th rowspan="2" >Unit Cost</th>
@@ -127,33 +146,77 @@
 					<th >Amount </th>
 				</tr>
 				<tr>
-					@for($i = 0; $i <= 18; $i++)
+					@for($i = 1; $i <= 18; $i++)
 					<th>{{ $i }}</th>
 					@endfor
 				</tr>				
 			</thead>
+			<tbody>
+				@foreach ($relatedItems as $relatedItem)
+				<tr>
+					<td>{{$relatedItem->date_acquired }}</td>
+					<td>
+						<b>{{ $relatedItem->item_name }}</b>
+						<br><i> {{ $relatedItem->item_descrip }}</i><br>
+						<b>MODEL:</b>{{ $relatedItem->item_model ? str_replace('Model:', '', $relatedItem->item_model) : '' }}<br>
+						<b>SN : </b> {{ $relatedItem->serial_number }}
+					</td>
+					<td>{{ $relatedItem->property_no_generated }}</td>
+					<td>{{ $relatedItem->qty }}</td>
+					<td>{{ $relatedItem->item_cost }}</td>
+					<td>{{ $relatedItem->item_cost }}</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				@endforeach
+			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="19" class="sign">
-				        <div class="footer-cell">
-							<div class="footer-cell-title">Certified Correct by:</div>
-							<div class="footer-cell-sign">MA. SOCORRO T. LLAMAS</div>
-							<div class="footer-cell-text">Administrative Officer IV/Supply Officer designate</div>
-						</div>
-
-						<div class="footer-cell">
-							<div class="footer-cell-title">Approved by:</div>
-							<div class="footer-cell-sign">ALADINO C. MORACA, Ph.D.</div>
-							<div class="footer-cell-text">SUC President</div>
-						</div>
-
-						<div class="footer-cell">
-							<div class="footer-cell-title">Verified by</div>
-							<div class="footer-cell-sign">JEREMIAS G. AGUI</div>
-							<div class="footer-cell-text">State Auditor IV</div>
-						</div>
+					<td colspan="10" style="border-bottom: none !important;">
+						<div><b>I HEREBY request inspection and disposition, pursuant to Section  79 of PD 1445, of the property enumerated above</div><br<br><br>
 					</td>
-					{{-- <td rowspan=""></td> --}}
+					<td colspan="4" style="border-bottom: none !important;">
+						I CERTIFY that I have inspected each and every article enumerated in this report, and that the disposition made thereof was, in my judgment, the best for the public interest.  													
+						<br>
+					</td>
+					<td colspan="4" style="border-bottom: none !important;">
+						I CERTIFY that I have witnessed the disposition of the articles enumerated on this report this <u>{{ \Carbon\Carbon::now()->format('jS') }}</u> of <u>{{ \Carbon\Carbon::now()->format('F') }}</u>, <u>{{ \Carbon\Carbon::now()->format('Y') }}</u>.
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="5" class="text1"  style="border-top: none !important; border-right: none !important;">
+						<div style="text-align: left !important;"><b>Requested by:</div><br><br>
+						<span style="display: inline-block; margin-bottom: -3px; width: 160px; "><b>CHIM C. MISAJON </span>
+						<br>
+						<i>Campus Administrator</i>
+					</td>
+					<td colspan="5" class="text1"  style="border-top: none !important; border-left: none !important;">
+						<div style="text-align: left !important;"><b>Approved by:</div><br><br>
+						<span style="display: inline-block; margin-bottom: -3px; width: 160px; "><b>ALADINO C. MORACA, Ph. D.</span>
+						<br>
+						<i>SUC President</i>
+					</td>
+					<td colspan="4" class="text1"  style="border-top: none !important;"><br><br>
+						<span style="display: inline-block; margin-bottom: -3px; width: 160px;"><b>JEREMIAS G. AGUI </span>
+						<br>
+						<i>Signature over Printed Name of Inspection Officer</i>
+					</td>
+					<td colspan="4" class="text1"  style="border-top: none !important;"><br><br>
+						<span style="display: inline-block; margin-bottom: -3px; width: 160px; "><b>JEREMIAS G. AGUI </span>
+						<br>
+						<i>Signature over Printed Name of Inspection Officer</i>
+					</td>
 				</tr>
 			</tfoot>
 		</table>

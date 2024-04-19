@@ -643,7 +643,49 @@ class ReportsController extends Controller
     }
 
     public function unserviceReport(Request $request){
-        $pdf = PDF::loadView('reports.unserviceable_report')->setPaper('Legal', 'landscape');
+        $setting = Setting::firstOrNew(['id' => 1]);
+         
+        $id = $request->person_accnt;
+        $itemId = $request->item_id;
+        $pAccountable = $request->pAccountable;
+
+        $selectedItem = Item::whereIn('id', $itemId)->get();
+        $condAccnt = ($pAccountable == 'accountable') ? 'inventories.person_accnt' : 'inventories.office_id';
+
+        if($pAccountable == 'accountable'){
+            $relatedItems = Item::join('purchases', 'items.id', '=', 'inventories.item_id')
+                ->join('units', 'inventories.unit_id', '=', 'units.id')
+                ->join('offices', 'inventories.office_id', '=', 'offices.id')
+                ->join('accountable', 'inventories.person_accnt', '=', 'accountable.id')
+                ->select('inventories.*', 'items.*', 'offices.*', 'items.id as itemid', 'units.*', 'accountable.person_accnt');
+
+                if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
+                    $relatedItems->whereIn('inventories.id', $itemId);
+                }
+                
+                $relatedItems = $relatedItems->where('inventories.remarks', 'Unserviceable');
+                $relatedItems = $relatedItems->where($condAccnt, $id)->get();
+        }
+        else{
+         $relatedItems = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
+            ->join('units', 'inventories.unit_id', '=', 'units.id')
+            ->join('offices', 'inventories.office_id', '=', 'offices.id')
+            ->select('inventories.*', 'items.*', 'offices.*', 'offices.id as oid', 'items.id as itemid', 'units.*', 'offices.office_abbr', 'offices.office_officer');
+            
+            if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
+                $relatedItems->whereIn('inventories.id', $itemId);
+            }
+            
+            $relatedItems = $relatedItems->where('inventories.remarks', 'Unserviceable');
+            $relatedItems = $relatedItems->where($condAccnt, $id)->get();
+        }
+
+        $data = [
+            'selectedItem' => $selectedItem,
+            'relatedItems' => $relatedItems,
+        ];
+
+        $pdf = PDF::loadView('reports.unserviceable_report', $data)->setPaper('Legal', 'landscape');
         return $pdf->stream();
     }
 
