@@ -43,7 +43,7 @@
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>End User:</label>
-                                    <input type="text" id="accountType" name="pAccountable" >
+                                    <input type="text" id="accountType" name="pAccountable" hidden>
                                     <select class="form-control select2bs4" id="person_accnt" data-placeholder="Select Accountable" onchange="genUnserviceable(this.value, 'user', this.options[this.selectedIndex].getAttribute('data-person-cat'))" name="person_accnt" style="width: 100%;">
                                         <option></option>
                                      
