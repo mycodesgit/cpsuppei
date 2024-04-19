@@ -14,19 +14,20 @@
 		}
 		.text1 {
 			text-align: center;
+			font-size: 10pt;
 		}
 		.text2 {
 			text-align: center;
 		}
 		.text3 {
-			font-size: 11pt;
+			font-size: 10pt;
 			margin-top: 10px;
 		}
 		.text4 {
-			font-size: 11pt;
+			font-size: 10pt;
 		}
 
-		#rpcppe {
+		#unserve {
 		  	font-family: Bookman Old Style, Georgia, serif;
 		  	border-collapse: collapse;
 		  	width: 100%;
@@ -34,27 +35,26 @@
 		  	margin-left: -10px;
 		}
 
-		#rpcppe td {
+		#unserve td {
 			border: 1px solid #000;
 			padding: 2px;
 		  	font-size: 8pt;
 		} 
-		#rpcppe th {
+		#unserve th {
 		  	border: 2px solid #000;
 		}
 
-		#rpcppe tfoot {
+		#unserve tfoot {
 		  	border: 2px solid #000;
 		  	padding: 8px;
 		}
 
-		#rpcppe tr:nth-child(even){background-color: #f2f2f2;}
+		#unserve tr:nth-child(even){background-color: #f2f2f2;}
 
-		#rpcppe tr:hover {background-color: #ddd;}
+		#unserve tr:hover {background-color: #ddd;}
 
-		#rpcppe th {
-		  	padding-top: 12px;
-		  	padding-bottom: 12px;
+		#unserve th {
+			padding: 2px;
 		  	text-align: center;
 		  	background-color: #fff;
 		  	font-size: 8pt;
@@ -88,17 +88,18 @@
 		<img src="{{ asset('template/img/unserviceable-header.png') }}">
 	</header>
 
-	<div class="text-type">
-
-
-	</div>
-	<div class="text1">(Type of Property, Plant and Equipment)</div>
-	<div class="text3">Fund Cluster : ________________________________</div>
-	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on______________.</div>
-
+	<table style="width: 100%; font-size: 14px;">
+			<th><b style="float: left; margin-left: -13px;">Entity Name : <span style="display: inline-block; margin-bottom: -3px; width: 250px; text-align:left; border-bottom: 1px solid black;"> </span></th>
+			<th><b style="float: right; margin-right: 10px;">Entity Name : <span style="display: inline-block; margin-bottom: -3px; width: 250px; text-align:left; border-bottom: 1px solid black;"> </span></th>
+		</tr>
+	</table>
 	<div class="table-responsive">
-		<table id="rpcppe" class="table table-bordered">
+		<table id="unserve" class="table">
 			<thead>
+				<tr>
+					<th colspan="11">INVENTORY</th>
+					<th colspan="8">INSPECTION and DISPOSAL</th>
+				</tr>
 				<tr style="padding: 2px">
 					<th rowspan="2" width="100">Date Acquired</th>
 					<th rowspan="2" >Particulars / Article</th>
@@ -108,32 +109,32 @@
 					<th rowspan="2" >Unit Cost</th>
 					<th rowspan="2" >Total Cost</th>
 					<th rowspan="2" >Accumulated Depreciation</th>
-					<th colspan="2"> Accumulated Impairment Losses</th>
-					<th colspan="2"> Carrying Amount</th>
-					<th rowspan="2">Remarks</th>
-					<th colspan="2" >Sale</th>
-					<th colspan="2" >Transfer</th>
-					<th colspan="2" >Destruction</th>
-					<th colspan="2" >Other (Specisfy)</th>
-					<th colspan="2" >Total</th>
-					<th colspan="2" >Appraised </th>
-					<th colspan="2" >OR No. </th>
-					<th colspan="2" >Amount </th>
+					<th rowspan="2"> Accumulated Impairment Losses</th>
+					<th rowspan="2"> Carrying Amount</th>
+					<th rowspan="2"> Remarks</th>
+					<th colspan="5" style="height: 10px !important;"> DISPOSAL</th>
+					<th rowspan="2"> Appraised Value</th>
+					<th colspan="2"> RECORDS OF SALE</th>
 				</tr>
-				<tr style="padding: 2px">
-					<th>Quantity</th>	
-					<th>Value</th>
-					<th width="100">Whereabout</th>
-				</tr>
-			</thead>
-			<tr>
-				<th colspan="6" style="text-align: right">Balance Brought Forwarded - </th>
-				<th colspan="6" style="text-align: left"> </th>
-			</tr>
+				<tr>
+					<th >Sale</th>
+					<th >Transfer</th>
+					<th >Destruction</th>
+					<th >Other (Specisfy)</th>
+					<th >Total</th>
 
+					<th >OR No. </th>
+					<th >Amount </th>
+				</tr>
+				<tr>
+					@for($i = 0; $i <= 18; $i++)
+					<th>{{ $i }}</th>
+					@endfor
+				</tr>				
+			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="12" class="sign">
+					<td colspan="19" class="sign">
 				        <div class="footer-cell">
 							<div class="footer-cell-title">Certified Correct by:</div>
 							<div class="footer-cell-sign">MA. SOCORRO T. LLAMAS</div>
