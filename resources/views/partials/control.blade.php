@@ -9,23 +9,23 @@
                 <i class="fas fa-th"></i> Dashboard
             </a>
             
-            <a href="{{ route('ppeRead') }}" class="btn btn-app {{ request()->is('view*') ? 'active' : '' }}">
+            <a href="@if(auth()->user()->role !== 'Technician'){{ route('ppeRead') }}@endif" class="btn btn-app @if(auth()->user()->role == 'Technician') disabled @endif {{ request()->is('view*') ? 'active' : '' }}">
                 <i class="fas fa-list"></i> View
             </a>
 
-            <a href="{{ route('purchaseREAD') }}" class="btn btn-app {{ request()->is('purchases*') ? 'active' : '' }}">
+            <a href="@if(auth()->user()->role !== 'Technician'){{ route('purchaseREAD') }}@endif" class="btn btn-app @if(auth()->user()->role == 'Technician') disabled @endif {{ request()->is('purchases*') ? 'active' : '' }}">
                 <i class="fas fa-shopping-cart"></i> Purchases
             </a>
 
-            <a href="{{ route('inventoryREAD') }}" class="btn btn-app {{ request()->is('inventory*') ? 'active' : '' }}">
+            <a href="@if(auth()->user()->role !== 'Technician'){{ route('inventoryREAD') }}@endif" class="btn btn-app @if(auth()->user()->role == 'Technician') disabled @endif {{ request()->is('inventory*') ? 'active' : '' }}">
                 <i class="fas fa-server"></i> Inventory
             </a>
 
-            <a href="{{ route('rpcppeOption') }}" class="btn btn-app {{ request()->is('reports*') ? 'active' : '' }}">
+            <a href="{{ route('rpcppeOption') }}" class="btn btn-app @if(auth()->user()->role == 'Technician') disabled @endif {{ request()->is('reports*') ? 'active' : '' }}">
                 <i class="fas fa-file-pdf"></i> Reports
             </a>
 
-            <a href="{{ route('rpcppeOption') }}" class="btn btn-app disabled {{ request()->is('technician*') ? 'active' : '' }}">
+            <a href="@if(auth()->user()->role !== 'Technician'){{ route('rpcppeOption') }}@endif" class="btn btn-app @if(auth()->user()->role !== 'Technician') disabled @endif {{ request()->is('technician*') ? 'active' : '' }}">
                 <i class="fas fa-user"></i> Technician
             </a>
 
