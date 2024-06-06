@@ -20,7 +20,6 @@ class LoginController extends Controller
         $validated=auth()->attempt([
             'username'=>$request->username,
             'password'=>$request->password,
-            //'role'=>'Librarian'
         ],$request->password);
 
         if($validated){

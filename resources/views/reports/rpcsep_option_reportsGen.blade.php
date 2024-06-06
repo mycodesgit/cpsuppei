@@ -135,7 +135,7 @@
 				<tr>
 				    <td colspan="11" align="center">No purchase data available.</td>
 				</tr>
-				@else
+				@else 
 					@php $no = 1; $overallTotal = 0; @endphp
 				    @foreach ($purchase as $purchaseData)
 				        <tr>

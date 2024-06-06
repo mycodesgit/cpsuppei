@@ -9,6 +9,7 @@
             "columns": [
                 {data: 'id', name: 'id', orderable: false, searchable: false},
                 {data: 'abbreviation'},
+                {data: 'po_number'},
                 {data: 'property_no_generated'},
                 {data: 'office_abbr'},
                 {data: 'item_model'},

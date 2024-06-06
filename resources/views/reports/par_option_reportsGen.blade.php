@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<title>{{ strtoupper('PAR REPORT ' . $datereport) }}</title>
 	<style>
 		/*.table-responsive {
 		  	overflow-x: auto;
@@ -98,9 +98,9 @@
 
 	<div>
 		<p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-			@if (!$relatedItems->isEmpty())
+			@if (!$paritems->isEmpty())
 			    <p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">
-			        Entity Name: {{ $relatedItems[0]->office_name }}
+			        Entity Name: {{ $paritems[0]->office_name }}
 			    </p>
 			@else
 			    <p style="font-weight: bolder; font-family: sans-serif; font-size: 10pt;">
@@ -132,31 +132,31 @@
 			        $grandTotal = 0;
 			    @endphp
 
-			    @foreach ($relatedItems as $relatedItem)
+			    @foreach ($paritems as $paritem)
 			        <tr>
-			            <td>{{ $relatedItem->qty }}</td>
-			            <td>{{ $relatedItem->unit_name }}</td>
-						<td>
-							<b>{{ $relatedItem->item_name }}</b>
-							<br><i> {{ $relatedItem->item_descrip }}</i><br>
-							<b>MODEL:</b>{{ $relatedItem->item_model ? str_replace('Model:', '', $relatedItem->item_model) : '' }}<br>
-							<b>SN : </b> {{ $relatedItem->serial_number }}
+			            <td>{{ $paritem->qty }}</td>
+			            <td>{{ $paritem->unit_name }}</td>
+						<td style="font-size: 10px;">
+							<b>{{ $paritem->item_name }}</b>
+							<br><i> {{ $paritem->item_descrip }}</i><br>
+							<b>MODEL:</b>{{ $paritem->item_model ? str_replace('Model:', '', $paritem->item_model) : '' }}<br>
+							<b>SN : </b> {{ $paritem->serial_number }}
 						</td>
-			            <td>{{ $relatedItem->property_no_generated }}</td>
-			            <td>{{ $relatedItem->date_acquired }}</td>
-			            <td align="right"><b>{{ $relatedItem->item_cost }}</b></td>
+			            <td>{{ $paritem->property_no_generated }}</td>
+			            <td>{{ $paritem->date_acquired }}</td>
+			            <td align="right"><b>{{ $paritem->item_cost }}</b></td>
 
-			            @if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
-			                {{-- @php $overallTotal += str_replace(',', '', $relatedItem->item_cost); @endphp --}}
+			            @if (is_numeric(str_replace(',', '', $paritem->item_cost)))
+			                {{-- @php $overallTotal += str_replace(',', '', $paritem->item_cost); @endphp --}}
 			                @php 
-				                $itemTotal = $relatedItem->qty * str_replace(',', '', $relatedItem->item_cost);
+				                $itemTotal = $paritem->qty * str_replace(',', '', $paritem->item_cost);
 				                $overallTotal += $itemTotal;
 				                $grandTotal += $itemTotal; // Add to grand total
 				            @endphp
 			            @endif
 			        </tr>
 
-			        @if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
+			        @if (is_numeric(str_replace(',', '', $paritem->item_cost)))
 			            @php $rowCount++; @endphp
 			        @endif
 			    @endforeach
@@ -194,12 +194,12 @@
 						<span class="text-receivedby" style="float: left">Received by:</span><br>
 						 <span class="footer-cell">
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->person_accnt : $relatedItems[0]->office_officer; }}
+								{{ isset($paritems[0]->person_accnt)  ? strtoupper($paritems[0]->person_accnt) : strtoupper($paritems[0]->office_officer); }}
 							</span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->office_name : $relatedItems[0]->office_name; }}
+								{{ isset($paritems[0]->person_accnt)  ? strtoupper($paritems[0]->office_name) : strtoupper($paritems[0]->office_name); }}
 							</span><br>
 							<span class="footer-cell-text">Positon / Office</span><br><br>
 
@@ -213,8 +213,8 @@
 							<span class="footer-cell-sign"><u>MA. SOCORRO T. LLAMAS</u></span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
-							<span class="footer-cell-sign"><u>SUPPLY OFFICER / Supply Office</u></span><br>
-							<span class="footer-cell-text">Positon / Office</span><br><br>
+							<span class="footer-cell-sign"><u>LUIGIE T. CABU-AL</u></span><br>
+							<span class="footer-cell-text">Supply Officer</span><br><br>
 
 							<span class="footer-cell-sign"><u>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
 							<span class="footer-cell-text">Date</span>

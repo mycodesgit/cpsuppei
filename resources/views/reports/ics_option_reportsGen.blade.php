@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title></title>
+	<title>{{ strtoupper('ICS REPORT ' . $datereport) }}</title>
 	<style>
 		/*.table-responsive {
 		  	overflow-x: auto;
@@ -92,14 +92,18 @@
 <body>
 	<header style="margin-top: -40px; margin-left: ;">
 		<img src="{{ asset('template/img/ics.png') }}">
-	</header>
-
-	<div class="table-responsive">
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
 				<tr>
 					<th colspan="8"><h3>INVENTORY CUSTODIAN SLIP</h3><p class="icsno" style="margin-bottom: -6px;">ICS No. _________________</p></th>
 				</tr>
+			</thead>
+		</table>
+	</header>
+
+	<div class="table-responsive">
+		<table id="rpcppe" class="table table-bordered">
+			<thead>
 				<tr>
 					<th>NO</th>
 					<th>Qty</th>
@@ -120,35 +124,35 @@
 					$no = 1;
 				@endphp
 
-				 @foreach ($relatedItems as $relatedItem)
+				 @foreach ($icsitems as $icsitem)
 					<tr>
 						<td>{{ $no++ }}</td>
-					    <td>{{ $relatedItem->qty }}</td>
-					    <td>{{ $relatedItem->unit_name }}</td>
+					    <td>{{ $icsitem->qty }}</td>
+					    <td>{{ $icsitem->unit_name }}</td>
 					    <td>
-							<b>{{ $relatedItem->item_name }}</b>
-							<br><i> {{ $relatedItem->item_descrip }}</i><br>
-							<b>MODEL:</b>{{ $relatedItem->item_model ? str_replace('Model:', '', $relatedItem->item_model) : '' }}<br>
-							<b>SN : </b> {{ $relatedItem->serial_number }}
+							<b>{{ $icsitem->item_name }}</b>
+							<br><i> {{ $icsitem->item_descrip }}</i><br>
+							<b>MODEL:</b>{{ $icsitem->item_model ? str_replace('Model:', '', $icsitem->item_model) : '' }}<br>
+							<b>SN : </b> {{ $icsitem->serial_number }}
 						</td>
-					    <td>{{ $relatedItem->item_cost }}</td>
+					    <td>{{ number_format($icsitem->qty * str_replace(',', '', $icsitem->item_cost), 2) }}</td>
 					    <td>
-					    	@if($relatedItem->date_acquired)
-						        {{ \Carbon\Carbon::parse($relatedItem->date_acquired)->format('M. j, Y') }}
+					    	@if($icsitem->date_acquired)
+						        {{ \Carbon\Carbon::parse($icsitem->date_acquired)->format('M. j, Y') }}
 						    @endif
 					    </td>
-					    <td>{{ $relatedItem->property_no_generated }}</td>
+					    <td>{{ $icsitem->property_no_generated }}</td>
 					    <td></td>
-						    @if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
-			                {{-- @php $overallTotal += str_replace(',', '', $relatedItem->item_cost); @endphp --}}
+						    @if (is_numeric(str_replace(',', '', $icsitem->item_cost)))
+			                {{-- @php $overallTotal += str_replace(',', '', $icsitem->item_cost); @endphp --}}
 			                @php 
-				                $itemTotal = $relatedItem->qty * str_replace(',', '', $relatedItem->item_cost);
+				                $itemTotal = $icsitem->qty * str_replace(',', '', $icsitem->item_cost);
 				                $overallTotal += $itemTotal;
 				                $grandTotal += $itemTotal; // Add to grand total
 				            @endphp
 			            @endif
 					</tr>
-					@if (is_numeric(str_replace(',', '', $relatedItem->item_cost)))
+					@if (is_numeric(str_replace(',', '', $icsitem->item_cost)))
 					    @php $rowCount++; @endphp
 					@endif
 				@endforeach
@@ -178,14 +182,18 @@
 				<tr>
 					<td colspan="4" class="sign" style="text-align: center;">
 						<span class="text-receivedby" style="float: left">Received by:</span><br>
-						 <span class="footer-cell">
+						 <span class="footer-cell"> 
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->person_accnt : $relatedItems[0]->office_officer; }}
+								@if($pAccountable == 'officeAccountable')
+									{{ isset($icsitems->first()->office_officer) ? strtoupper($icsitems->first()->office_officer) : '' }}
+								@else
+									{{ isset($icsitems->first()->person_accnt_name) ? strtoupper($icsitems->first()->person_accnt_name) : '' }}
+								@endif			
 							</span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($relatedItems[0]->person_accnt)  ? $relatedItems[0]->office_name : $relatedItems[0]->office_name; }}
+								{{ isset($icsitems[0]->person_accnt)  ? strtoupper($icsitems[0]->office_name) : strtoupper($icsitems[0]->office_name); }}
 							</span><br>
 							<span class="footer-cell-text">Positon / Office</span><br><br>
 
@@ -199,8 +207,8 @@
 							<span class="footer-cell-sign"><u>MA. SOCORRO T. LLAMAS</u></span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
-							<span class="footer-cell-sign"><u>SUPPLY OFFICER / Supply Office</u></span><br>
-							<span class="footer-cell-text">Positon / Office</span><br><br>
+							<span class="footer-cell-sign"><u>LUIGIE T. CABU-AL</u></span><br>
+							<span class="footer-cell-text">Supply Officer</span><br><br>
 
 							<span class="footer-cell-sign"><u>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
 							<span class="footer-cell-text">Date</span>

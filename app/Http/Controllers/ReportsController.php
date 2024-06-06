@@ -644,49 +644,70 @@ class ReportsController extends Controller
 
     public function unserviceReport(Request $request){
         $setting = Setting::firstOrNew(['id' => 1]);
-         
-        $id = $request->person_accnt;
+    
+        $officeId = $request->office_id;
+        $personaccountable = $request->person_accnt;
         $itemId = $request->item_id;
         $pAccountable = $request->pAccountable;
+        $categoriesId = $request->categories_id;
+        $propId = $request->property_id;
+        $startDate = $request->start_date_acquired;
+        $endDate = $request->end_date_acquired;
+        $selectId = $request->selected_account_id;
 
+        $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
+        $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
+        $datereport = $formattedStartDate.'-'.$formattedEndDate;
+        $condcategories = ($categoriesId == 'All') ? '!=' : '=';
+        $condpropid = ($propId == 'All') ? '!=' : '=';
+        $conaccountid = ($selectId == 'All' || $selectId == '') ? '!=' : '=';
+        $officecond = ($officeId == 'All') ? '!=' : '=';
+    
+        $categoriesId = ($categoriesId == 'All') ? '0' : $categoriesId;
+        $propId = ($propId == 'All') ? '0' : $propId;
+        $selectId = ($selectId == 'All') ? '0' : $selectId;
+        $officeId = ($officeId == 'All') ? '0' : $officeId;
+    
         $selectedItem = Item::whereIn('id', $itemId)->get();
         $condAccnt = ($pAccountable == 'accountable') ? 'inventories.person_accnt' : 'inventories.office_id';
-
-        if($pAccountable == 'accountable'){
-            $relatedItems = Item::join('purchases', 'items.id', '=', 'inventories.item_id')
-                ->join('units', 'inventories.unit_id', '=', 'units.id')
-                ->join('offices', 'inventories.office_id', '=', 'offices.id')
-                ->join('accountable', 'inventories.person_accnt', '=', 'accountable.id')
-                ->select('inventories.*', 'items.*', 'offices.*', 'items.id as itemid', 'units.*', 'accountable.person_accnt');
-
-                if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
-                    $relatedItems->whereIn('inventories.id', $itemId);
-                }
-                
-                $relatedItems = $relatedItems->where('inventories.remarks', 'Unserviceable');
-                $relatedItems = $relatedItems->where($condAccnt, $id)->get();
-        }
-        else{
-         $relatedItems = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
+    
+        $unservicequery = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
             ->join('units', 'inventories.unit_id', '=', 'units.id')
             ->join('offices', 'inventories.office_id', '=', 'offices.id')
-            ->select('inventories.*', 'items.*', 'offices.*', 'offices.id as oid', 'items.id as itemid', 'units.*', 'offices.office_abbr', 'offices.office_officer');
-            
-            if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
-                $relatedItems->whereIn('inventories.id', $itemId);
-            }
-            
-            $relatedItems = $relatedItems->where('inventories.remarks', 'Unserviceable');
-            $relatedItems = $relatedItems->where($condAccnt, $id)->get();
+            ->select('inventories.*', 'items.*', 'offices.*',  'offices.id as oid', 'items.id as itemid', 'units.*', 'offices.office_abbr', 'offices.office_officer');
+    
+        if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
+            $unservicequery->whereIn('inventories.id', $itemId);
         }
-
-        $data = [
-            'selectedItem' => $selectedItem,
-            'relatedItems' => $relatedItems,
-        ];
-
-        $pdf = PDF::loadView('reports.unserviceable_report', $data)->setPaper('Legal', 'landscape');
-        return $pdf->stream();
+    
+        if ($pAccountable == 'accountable') {
+            $unservicequery->where($condAccnt, $personaccountable);
+        } else {
+            $unservicequery->where('inventories.office_id', $officecond, $officeId);
+        }
+    
+        $unservitems = $unservicequery
+            ->where('inventories.categories_id', $condcategories, $categoriesId)
+            ->where('inventories.property_id', $condpropid, $propId)
+            ->where('inventories.selected_account_id', $conaccountid, $selectId)
+            ->where(function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('inventories.date_acquired', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                } elseif ($startDate) {
+                    $query->where('inventories.date_acquired', '>=', $startDate . ' 00:00:00');
+                } elseif ($endDate) {
+                    $query->where('inventories.date_acquired', '<=', $endDate . ' 23:59:59');
+                }
+            })
+            ->where('inventories.remarks', 'Unserviceable')
+            ->get();
+    // dd($unservitems);
+        if($unservitems->isNotEmpty()){
+            $pdf = PDF::loadView('reports.unserviceable_report', compact('selectedItem', 'unservitems', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'landscape');
+            return $pdf->stream();
+        }else{
+            return redirect()->back()->with('error', 'No Item Found Belong to this End User!');
+        }
     }
 
     public function icsOption() {
@@ -702,149 +723,147 @@ class ReportsController extends Controller
 
     public function icsOptionReportGen(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
-         
-        $id = $request->person_accnt;
+    
+        $officeId = $request->office_id;
+        $personaccountable = $request->person_accnt;
         $itemId = $request->item_id;
         $pAccountable = $request->pAccountable;
+        $categoriesId = $request->categories_id;
+        $propId = $request->property_id;
+        $startDate = $request->start_date_acquired;
+        $endDate = $request->end_date_acquired;
+        $selectId = $request->selected_account_id;
 
+        $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
+        $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
+        $datereport = $formattedStartDate.'-'.$formattedEndDate;
+        $condcategories = ($categoriesId == 'All') ? '!=' : '=';
+        $condpropid = ($propId == 'All') ? '!=' : '=';
+        $conaccountid = ($selectId == 'All' || $selectId == '') ? '!=' : '=';
+        $officecond = ($officeId == 'All') ? '!=' : '=';
+    
+        $categoriesId = ($categoriesId == 'All') ? '0' : $categoriesId;
+        $propId = ($propId == 'All') ? '0' : $propId;
+        $selectId = ($selectId == 'All') ? '0' : $selectId;
+        $officeId = ($officeId == 'All') ? '0' : $officeId;
+    
         $selectedItem = Item::whereIn('id', $itemId)->get();
         $condAccnt = ($pAccountable == 'accountable') ? 'inventories.person_accnt' : 'inventories.office_id';
-
-        if($pAccountable == 'accountable'){
-            $relatedItems = Item::join('purchases', 'items.id', '=', 'inventories.item_id')
-                ->join('units', 'inventories.unit_id', '=', 'units.id')
-                ->join('offices', 'inventories.office_id', '=', 'offices.id')
-                ->join('accountable', 'inventories.person_accnt', '=', 'accountable.id')
-                ->select('inventories.*', 'items.*', 'offices.*', 'items.id as itemid', 'units.*', 'accountable.person_accnt');
-                
-
-                if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
-                    $relatedItems->whereIn('inventories.id', $itemId);
-                }
-
-                $relatedItems = $relatedItems->where($condAccnt, $id)->get();
-
-        }
-        else{
-         $relatedItems = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
+    
+        $icsitemquery = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
             ->join('units', 'inventories.unit_id', '=', 'units.id')
             ->join('offices', 'inventories.office_id', '=', 'offices.id')
             ->select('inventories.*', 'items.*', 'offices.*', 'offices.id as oid', 'items.id as itemid', 'units.*', 'offices.office_abbr', 'offices.office_officer');
-
-            if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
-                $relatedItems->whereIn('inventories.id', $itemId);
-            }
-            
-            $relatedItems = $relatedItems->where($condAccnt, $id)->get();
-            
+    
+        if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
+            $icsitemquery->whereIn('inventories.id', $itemId);
         }
-
-
-
-        $pdf = PDF::loadView('reports.ics_option_reportsGen', compact('selectedItem','relatedItems', 'itemId'))->setPaper('Legal', 'portrait');
-        return $pdf->stream();
-    }
-
-    public function icsgenOption(Request $request) {
-        $id = $request->id;
-        $type = $request->type;
-        $pAccountable = $request->pAccountable;
-
-        if ($type == 'campus') {
-            $userAccountable = Accountable::where('off_id', $id)
-                ->select('person_accnt', 'id')
-                ->get();
-
-            $officeAccountable = Office::where('id', $id)
-                ->select('office_officer', 'id')
-                ->get();
-
-            $options = "";
-            foreach ($userAccountable as $accnt) {
-                $options .= "<option value='".$accnt->id."' data-person-cat='accountable' data-account-id='".$accnt->id."'>".$accnt->person_accnt."</option>";
-            }
-            foreach ($officeAccountable as $officeAccount) {
-                $options .= "<option value='".$officeAccount->id."' data-person-cat='officeAccountable' data-account-id='".$officeAccount->id."'>".$officeAccount->office_officer."- Office Head</option>";
-            }
-
-
+    
+        if ($pAccountable == 'accountable') {
+            $icsitemquery->where($condAccnt, $personaccountable);
         } else {
-            if($pAccountable == 'officeAccountable'){
-                $itempar = Inventory::join('items', 'items.id', '=', 'inventories.item_id')
-                ->select('inventories.*', 'items.*', 'inventories.id as pid')
-                ->where('office_id', $id)
-                ->whereIn('inventories.properties_id', ['1', '2'])
-                ->get();
-            }else{
-                 $itempar = Inventory::where('person_accnt', $id)
-                ->join('items', 'items.id', '=', 'inventories.item_id')
-                ->select('inventories.*', 'items.*', 'inventories.id as pid')
-                ->whereIn('inventories.properties_id', ['1', '2'])
-                ->get();
-            }
-
-            $options = "";
-            $options .= "<option>All</option>";
-            foreach ($itempar as $parItem) {
-                $options .= "<option value='".$parItem->pid."'>".$parItem->item_name.' '.$parItem->item_descrip."</option>";
-            }
+            $icsitemquery->where('inventories.office_id', $officecond, $officeId);
         }
-
-        return response()->json([
-            "options" => $options,
-        ]);
+    
+        $icsitems = $icsitemquery
+            ->where('inventories.properties_id', '!=', 3)
+            ->where('inventories.categories_id', $condcategories, $categoriesId)
+            ->where('inventories.property_id', $condpropid, $propId)
+            ->where('inventories.selected_account_id', $conaccountid, $selectId)
+            ->where(function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('inventories.date_acquired', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                } elseif ($startDate) {
+                    $query->where('inventories.date_acquired', '>=', $startDate . ' 00:00:00');
+                } elseif ($endDate) {
+                    $query->where('inventories.date_acquired', '<=', $endDate . ' 23:59:59');
+                }
+            })
+            ->get();
+    
+        if($icsitems->isNotEmpty()){
+            $pdf = PDF::loadView('reports.ics_option_reportsGen', compact('selectedItem', 'icsitems', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'portrait');
+            return $pdf->stream();
+        }else{
+            return redirect()->back()->with('error', 'No Item Found Belong to this End User!');
+        }
     }
 
     public function parOption() {
         $setting = Setting::firstOrNew(['id' => 1]);
         $office = Office::all();
-        
-        return view('reports.par_option', compact('setting', 'office'));
+        $property = Property::all();
+        $category = Category::all();
+        return view('reports.par_option', compact('setting', 'office', 'property', 'category'));
     }
 
     public function parOptionReportGen(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
-         
-        $id = $request->person_accnt;
+    
+        $officeId = $request->office_id;
+        $personaccountable = $request->person_accnt;
         $itemId = $request->item_id;
         $pAccountable = $request->pAccountable;
+        $categoriesId = $request->categories_id;
+        $propId = $request->property_id;
+        $startDate = $request->start_date_acquired;
+        $endDate = $request->end_date_acquired;
+        $selectId = $request->selected_account_id;
 
+        $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
+        $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
+        $datereport = $formattedStartDate.'-'.$formattedEndDate;
+        $condcategories = ($categoriesId == 'All') ? '!=' : '=';
+        $condpropid = ($propId == 'All') ? '!=' : '=';
+        $conaccountid = ($selectId == 'All' || $selectId == '') ? '!=' : '=';
+        $officecond = ($officeId == 'All') ? '!=' : '=';
+    
+        $categoriesId = ($categoriesId == 'All') ? '0' : $categoriesId;
+        $propId = ($propId == 'All') ? '0' : $propId;
+        $selectId = ($selectId == 'All') ? '0' : $selectId;
+        $officeId = ($officeId == 'All') ? '0' : $officeId;
+    
         $selectedItem = Item::whereIn('id', $itemId)->get();
         $condAccnt = ($pAccountable == 'accountable') ? 'inventories.person_accnt' : 'inventories.office_id';
-
-        if($pAccountable == 'accountable'){
-            $relatedItems = Item::join('purchases', 'items.id', '=', 'inventories.item_id')
-                ->join('units', 'inventories.unit_id', '=', 'units.id')
-                ->join('offices', 'inventories.office_id', '=', 'offices.id')
-                ->join('accountable', 'inventories.person_accnt', '=', 'accountable.id')
-                ->select('inventories.*', 'items.*', 'offices.*', 'items.id as itemid', 'units.*', 'accountable.person_accnt');
-
-                if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
-                    $relatedItems->whereIn('inventories.id', $itemId);
-                }
-                
-                $relatedItems = $relatedItems->where($condAccnt, $id)->get();
-        }
-        else{
-         $relatedItems = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
+    
+        $paritemquery = Inventory::join('items', 'inventories.item_id', '=', 'items.id')
             ->join('units', 'inventories.unit_id', '=', 'units.id')
             ->join('offices', 'inventories.office_id', '=', 'offices.id')
             ->select('inventories.*', 'items.*', 'offices.*', 'offices.id as oid', 'items.id as itemid', 'units.*', 'offices.office_abbr', 'offices.office_officer');
-            
-            if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
-                $relatedItems->whereIn('inventories.id', $itemId);
-            }
-            
-            $relatedItems = $relatedItems->where($condAccnt, $id)->get();
+    
+        if ($itemId[0] != 'All' && !in_array('All', $itemId)) {
+            $paritemquery->whereIn('inventories.id', $itemId);
         }
+    
+        if ($pAccountable == 'accountable') {
+            $paritemquery->where($condAccnt, $personaccountable);
+        } else {
+            $paritemquery->where('inventories.office_id', $officecond, $officeId);
+        }
+    
+        $paritems = $paritemquery
+            ->where('inventories.properties_id', 3)
+            ->where('inventories.categories_id', $condcategories, $categoriesId)
+            ->where('inventories.property_id', $condpropid, $propId)
+            ->where('inventories.selected_account_id', $conaccountid, $selectId)
+            ->where(function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereBetween('inventories.date_acquired', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+                } elseif ($startDate) {
+                    $query->where('inventories.date_acquired', '>=', $startDate . ' 00:00:00');
+                } elseif ($endDate) {
+                    $query->where('inventories.date_acquired', '<=', $endDate . ' 23:59:59');
+                }
+            })
+            ->get();
 
-        $data = [
-            'selectedItem' => $selectedItem,
-            'relatedItems' => $relatedItems,
-        ];
-
-        $pdf = PDF::loadView('reports.par_option_reportsGen', $data)->setPaper('Legal', 'portrait');
-        return $pdf->stream();
+        if($paritems->isNotEmpty()){
+            $pdf = PDF::loadView('reports.par_option_reportsGen', compact('selectedItem', 'paritems', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'portrait');
+            return $pdf->stream();
+        }else{
+            return redirect()->back()->with('error', 'No Item Found Belong to this End User!');
+        }
+        
     }
 
     public function genOption(Request $request) {
@@ -875,13 +894,112 @@ class ReportsController extends Controller
                 $itempar = Inventory::join('items', 'items.id', '=', 'inventories.item_id')
                 ->select('inventories.*', 'items.*', 'inventories.id as pid')
                 ->where('office_id', $id)
-                ->where('inventories.properties_id', '=', '3')
                 ->get();
             }else{
                  $itempar = Inventory::where('person_accnt', $id)
                 ->join('items', 'items.id', '=', 'inventories.item_id')
                 ->select('inventories.*', 'items.*', 'inventories.id as pid')
-                ->where('inventories.properties_id', '=', '3')
+                ->get();
+            }
+
+            $options = "";
+            $options .= "<option>All</option>";
+            foreach ($itempar as $parItem) {
+                $options .= "<option value='".$parItem->pid."'>".$parItem->item_name.' '.$parItem->item_descrip."</option>";
+            }
+        }
+
+        return response()->json([
+            "options" => $options,
+        ]);
+    }
+
+        
+    public function icsgenOption(Request $request) {
+        $id = $request->id;
+        $type = $request->type;
+        $pAccountable = $request->pAccountable;
+
+        if ($type == 'campus') {
+            $userAccountable = Accountable::where('off_id', $id)
+                ->select('person_accnt', 'id')
+                ->get();
+
+            $officeAccountable = Office::where('id', $id)
+                ->select('office_officer', 'id')
+                ->get();
+
+            $options = "";
+            foreach ($userAccountable as $accnt) {
+                $options .= "<option value='".$accnt->id."' data-person-cat='accountable' data-account-id='".$accnt->id."'>".$accnt->person_accnt."</option>";
+            }
+            foreach ($officeAccountable as $officeAccount) {
+                $options .= "<option value='".$officeAccount->id."' data-person-cat='officeAccountable' data-account-id='".$officeAccount->id."'>".$officeAccount->office_officer."- Office Head</option>";
+            }
+
+
+        } else {
+            if($pAccountable == 'officeAccountable'){
+                $itempar = Inventory::join('items', 'items.id', '=', 'inventories.item_id')
+                ->select('inventories.*', 'items.*', 'inventories.id as pid')
+                ->where('office_id', $id)
+                ->where('inventories.properties_id', '!=', 3)
+                ->get();
+            }else{
+                 $itempar = Inventory::where('person_accnt', $id)
+                ->join('items', 'items.id', '=', 'inventories.item_id')
+                ->select('inventories.*', 'items.*', 'inventories.id as pid')
+                ->where('inventories.properties_id', '!=', 3)
+                ->get();
+            }
+
+            $options = "";
+            $options .= "<option>All</option>";
+            foreach ($itempar as $parItem) {
+                $options .= "<option value='".$parItem->pid."'>".$parItem->item_name.' '.$parItem->item_descrip."</option>";
+            }
+        }
+
+        return response()->json([
+            "options" => $options,
+        ]);
+    }
+
+    public function genOptionUnserv(Request $request) {
+        $id = $request->id;
+        $type = $request->type;
+        $pAccountable = $request->pAccountable;
+
+        if ($type == 'campus') {
+            $userAccountable = Accountable::where('off_id', $id)
+                ->select('person_accnt', 'id')
+                ->get();
+
+            $officeAccountable = Office::where('id', $id)
+                ->select('office_officer', 'id')
+                ->get();
+
+            $options = "";
+            foreach ($userAccountable as $accnt) {
+                $options .= "<option value='".$accnt->id."' data-person-cat='accountable' data-account-id='".$accnt->id."'>".$accnt->person_accnt."</option>";
+            }
+            foreach ($officeAccountable as $officeAccount) {
+                $options .= "<option value='".$officeAccount->id."' data-person-cat='officeAccountable' data-account-id='".$officeAccount->id."'>".$officeAccount->office_officer."- Office Head</option>";
+            }
+
+
+        } else {
+            if($pAccountable == 'officeAccountable'){
+                $itempar = Inventory::join('items', 'items.id', '=', 'inventories.item_id')
+                ->select('inventories.*', 'items.*', 'inventories.id as pid')
+                ->where('inventories.remarks', 'Unserviceable')
+                ->where('office_id', $id)
+                ->get();
+            }else{
+                 $itempar = Inventory::where('person_accnt', $id)
+                ->join('items', 'items.id', '=', 'inventories.item_id')
+                ->select('inventories.*', 'items.*', 'inventories.id as pid')
+                ->where('inventories.remarks', 'Unserviceable')
                 ->get();
             }
 

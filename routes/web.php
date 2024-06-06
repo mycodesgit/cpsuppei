@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\ViewController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\InvSetting;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RpcppeController;
 use App\Http\Controllers\UserController;
@@ -25,7 +26,7 @@ use App\Http\Controllers\ReportsController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
+| routes are loaded by the RouteServiceProvider within a group which 
 | contains the "web" middleware group. Now create something great!
 |
 */
@@ -40,6 +41,9 @@ Route::post('/login',[LoginController::class,'postLogin'])->name('postLogin');
 Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
 Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
 Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
+Route::get('/instat', [InventoryController::class, 'inventoryStat'])->name('inventoryStat'); 
+Route::get('/instat-update', [InventoryController::class, 'inventoryStatUp'])->name('inventoryStatUp'); 
+
 //Middleware
 Route::group(['middleware'=>['login_auth']],function(){
     Route::get('/dashboard',[MasterController::class,'dashboard'])->name('dashboard');
@@ -140,21 +144,23 @@ Route::group(['middleware'=>['login_auth']],function(){
     //Reports
     Route::prefix('/reports')->group(function () {
         Route::get('/rpcppe/option', [ReportsController::class, 'rpcppeOption'])->name('rpcppeOption');
-        Route::get('/rpcppe/reports/gen', [ReportsController::class, 'rpcppeOptionReportGen'])->name('rpcppeOptionReportGen');
+        Route::get('/rpcppe/reports/rpcppe', [ReportsController::class, 'rpcppeOptionReportGen'])->name('rpcppeOptionReportGen');
 
         Route::get('/rpcsep/option', [ReportsController::class, 'rpcsepOption'])->name('rpcsepOption');
-        Route::post('/rpcsep/reports/gen', [ReportsController::class, 'rpcsepOptionReportGen'])->name('rpcsepOptionReportGen');
+        Route::post('/rpcsep/reports/rpcsep', [ReportsController::class, 'rpcsepOptionReportGen'])->name('rpcsepOptionReportGen');
 
         Route::get('/ics/option', [ReportsController::class, 'icsOption'])->name('icsOption');
-        Route::post('/ics/reports/gen', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
+        Route::post('/ics/reports/ics', [ReportsController::class, 'icsOptionReportGen'])->name('icsOptionReportGen');
         Route::post('/ics/icsitemList', [ReportsController::class, 'icsgenOption'])->name('icsgenOption');
 
         Route::get('/unserviceable-form', [ReportsController::class, 'unserviceForm'])->name('unserviceForm');
         Route::post('/unserviceable-report', [ReportsController::class, 'unserviceReport'])->name('unserviceReport');
         
         Route::get('/par/option', [ReportsController::class, 'parOption'])->name('parOption');
-        Route::post('/par/reports/gen', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
+        Route::post('/par/reports/par', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
         Route::post('/par/itemList', [ReportsController::class, 'genOption'])->name('genOption');
+        
+        Route::post('/par/itemList/unserv', [ReportsController::class, 'genOptionUnserv'])->name('genOptionUnserv');
     });
 
 
@@ -175,6 +181,8 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/system-name',[SettingsController::class,'setting_list'])->name('setting_list');
         Route::post('/system-name',[SettingsController::class,'upload'])->name('upload');
     });
+
+    
     
     //Logout
     Route::get('/logout',[MasterController::class,'logout'])->name('logout');

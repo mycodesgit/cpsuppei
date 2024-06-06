@@ -44,6 +44,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Property Type</th>
+                                    <th>PO Number</th>
                                     <th>Property No.</th>
                                     <th>Office</th>
                                     <th>Model</th>

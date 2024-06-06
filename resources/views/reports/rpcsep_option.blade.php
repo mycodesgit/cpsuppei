@@ -140,7 +140,7 @@ function categor(val) {
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
     
     if (categoryId) {
-        $.ajax({
+        $.ajax({ 
             url: url,
             type: "GET",
             success: function(response) {

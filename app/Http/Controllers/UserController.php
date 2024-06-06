@@ -146,6 +146,7 @@ class UserController extends Controller
 
             $token = ([
                 'id' => $user->id,
+                'role' => $user->role,
                 'fname' => $user->fname,
                 'lname' => $user->lname
             ]);

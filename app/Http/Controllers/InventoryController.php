@@ -18,6 +18,7 @@ use App\Models\InvQR;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Setting;
+use App\Models\InvSetting;
 use PDF;
 
 class InventoryController extends Controller
@@ -34,7 +35,8 @@ class InventoryController extends Controller
         $inventory = Inventory::join('offices', 'inventories.office_id', '=', 'offices.id')
                     ->join('property', 'inventories.properties_id', '=', 'property.id')
                     ->join('items', 'inventories.item_id', '=', 'items.id')
-                    ->select('inventories.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
+                    ->leftjoin('purchases', 'inventories.purch_id', '=', 'purchases.id')
+                    ->select('inventories.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name', 'purchases.po_number')
                     ->get();
         return view('inventories.listajax', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice','category', 'inventory'));
     }
@@ -79,7 +81,8 @@ class InventoryController extends Controller
         $data = Inventory::join('offices', 'inventories.office_id', '=', 'offices.id')
                 ->join('property', 'inventories.properties_id', '=', 'property.id')
                 ->join('items', 'inventories.item_id', '=', 'items.id')
-                ->select('inventories.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name')
+                ->leftjoin('purchases', 'inventories.purch_id', '=', 'purchases.id')
+                ->select('inventories.*', 'offices.office_abbr', 'property.abbreviation', 'items.item_name', 'purchases.po_number')
                 ->get();
         return response()->json(['data' => $data]);
     }
@@ -445,7 +448,23 @@ class InventoryController extends Controller
         $qr = $request->query('q');
         $inventory = Inventory::where('property_no_generated', $qr)->first();
         if($inventory){
-            return "1";
+            $office = Office::where('id', '!=', 1)->get();
+            $accnt = Accountable::all();
+            
+            $data = ([
+                'invmatch' => $inventory,
+                'office' => $office,
+                'accnt' => $accnt,
+            ]);
+            return response()->json(['data' => $data]);
+            // echo '<select>';
+            // foreach ($data['office'] as $office) {
+            //     echo '<option value="'.$office->id.";OfficeAccountable".'">' . 'OFFICE OFFICER - ' . $office->office_officer . '</option>';
+            // }
+            // foreach ($data['accnt'] as $accnt) {
+            //     echo '<option value="'.$accnt->id.";accountable".'">' . 'OFFICE ACCOUNTABLE - ' . $accnt->person_accnt . '</option>';
+            // }
+            // echo '</select>';
         }else{
             return "0";
         }
@@ -474,5 +493,25 @@ class InventoryController extends Controller
             return "0";
         }
     }
+
+
+    public function inventoryStat(){
+        $instat = InvSetting::first();
+
+        return $instat->switch;
+    }
     
+    public function inventoryStatUp(){
+        $instat = InvSetting::first();
+        
+        if ($instat) {
+            $instat->switch = $instat->switch == 1 ? 0 : 1;
+            
+            $instat->save();
+            
+            return $instat->switch;
+        }
+    
+        return null;
+    }
 }

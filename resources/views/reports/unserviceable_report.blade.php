@@ -152,19 +152,19 @@
 				</tr>				
 			</thead>
 			<tbody>
-				@foreach ($relatedItems as $relatedItem)
+				@foreach ($unservitems as $unservitem)
 				<tr>
-					<td>{{$relatedItem->date_acquired }}</td>
+					<td>{{$unservitem->date_acquired }}</td>
 					<td>
-						<b>{{ $relatedItem->item_name }}</b>
-						<br><i> {{ $relatedItem->item_descrip }}</i><br>
-						<b>MODEL:</b>{{ $relatedItem->item_model ? str_replace('Model:', '', $relatedItem->item_model) : '' }}<br>
-						<b>SN : </b> {{ $relatedItem->serial_number }}
+						<b>{{ $unservitem->item_name }}</b>
+						<br><i> {{ $unservitem->item_descrip }}</i><br>
+						<b>MODEL:</b>{{ $unservitem->item_model ? str_replace('Model:', '', $unservitem->item_model) : '' }}<br>
+						<b>SN : </b> {{ $unservitem->serial_number }}
 					</td>
-					<td>{{ $relatedItem->property_no_generated }}</td>
-					<td>{{ $relatedItem->qty }}</td>
-					<td>{{ $relatedItem->item_cost }}</td>
-					<td>{{ $relatedItem->item_cost }}</td>
+					<td>{{ $unservitem->property_no_generated }}</td>
+					<td>{{ $unservitem->qty }}</td>
+					<td>{{ $unservitem->item_cost }}</td>
+					<td>{{ $unservitem->item_cost }}</td>
 					<td></td>
 					<td></td>
 					<td></td>
