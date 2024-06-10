@@ -131,16 +131,15 @@
                                         @endforeach
                                     </select>
                                 </div>
-
                                 <div id="category-div" class="col-md-6 category-column mt-3">
-                                    <label for="exampleInputName">Select Category</label>
-                                    <select id="category_id" name="categories_id"  data-placeholder="Select Category" class="form-control select2bs4" style="width: 100%;">
+                                    <label>Select Category</label>
+                                    <select id="category_id" name="categories_id" onchange="categorEdit(this.value)" data-placeholder="Select Category" class="form-control select2bs4" style="width: 100%;">
                                         <option></option>
                                         @foreach ($category as $data)
                                             <option value="{{ $data->cat_code }}" {{ $data->id == $selectedCatId ? 'selected' : '' }}>
                                                 {{ $data->cat_code }} - {{ $data->cat_name }}
                                             </option>
-                                        @endforeach 
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div id="account-div" class="col-md-6 desc-column mt-3">
@@ -255,18 +254,9 @@ function toggleSecondForm(selectElement) {
 </script>
 
 <script>
-    var propertiesId = 4;
-
-    // Dynamically set the onchange attribute
-    var onchangeFunction = (propertiesId === 4) ? 'categorEditINT' : 'categorEdit';
-    document.getElementById('category_id').onchange = function() {
-        window[onchangeFunction](this.value);
-    };
-
 function categorEdit(val) {
     var categoryId = val;
     var price = $("#item_cost").val().replace(/,/g, '');
-    
     var modeval = (price <= 49000) ? 2 : 3;
     var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
@@ -292,37 +282,6 @@ function categorEdit(val) {
     }
 };
 
-function categorEditINT(val) {
-    var categoryId = val;
-    var price = $("#item_cost").val().replace(/,/g, '');
-    
-    var modeval = 4;
-    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
-    var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
-    
-    if (categoryId) {
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function(response) {
-                console.log(response);
-                $('#account_title').empty();
-                $('#account_title').append("<option value=''></option>");
-                $('#account_title').append(response.options);
-            }
-        })
-        $("#account_title").on("change", function() {
-            var selectedOption = $(this).find(':selected');
-            var selectedAccountId = selectedOption.val(); // Get the account ID directly from the selected option's value
-            var selectedAccountCode = selectedOption.data('account-id'); // Get the account code from the data attribute
-            $("#selected_account_id").val(selectedAccountCode); // Set account ID to input field
-            // Optionally, do something with the selected account code
-        });
-    }
-};
 </script>
-
-
-
 
 @endsection
