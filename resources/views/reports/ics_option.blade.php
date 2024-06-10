@@ -126,7 +126,7 @@ function categor(val) {
     var categoryId = val;
     var propertyId = $("#property_id").val();
     $("#selected_account_id").val('All');
-    $('#item_id').empty();
+    // $('#item_id').empty();
     var modeval = "1,2"; // Ensure it's a comma-separated string
     var urlTemplate = "{{ route('invCatIcsPar', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
@@ -158,7 +158,7 @@ function categor(val) {
 function allgenOption(val, type, pAccountable) {
     var category = $('#category_id').val();
     var accnt_title = $('#account_title').val();
-    var properties_id = "par";
+    var properties_id = "ics";
     var selected_account_id = $('#selected_account_id').val();
     var endUserID = val;
 

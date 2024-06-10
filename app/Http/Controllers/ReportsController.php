@@ -967,18 +967,34 @@ class ReportsController extends Controller
                 ->select('inventories.*', 'items.*', 'inventories.id as pid')
                 ->where('office_id', $id)
                 ->whereIn('inventories.properties_id', $propertiesid)
-                ->where('inventories.categories_id', $condcategories, $categoriesId)
+                ->when($properties_id == 'ics', function ($query) {
+                    return $query->whereIn('inventories.properties_id', [1, 2]);
+                })
+                ->when($properties_id == 'par', function ($query) {
+                    return $query->whereIn('inventories.properties_id', [3]);
+                })
+                ->when($properties_id == 'unserv', function ($query) {
+                    return $query->whereIn('inventories.properties_id', [1, 2, 3]);
+                })
                 ->where('inventories.property_id', $condpropid, $propId)
                 ->get();
             }else{
-                 $itempar = Inventory::where('person_accnt', $id)
+                $itempar = Inventory::where('person_accnt', $id)
                 ->join('items', 'items.id', '=', 'inventories.item_id')
                 ->select('inventories.*', 'items.*', 'inventories.id as pid')
-                ->whereIn('inventories.properties_id', $propertiesid)
+                ->when($properties_id == 'ics', function ($query) {
+                    return $query->whereIn('inventories.properties_id', [1, 2]);
+                })
+                ->when($properties_id == 'par', function ($query) {
+                    return $query->whereIn('inventories.properties_id', [3]);
+                })
+                ->when($properties_id == 'unserv', function ($query) {
+                    return $query->whereIn('inventories.properties_id', [1, 2, 3]);
+                })
                 ->where('inventories.categories_id', $condcategories, $categoriesId)
                 ->where('inventories.property_id', $condpropid, $propId)
                 // ->where('inventories.selected_account_id ', $selaccnt)
-                ->get();
+                ->get();            
             }
 
             $options = "";
