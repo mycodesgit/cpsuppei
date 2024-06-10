@@ -178,45 +178,51 @@
 			    	<th colspan="4" style="text-align: left"><b class="text-total">{{ number_format($grandTotal, 2) }}</b></th>
 			    </tr>
 			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="4" class="sign" style="text-align: center;">
-						<span class="text-receivedby" style="float: left">Received by:</span><br>
-						 <span class="footer-cell"> 
-							<span class="footer-cell-sign" style="text-decoration: underline;">
-								@if($pAccountable == 'officeAccountable')
-									{{ isset($icsitems->first()->office_officer) ? strtoupper($icsitems->first()->office_officer) : '' }}
-								@else
-									{{ isset($icsitems->first()->person_accnt_name) ? strtoupper($icsitems->first()->person_accnt_name) : '' }}
-								@endif			
-							</span><br>
-							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
-							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($icsitems[0]->person_accnt)  ? strtoupper($icsitems[0]->office_name) : strtoupper($icsitems[0]->office_name); }}
-							</span><br>
-							<span class="footer-cell-text">Positon / Office</span><br><br>
-
-							<span class="footer-cell-sign">____________________</span><br>
-							<span class="footer-cell-text">Date</span>
-						</span>
-					</td>
-					<td colspan="4" class="sign" style="text-align: center;">
-						<span class="text-receivedby" style="float: left">Received from:</span><br>
-						 <span class="footer-cell">
-							<span class="footer-cell-sign"><u>MA. SOCORRO T. LLAMAS</u></span><br>
-							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
-
-							<span class="footer-cell-sign"><u>LUIGIE T. CABU-AL</u></span><br>
-							<span class="footer-cell-text">Supply Officer</span><br><br>
-
-							<span class="footer-cell-sign"><u>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
-							<span class="footer-cell-text">Date</span>
-						</span>
-					</td>
-				</tr>
-			</tfoot>
 		</table>
+		<table id="rpcppe" class="table table-bordered">
+		<tfoot>
+			<tr>
+				<td colspan="4" class="sign" style="text-align: center;">
+					<span class="text-receivedby" style="float: left">Received by:</span><br>
+					 <span class="footer-cell"> 
+						<span class="footer-cell-sign" style="text-decoration: underline;">
+							@if($pAccountable == 'officeAccountable')
+								<b>{{ isset($icsitems->first()->office_officer) ? strtoupper($icsitems->first()->office_officer) : '' }}
+							@else
+								<b>{{ isset($icsitems->first()->person_accnt_name) ? strtoupper($icsitems->first()->person_accnt_name) : '' }}
+							@endif			
+						</span><br>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+						<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
+
+						<span class="footer-cell-sign" style="text-decoration: underline;">
+							{{-- <b>{{ isset($icsitems->first()->person_accnt)  ? strtoupper($icsitems->first()->office_name) : strtoupper($icsitems->first()->office_name); }} --}}
+						</span><br>
+						<span class="footer-cell-text">Positon / Office</span><br><br>
+
+						<span class="footer-cell-sign">____________________</span><br>
+						<span class="footer-cell-text">Date</span>
+					</span>
+				</td>
+				<td colspan="4" class="sign" style="text-align: center;">
+					<span class="text-receivedby" style="float: left">Issued by:</span><br>
+					<span class="footer-cell">
+
+					   <span class="footer-cell-sign"><u><b>LUIGIE T. CABU-AL</u></span><br>
+					   <span class="footer-cell-text">Signature Over Printed Name</span><br><br>
+
+					   <span class="footer-cell-sign" style="text-decoration: underline;">
+						   <b>Supply Officer II / SUPPLY OFFICE
+					   </span><br>
+					   <span class="footer-cell-text">Positon / Office</span><br><br>
+
+					   <span class="footer-cell-sign"><u><b>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
+					   <span class="footer-cell-text">Date</span>
+				   </span>
+				</td>
+			</tr>
+		</tfoot>
+	</table>
 	</div>
 </body>
 </html>

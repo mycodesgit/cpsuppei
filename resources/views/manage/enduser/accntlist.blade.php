@@ -24,7 +24,7 @@
                                     <th>No</th>
                                     <th>Accountable Person</th>
                                     <th>Campus/Office</th>
-                                    <th>Action</th>
+                                    <th class="text-center" width="50">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,13 +34,13 @@
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->person_accnt }}</td>
                                     <td>{{ $data->office_name }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{ route('accountableEdit', $data->id) }}" class="btn btn-info btn-xs btn-edit">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </a>
-                                        <button value="{{ $data->id}}" class="btn btn-danger btn-xs accnt-delete">
+                                        {{-- <button value="{{ $data->id}}" class="btn btn-danger btn-xs accnt-delete">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </button> --}}
                                     </td>
                                 </tr>
                                 @endforeach

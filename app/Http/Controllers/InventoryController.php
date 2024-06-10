@@ -370,6 +370,29 @@ class InventoryController extends Controller
             "options" => $options,
         ]);
     }
+
+    public function invCatIcsPar($id, $mode) {
+        $modeArray = explode(',', $mode);
+        if ($id) {
+            $accounts = Properties::join('property', 'property.id', '=', 'properties.property_id')
+                ->where('properties.category_id', $id)
+                ->whereIn('properties.property_id', $modeArray)
+                ->select('properties.account_number', 'properties.account_title', 'properties.code', 'properties.id', 'property.abbreviation')
+                ->get();
+    
+            $options = "<option value='All' data-account-id='All' selected>All</option>"; 
+            
+            foreach ($accounts as $account) {
+                $options .= "<option value='".$account->code."' data-account-id='".$account->id."'>".$account->code.'|'.$account->abbreviation.'|'.$account->account_title."</option>";
+            }
+        } else {
+            $options = "<option value=''>Select a category first</option>";
+        }
+    
+        return response()->json([
+            "options" => $options,
+        ]);
+    }    
     
 
     public function inventoryDelete($id){
@@ -446,10 +469,26 @@ class InventoryController extends Controller
 
     public function geneCheck(Request $request){
         $qr = $request->query('q');
-        $inventory = Inventory::where('property_no_generated', $qr)->first();
+
+        $inventory = Inventory::where('property_no_generated', $qr)
+        ->leftJoin('offices', 'inventories.office_id', '=', 'offices.id')
+        ->leftJoin('accountable', 'inventories.person_accnt', '=', 'accountable.id')
+        ->select(
+            'inventories.id', 
+            'inventories.remarks', 
+            'inventories.property_no_generated', 
+            'inventories.office_id', 
+            'inventories.person_accnt_name', 
+            'offices.office_officer', 
+            'accountable.person_accnt as accntperson'
+        )
+        ->first();
+
+    
+
         if($inventory){
-            $office = Office::where('id', '!=', 1)->get();
-            $accnt = Accountable::all();
+            $office = Office::where('id', '!=', 1)->select('id', 'office_name', 'office_officer')->get();
+            $accnt = Accountable::select('id', 'person_accnt')->get();
             
             $data = ([
                 'invmatch' => $inventory,
@@ -472,17 +511,21 @@ class InventoryController extends Controller
 
     public function geneQr(Request $request){
         $uid = $request->query('uid');
-        $qr = $request->query('q');
-        $remarks = $request->query('r');
-        $comment = $request->query('c');
-
+        $qr = $request->query('qrcode');
+        $atype = $request->query('accnt_type');
+        $paccount = $request->query('person_accnt');
+        $remarks = $request->query('remarks');
+        $comment = $request->query('comment');
+        
         $inventory = Inventory::where('property_no_generated', $qr)->first();
- 
+        
         $inv_id = $inventory->id;
 
         InvQR::create([
             'uid' => $uid,
             'inv_id' => $inv_id,
+            'accnt_type' => $atype,
+            'person_accnt' => $paccount,
             'remarks' => $remarks,
             'comment' => $comment,
         ]);
@@ -493,7 +536,6 @@ class InventoryController extends Controller
             return "0";
         }
     }
-
 
     public function inventoryStat(){
         $instat = InvSetting::first();

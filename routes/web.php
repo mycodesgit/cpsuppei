@@ -140,7 +140,7 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/list/sticker', [InventoryController::class, 'inventoryStickerTemplate'])->name('inventoryStickerTemplate');
         Route::get('/list/sticker/pdf', [InventoryController::class, 'inventoryStickerTemplatePDF'])->name('inventoryStickerTemplatePDF');
     });
-
+    
     //Reports
     Route::prefix('/reports')->group(function () {
         Route::get('/rpcppe/option', [ReportsController::class, 'rpcppeOption'])->name('rpcppeOption');
@@ -158,9 +158,14 @@ Route::group(['middleware'=>['login_auth']],function(){
         
         Route::get('/par/option', [ReportsController::class, 'parOption'])->name('parOption');
         Route::post('/par/reports/par', [ReportsController::class, 'parOptionReportGen'])->name('parOptionReportGen');
-        Route::post('/par/itemList', [ReportsController::class, 'genOption'])->name('genOption');
+        Route::post('/par/icsitemList', [ReportsController::class, 'pargenOption'])->name('pargenOption');
         
         Route::post('/par/itemList/unserv', [ReportsController::class, 'genOptionUnserv'])->name('genOptionUnserv');
+
+        Route::get('/list/cat/{id}/{mode}', [InventoryController::class, 'invCatIcsPar'])->name('invCatIcsPar');
+
+
+        Route::post('/allgenoption', [ReportsController::class, 'allgenOption'])->name('allgenOption');
     });
 
 

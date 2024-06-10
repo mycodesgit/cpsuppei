@@ -25,7 +25,7 @@
                                     <th>Category</th>
                                     <th>Account Title</th>
                                     <th>Account Number</th>
-                                    <th>Abbreviation</th>
+                                    <th>Account Title Type</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -99,8 +99,8 @@
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-12">
-                                    <label for="">Account title</label>
-                                    <input type="text" id="account_title_abbr" name="account_title_abbr" value="{{ $cr == 'lvEdit' ? $lvProperties->account_title_abbr : '' }}" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter Account Title Abbreviation">
+                                    <label for="">Account title type</label>
+                                    <input type="text" id="account_title_abbr" name="account_title_abbr" value="{{ $cr == 'lvEdit' ? $lvProperties->account_title_abbr : '' }}" class="form-control" oninput="this.value = this.value.toUpperCase()" placeholder="Enter Account Title Type">
                                 </div>
                             </div>
                         </div>

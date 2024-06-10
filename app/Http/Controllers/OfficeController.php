@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 use App\Models\Setting;
+use App\Models\Inventory;
 use App\Models\Office;
+use App\Models\InvQR;
 
 class OfficeController extends Controller
 {
@@ -62,35 +64,63 @@ class OfficeController extends Controller
     }
 
     public function officeUpdate(Request $request) {
+        // Validate request data
         $request->validate([
             'id' => 'required',
             'office_code' => 'required',
             'office_name' => 'required',
             'office_abbr' => 'required',
             'office_officer' => 'required',
-        ]);
+        ]); 
+    
+        $officeId = $request->input('id');
+        $officeName = $request->input('office_name');
+        $officeOfficer = $request->input('office_officer');
+    
+        $existingOffice = Office::where('office_name', $officeName)
+                                ->where('id', '!=', $officeId)
+                                ->first();
 
-        try {
-            $officeName = $request->input('office_name');
-            $existingOffice = Office::where('office_name', $officeName)->where('id', '!=', $request->input('id'))->first();
-
-            if ($existingOffice) {
-                return redirect()->back()->with('error', 'Office already exists!');
-            }
-
-            $office = Office::findOrFail($request->input('id'));
-            $office->update([
-                'office_code' => $request->input('office_code'),
-                'office_name' => $officeName,
-                'office_abbr' => $request->input('office_abbr'), 
-                'office_officer' => $request->input('office_officer'),
-            ]);
-
-            return redirect()->route('officeEdit', ['id' => $office->id])->with('success', 'Updated Successfully');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to update Office!');
+        if ($existingOffice) {
+            return redirect()->back()->with('error', 'Office already exists!');
         }
-    }
+    
+        $existingOfficer = Office::where('office_officer', $officeOfficer)
+                                 ->where('id', '!=', $officeId)
+                                 ->first();
+        if ($existingOfficer) {
+            return redirect()->back()->with('error', 'Office officer already assigned to another office!');
+        }
+    
+        $office = Office::findOrFail($officeId);
+        $office->update([
+            'office_code' => $request->input('office_code'),
+            'office_name' => $officeName,
+            'office_abbr' => $request->input('office_abbr'),
+            'office_officer' => $officeOfficer,
+        ]);
+    
+        $inventories = Inventory::where('office_id', $officeId)->get();
+        foreach ($inventories as $inventory) {
+            if ($officeOfficer != $inventory->person_accnt_name) {
+                $inventory->update([
+                    'person_accnt_name' => $officeOfficer,
+                ]);
+    
+                InvQR::create([
+                    'uid' => auth()->check() ? auth()->user()->id : null,
+                    'inv_id' => $inventory->id,
+                    'accnt_type' => 'OfficeAccountable',
+                    'person_accnt' => $officeOfficer,
+                    'remarks' => $inventory->remarks,
+                    'comment' => 'Updating office officer',
+                ]);
+            }
+        }
+    
+        return redirect()->route('officeEdit', ['id' => $office->id])->with('success', 'Updated Successfully');
+    }    
+    
 
     public function officeDelete($id){
         $office = Office::find($id);

@@ -12,6 +12,8 @@ class InvQR extends Model
     protected $fillable = [
         'uid',
         'inv_id',
+        'accnt_type',
+        'person_accnt',
         'remarks',
         'comment',
     ];

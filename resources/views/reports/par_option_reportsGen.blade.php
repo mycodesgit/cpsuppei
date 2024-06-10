@@ -194,12 +194,12 @@
 						<span class="text-receivedby" style="float: left">Received by:</span><br>
 						 <span class="footer-cell">
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($paritems[0]->person_accnt)  ? strtoupper($paritems[0]->person_accnt) : strtoupper($paritems[0]->office_officer); }}
+								<b>{{ (isset($paritems[0]->person_accnt_id)) ? strtoupper($paritems[0]->person_accnt) : strtoupper($paritems[0]->person_accnt_name); }}
 							</span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								{{ isset($paritems[0]->person_accnt)  ? strtoupper($paritems[0]->office_name) : strtoupper($paritems[0]->office_name); }}
+								<b>{{ isset($paritems[0]->person_accnt_id)  ? strtoupper($paritems[0]->office_name) : strtoupper($paritems[0]->office_name); }}
 							</span><br>
 							<span class="footer-cell-text">Positon / Office</span><br><br>
 
@@ -210,13 +210,16 @@
 					<td colspan="3" class="sign" style="text-align: center;">
 						<span class="text-receivedby" style="float: left">Issued by:</span><br>
 						 <span class="footer-cell">
-							<span class="footer-cell-sign"><u>MA. SOCORRO T. LLAMAS</u></span><br>
+
+							<span class="footer-cell-sign"><u><b>LUIGIE T. CABU-AL</u></span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
-							<span class="footer-cell-sign"><u>LUIGIE T. CABU-AL</u></span><br>
-							<span class="footer-cell-text">Supply Officer</span><br><br>
+							<span class="footer-cell-sign" style="text-decoration: underline;">
+								<b>Supply Officer II / SUPPLY OFFICE
+							</span><br>
+							<span class="footer-cell-text">Positon / Office</span><br><br>
 
-							<span class="footer-cell-sign"><u>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
+							<span class="footer-cell-sign"><u><b>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
 							<span class="footer-cell-text">Date</span>
 						</span>
 					</td>

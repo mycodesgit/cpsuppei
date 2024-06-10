@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 
 use App\Models\Setting;
-use App\Models\Accountable;
+use App\Models\Accountable; 
+use App\Models\Inventory;
+use App\Models\InvQR;
 use App\Models\Office;
 
 class EnduserController extends Controller
@@ -68,32 +70,63 @@ class EnduserController extends Controller
     }
 
     public function accountableUpdate(Request $request) {
+        // Validate request data
         $request->validate([
             'id' => 'required',
             'person_accnt' => 'required',
             'off_id' => 'required',
         ]);
-
+    
         try {
+            $accountId = $request->input('id');
             $accntName = $request->input('person_accnt');
-            $existingAccnt = Accountable::where('person_accnt', $accntName)->where('id', '!=', $request->input('id'))->first();
-
+            $offId = $request->input('off_id');
+    
+            $existingAccnt = Accountable::where('person_accnt', $accntName)
+                                        ->where('id', '!=', $accountId)
+                                        ->first();
+    
             if ($existingAccnt) {
-                return redirect()->back()->with('error', 'Item already exists!');
+                return redirect()->back()->with('error', 'Accountable person already exists!');
             }
-
-            $accnt = Accountable::findOrFail($request->input('id'));
+    
+            $existingPersonAccnt = Accountable::where('person_accnt', $accntName)
+                                              ->where('id', '!=', $accountId)
+                                              ->first();
+            if ($existingPersonAccnt) {
+                return redirect()->back()->with('error', 'Accountable person already assigned to another office!');
+            }
+    
+            $accnt = Accountable::findOrFail($accountId);
             $accnt->update([
                 'person_accnt' => $accntName,
-                'off_id' => $request->input('off_id'),
+                'off_id' => $offId,
             ]);
-
+    
+            $inventories = Inventory::where('person_accnt', $accountId)->get();
+            foreach ($inventories as $inventory) {
+                if ($accntName != $inventory->person_accnt_name) {
+                    $inventory->update([
+                        'person_accnt_name' => $accntName,
+                    ]);
+    
+                    InvQR::create([
+                        'uid' => auth()->check() ? auth()->user()->id : null,
+                        'inv_id' => $inventory->id,
+                        'accnt_type' => 'accountable',
+                        'person_accnt' => $accntName,
+                        'remarks' => $inventory->remarks,
+                        'comment' => 'Updating accountable person',
+                    ]);
+                }
+            }
+    
             return redirect()->route('accountableEdit', ['id' => $accnt->id])->with('success', 'Updated Successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to update Accountable!');
         }
     }
-
+    
     public function accountableDelete($id){
         $accnt = Accountable::find($id);
         $accnt->delete();

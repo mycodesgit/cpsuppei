@@ -653,32 +653,42 @@ class ReportsController extends Controller
     }
 
     public function icsgenOption(Request $request) {
+        $categoriesId = $request->categories_id;
+        $propId = $request->property_id;
         $id = $request->id;
         $type = $request->type;
         $pAccountable = $request->pAccountable;
 
-        if ($type == 'campus') {
-            $userAccountable = Accountable::where('off_id', $id)
-                ->select('person_accnt', 'id')
-                ->get();
+        $condcategories = ($categoriesId == 'All') ? '!=' : '=';
+        $categoriesId = ($categoriesId == 'All') ? '0' : $categoriesId;
 
-            $officeAccountable = Office::where('id', $id)
-                ->select('office_officer', 'id')
-                ->get();
+        $condpropid = ($propId == 'All') ? '!=' : '=';
+        $propId = ($propId == 'All') ? '0' : $propId;
 
-            $options = "";
-            foreach ($userAccountable as $accnt) {
-                $options .= "<option value='".$accnt->id."' data-person-cat='accountable' data-account-id='".$accnt->id."'>".$accnt->person_accnt."</option>";
-            }
-            foreach ($officeAccountable as $officeAccount) {
-                $options .= "<option value='".$officeAccount->id."' data-person-cat='officeAccountable' data-account-id='".$officeAccount->id."'>".$officeAccount->office_officer."- Office Head</option>";
-            }
+        // if ($type == 'campus') {
+        //     $userAccountable = Accountable::where('off_id', $id)
+        //         ->select('person_accnt', 'id')
+        //         ->get();
+
+        //     $officeAccountable = Office::where('id', $id)
+        //         ->select('office_officer', 'id')
+        //         ->get();
+
+        //     $options = "";
+        //     foreach ($userAccountable as $accnt) {
+        //         $options .= "<option value='".$accnt->id."' data-person-cat='accountable' data-account-id='".$accnt->id."'>".$accnt->person_accnt."</option>";
+        //     }
+        //     foreach ($officeAccountable as $officeAccount) {
+        //         $options .= "<option value='".$officeAccount->id."' data-person-cat='officeAccountable' data-account-id='".$officeAccount->id."'>".$officeAccount->office_officer."- Office Head</option>";
+        //     }
 
 
-        } else {
+        // } else {
             if($pAccountable == 'officeAccountable'){
                 $itempar = Purchases::join('items', 'items.id', '=', 'purchases.item_id')
                 ->select('purchases.*', 'items.*', 'purchases.id as pid')
+                ->where('inventories.categories_id', $condcategories, $categoriesId)
+                ->where('inventories.property_id', $condpropid, $propId)
                 ->where('office_id', $id)
                 ->whereIn('purchases.properties_id', ['1', '2'])
                 ->get();
@@ -686,15 +696,14 @@ class ReportsController extends Controller
                  $itempar = Purchases::where('person_accnt', $id)
                 ->join('items', 'items.id', '=', 'purchases.item_id')
                 ->select('purchases.*', 'items.*', 'purchases.id as pid')
+                ->where('inventories.categories_id', $condcategories, $categoriesId)
+                ->where('inventories.property_id', $condpropid, $propId)
                 ->whereIn('purchases.properties_id', ['1', '2'])
                 ->get();
             }
 
-            $options = "";
-            foreach ($itempar as $parItem) {
-                $options .= "<option value='".$parItem->pid."'>".$parItem->item_name.' '.$parItem->item_descrip."</option>";
-            }
-        }
+
+        // }
 
         return response()->json([
             "options" => $options,

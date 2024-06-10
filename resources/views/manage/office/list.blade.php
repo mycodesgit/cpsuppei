@@ -26,7 +26,7 @@
                                     <th>Office Name</th>
                                     <th>Abbreviation</th>
                                     <th>Office Head</th>
-                                    <th>Action</th>
+                                    <th class="text-center" width="50">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,13 +38,13 @@
                                     <td>{{ $data->office_name }}</td>
                                     <td>{{ $data->office_abbr }}</td>
                                     <td>{{ $data->office_officer }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{ route('officeEdit', $data->id) }}" class="btn btn-info btn-xs btn-edit" data-id="{{ $data->id }}">
                                             <i class="fas fa-exclamation-circle"></i>
                                         </a>
-                                        <button value="{{ $data->id}}" class="btn btn-danger btn-xs office-delete">
+                                        {{-- <button value="{{ $data->id}}" class="btn btn-danger btn-xs office-delete">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </button> --}}
                                     </td>
                                 </tr>
                                 @endforeach

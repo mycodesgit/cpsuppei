@@ -24,12 +24,11 @@
                 <div class="card-body">
                     <form action="{{ route('parOptionReportGen') }}" class="form-horizontal add-form" id="parReport" method="POST" target="_blank">
                         @csrf
-                        
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-6">
                                     <label>Campus or Office:</label>
-                                    <select class="form-control select2bs4" id="office_id" name="office_id" style="width: 100%;" onchange="genOption(this.value, 'campus', this.options[this.selectedIndex].getAttribute('data-person-cat'))">
+                                    <select class="form-control select2bs4" id="office_id" name="office_id" style="width: 100%;" onchange="allgenOption(this.value, 'campus', this.options[this.selectedIndex].getAttribute('data-person-cat'))">
                                         <option disabled selected value=""> --- Select Campus or Office Type --- </option>
                                         @foreach ($office as $data)
                                             @if($data->id != 1)
@@ -58,7 +57,7 @@
                             <div class="form-row">
                                 <div class="col-md-6" id="account-div">
                                     <label>Account Title:</label>
-                                    <select id="account_title" name="property_id" data-placeholder="---Select Account Title---" class="form-control select2bs4" style="width: 100%;">
+                                    <select id="account_title" name="property_id" data-placeholder="---Select Account Title---" onchange="acctTitle()" class="form-control select2bs4" style="width: 100%;">
                                     </select>
                                 </div>
                                 <input type="hidden" id="selected_account_id" name="selected_account_id">
@@ -75,13 +74,13 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-12">
                                     <label>End User:</label>
                                     <input type="hidden" id="accountType" name="pAccountable">
-                                    <select class="form-control select2bs4" id="person_accnt" data-placeholder="Select Accountable" onchange="genOption(this.value, 'user', this.options[this.selectedIndex].getAttribute('data-person-cat'))" name="person_accnt" style="width: 100%;">
+                                    <select class="form-control select2bs4" id="person_accnt" data-placeholder="Select Accountable" onchange="allgenOption(this.value, 'user', this.options[this.selectedIndex].getAttribute('data-person-cat'))" name="person_accnt" style="width: 100%;">
                                         <option></option>
                                      
                                     </select>
@@ -112,6 +111,7 @@
                                 </div>
                             </div>
                         </div>   
+                        </div>   
                     </form>
                 </div>
             </div>
@@ -119,24 +119,18 @@
     </div>
 </div>
 <script>
+function acctTitle(){
+    $('#item_id').empty();
+}
 function categor(val) {
     var categoryId = val;
     var propertyId = $("#property_id").val();
     $("#selected_account_id").val('All');
-    var modeval;
-    if (propertyId === '2') {
-        modeval = 2;
-    } else if (propertyId === '3') {
-        modeval = 3;
-    } else if (propertyId === '1') {
-        modeval = 1;
-    } else {
-        modeval = 3; 
-    }
-
-    var urlTemplate = "{{ route('inventoryCat', [':id', ':mode']) }}";
+    $('#item_id').empty();
+    var modeval = "3"; // Ensure it's a comma-separated string
+    var urlTemplate = "{{ route('invCatIcsPar', [':id', ':mode']) }}";
     var url = urlTemplate.replace(':id', categoryId).replace(':mode', modeval);
-    
+
     if (categoryId) {
         $.ajax({
             url: url,
@@ -144,10 +138,13 @@ function categor(val) {
             success: function(response) {
                 console.log(response);
                 $('#account_title').empty();
-                $('#account_title').append("<option value=''></option>");
                 $('#account_title').append(response.options);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error: ", status, error);
             }
         });
+
         $("#account_title").on("change", function() {
             var selectedOption = $(this).find(':selected');
             var selectedAccountId = selectedOption.val();
@@ -158,44 +155,52 @@ function categor(val) {
 }
 </script>
 <script>
-function genOption(val, type, pAccountable) {
-    var endUserID = val;
-
-    var urlTemplate = "{{ route('genOption') }}";
-    var csrfToken = '{{ csrf_token() }}'; 
-    if(pAccountable != "none"){
-        $('#accountType').val(pAccountable);
-    }
-    //alert(pAccountable);
-    if (endUserID) {
-        $.ajax({
-            url: urlTemplate,
-            type: "POST",
-            data: {
-                'id': endUserID,
-                'type': type,
-                'pAccountable': pAccountable,
-            },
-            headers: {
-                'X-CSRF-TOKEN': csrfToken 
-            },
-            success: function(response) {
-                console.log(response);
-                if(type == 'campus'){
-                    $('#person_accnt').empty();
-                    $('#person_accnt').append("<option value=''></option>");
-                    $('#person_accnt').append(response.options);
-                }else{
-                     $('#item_id').empty();
-                     $('#item_id').append("<option value=''></option>");
-                     $('#item_id').append(response.options);
+    function allgenOption(val, type, pAccountable) {
+        var category = $('#category_id').val();
+        var accnt_title = $('#account_title').val();
+        var properties_id = "par";
+        var selected_account_id = $('#selected_account_id').val();
+        var endUserID = val;
+    
+        var urlTemplate = "{{ route('allgenOption') }}";
+        var csrfToken = '{{ csrf_token() }}';
+        if(pAccountable != "none"){
+            $('#accountType').val(pAccountable);
+        }
+        //alert(pAccountable);
+        if (endUserID) {
+            $.ajax({
+                url: urlTemplate,
+                type: "POST",
+                data: {
+                    'category': category,
+                    'accnt_title': accnt_title,
+                    'selected_account_id': selected_account_id,
+                    'properties_id': properties_id, 
+                    'id': endUserID,
+                    'type': type,
+                    'pAccountable': pAccountable,
+                },
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken 
+                },
+                success: function(response) {
+                    console.log(response);
+                    if(type == 'campus'){
+                        $('#person_accnt').empty();
+                        $('#person_accnt').append("<option value=''></option>");
+                        $('#person_accnt').append(response.options);
+                    }else{
+                         $('#item_id').empty();
+                         $('#item_id').append("<option value=''></option>");
+                         $('#item_id').append(response.options);
+                    }
                 }
-            }
-        });
-        
-    }
-};
-</script>
+            });
+            
+        }
+    };
+    </script>
 
 
 @endsection
