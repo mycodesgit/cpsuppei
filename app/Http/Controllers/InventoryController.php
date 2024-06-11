@@ -469,45 +469,44 @@ class InventoryController extends Controller
 
     public function geneCheck(Request $request){
         $qr = $request->query('q');
-
-        $inventory = Inventory::where('property_no_generated', $qr)
-        ->leftJoin('offices', 'inventories.office_id', '=', 'offices.id')
-        ->leftJoin('accountable', 'inventories.person_accnt', '=', 'accountable.id')
-        ->select(
-            'inventories.id', 
-            'inventories.remarks', 
-            'inventories.property_no_generated', 
-            'inventories.office_id', 
-            'inventories.person_accnt_name', 
-            'offices.office_officer', 
-            'accountable.person_accnt as accntperson'
-        )
-        ->first();
-
     
-
-        if($inventory){
+        $inventoryQuery = Inventory::where('property_no_generated', $qr)
+            ->leftJoin('offices', 'inventories.office_id', '=', 'offices.id')
+            ->leftJoin('accountable', 'inventories.person_accnt', '=', 'accountable.id')
+            ->select(
+                'inventories.id', 
+                'inventories.remarks', 
+                'inventories.property_no_generated', 
+                'inventories.office_id', 
+                'inventories.person_accnt_name', 
+                'offices.office_officer', 
+                'accountable.person_accnt as accntperson'
+            );
+        
+        $count = $inventoryQuery->count();
+    
+        if ($count == 1) {
+            $inventory = $inventoryQuery->first();
+            
             $office = Office::where('id', '!=', 1)->select('id', 'office_name', 'office_officer')->get();
             $accnt = Accountable::select('id', 'person_accnt')->get();
             
-            $data = ([
+            $data = [
                 'invmatch' => $inventory,
                 'office' => $office,
                 'accnt' => $accnt,
-            ]);
-            return response()->json(['data' => $data]);
-            // echo '<select>';
-            // foreach ($data['office'] as $office) {
-            //     echo '<option value="'.$office->id.";OfficeAccountable".'">' . 'OFFICE OFFICER - ' . $office->office_officer . '</option>';
-            // }
-            // foreach ($data['accnt'] as $accnt) {
-            //     echo '<option value="'.$accnt->id.";accountable".'">' . 'OFFICE ACCOUNTABLE - ' . $accnt->person_accnt . '</option>';
-            // }
-            // echo '</select>';
+            ];
+    
+            return response()->json(['data' => $data], 200);
+    
+        } elseif ($count > 1) {
+            return 'multiple';
         }else{
-            return "0";
-        }
+            return '0';
+        } 
+
     }
+    
 
     public function geneQr(Request $request){
         $uid = $request->query('uid');

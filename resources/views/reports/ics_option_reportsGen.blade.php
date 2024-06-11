@@ -196,7 +196,7 @@
 						<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
 						<span class="footer-cell-sign" style="text-decoration: underline;">
-							{{-- <b>{{ isset($icsitems->first()->person_accnt)  ? strtoupper($icsitems->first()->office_name) : strtoupper($icsitems->first()->office_name); }} --}}
+							<b>{{ isset($icsitems->first()->person_accnt)  ? strtoupper($icsitems->first()->office_name) : strtoupper($icsitems->first()->office_name); }}
 						</span><br>
 						<span class="footer-cell-text">Positon / Office</span><br><br>
 

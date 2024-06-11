@@ -39,6 +39,7 @@ Route::get('/', function () {
 Route::get('/login',[LoginController::class,'getLogin'])->name('getLogin');
 Route::post('/login',[LoginController::class,'postLogin'])->name('postLogin');
 Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
+
 Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
 Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
 Route::get('/instat', [InventoryController::class, 'inventoryStat'])->name('inventoryStat'); 
