@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'login_auth' => \App\Http\Middleware\LoginAuth::class,
         'role' => \App\Http\Middleware\LoginAuth::class,
+        'android' => \App\Http\Middleware\AndroidMiddleware::class,
     ];
 }

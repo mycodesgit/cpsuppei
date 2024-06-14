@@ -38,12 +38,14 @@ Route::get('/', function () {
 //Login
 Route::get('/login',[LoginController::class,'getLogin'])->name('getLogin');
 Route::post('/login',[LoginController::class,'postLogin'])->name('postLogin');
-Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
 
-Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
-Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
-Route::get('/instat', [InventoryController::class, 'inventoryStat'])->name('inventoryStat'); 
-Route::get('/instat-update', [InventoryController::class, 'inventoryStatUp'])->name('inventoryStatUp'); 
+Route::middleware(['android'])->group(function () {
+    Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
+    Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
+    Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
+    Route::get('/instat', [InventoryController::class, 'inventoryStat'])->name('inventoryStat');
+    Route::get('/instat-update', [InventoryController::class, 'inventoryStatUp'])->name('inventoryStatUp');
+});
 
 //Middleware
 Route::group(['middleware'=>['login_auth']],function(){

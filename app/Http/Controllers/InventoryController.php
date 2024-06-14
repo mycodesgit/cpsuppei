@@ -472,6 +472,7 @@ class InventoryController extends Controller
     
         $inventoryQuery = Inventory::where('property_no_generated', $qr)
             ->leftJoin('offices', 'inventories.office_id', '=', 'offices.id')
+            ->leftJoin('items', 'inventories.item_id', '=', 'items.id')
             ->leftJoin('accountable', 'inventories.person_accnt', '=', 'accountable.id')
             ->select(
                 'inventories.id', 
@@ -479,6 +480,7 @@ class InventoryController extends Controller
                 'inventories.property_no_generated', 
                 'inventories.office_id', 
                 'inventories.person_accnt_name', 
+                'items.item_name',
                 'offices.office_officer', 
                 'accountable.person_accnt as accntperson'
             );
