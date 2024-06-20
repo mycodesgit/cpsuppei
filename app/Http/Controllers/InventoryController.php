@@ -518,9 +518,23 @@ class InventoryController extends Controller
         $remarks = $request->query('remarks');
         $comment = $request->query('comment');
         
+        
         $inventory = Inventory::where('property_no_generated', $qr)->first();
         
         $inv_id = $inventory->id;
+        
+        $check = InvQR::where('inv_id', $inv_id)->first();
+
+        if (is_null($check)) {
+            InvQR::create([
+                'uid' => $uid,
+                'inv_id' => $inv_id,
+                'accnt_type' => $atype,
+                'person_accnt' => $inventory->person_accnt_name,
+                'remarks' => $remarks,
+                'comment' => $comment,
+            ]);
+        }
 
         InvQR::create([
             'uid' => $uid,
