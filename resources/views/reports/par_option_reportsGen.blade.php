@@ -91,8 +91,8 @@
 </head>
 <body>
 	<p style="margin-top: -30px; margin-left: 640px;">Appendix 71</p>
-	<header style="margin-top: -10px; margin-left: 50px;">
-		<img src="{{ asset('template/img/par.png') }}">
+	<header style="margin-top: -10px; margin-left: 135px;">
+		<img src="{{ asset('template/img/par-header.png') }}">
 	</header>
 	<p style="font-weight: bolder; font-family: sans-serif; text-align: center;">PROPERTY ACKNOWLEDGEMENT RECEIPT</p>
 
@@ -116,6 +116,7 @@
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
 				<tr>
+					<th>No</th>
 					<th width="10%">Quantity</th>
 					<th width="8%">Unit</th>
 					<th width="30%">Description</th>
@@ -126,14 +127,16 @@
 			</thead>
 			<tbody>
 				@php
-			        $maxRows = 20;
+			        $maxRows = 3;
 			        $rowCount = 0;
+					$no = 1;
 			        $overallTotal = 0;
 			        $grandTotal = 0;
 			    @endphp
 
 			    @foreach ($paritems as $paritem)
 			        <tr>
+						<td>{{ $no++ }}</td>
 			            <td>{{ $paritem->qty }}</td>
 			            <td>{{ $paritem->unit_name }}</td>
 						<td style="font-size: 10px;">
@@ -160,37 +163,41 @@
 			            @php $rowCount++; @endphp
 			        @endif
 			    @endforeach
-
-			    @php
-			        $emptyRows = $maxRows - $rowCount;
-			    @endphp
-
-			    @for ($i = 0; $i < $emptyRows; $i++)
-			        <tr>
-			            <td height="13"></td>
-			            <td></td>
-			            <td></td>
-			            <td></td>
-			            <td></td>
-			            <td></td>
-			        </tr>
-			    @endfor
+					<tr>
+						<td height="13"></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td height="13"></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
 			    	<tr>
 			            <td height="13"></td>
 			            <td></td>
 			            <td></td>
 			            <td></td>
+						<td></td>
 			            <td style="text-align: right">Grand Total:</td>
 			            <td style="text-align: right"><strong>{{ number_format($grandTotal, 2) }}</strong></td>
 			        </tr>
 				<tr>
 			    	<td colspan="3" style="text-align: right"><b class="text-total">Supplier:</b></td>
-			    	<td colspan="3" style="text-align: left"><b class="text-total"></b></td>
+			    	<td colspan="4" style="text-align: left"><b class="text-total"></b></td>
 			    </tr>
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="3" class="sign" style="text-align: center;">
+					<td colspan="4" class="sign" style="text-align: center;">
 						<span class="text-receivedby" style="float: left">Received by:</span><br>
 						 <span class="footer-cell">
 							<span class="footer-cell-sign" style="text-decoration: underline;">
@@ -211,11 +218,11 @@
 						<span class="text-receivedby" style="float: left">Issued by:</span><br>
 						 <span class="footer-cell">
 
-							<span class="footer-cell-sign"><u><b>LUIGIE T. CABU-AL</u></span><br>
+							<span class="footer-cell-sign"><u><b>MA. SOCORRO T. LLAMAS</u></span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
 							<span class="footer-cell-sign" style="text-decoration: underline;">
-								<b>Supply Officer II / SUPPLY OFFICE
+								<b>Supply Officer / SUPPLY OFFICE
 							</span><br>
 							<span class="footer-cell-text">Positon / Office</span><br><br>
 

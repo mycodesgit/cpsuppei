@@ -58,7 +58,7 @@ class InventoryController extends Controller
                     ->get();
         return view('inventories.list', compact('setting', 'office', 'accnt','item', 'unit', 'property', 'currentPrice','category', 'inventory'));
     }
-
+    
     public function inventoryhighREAD(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $office = Office::all();
@@ -517,7 +517,6 @@ class InventoryController extends Controller
         $paccount = $request->query('person_accnt');
         $remarks = $request->query('remarks');
         $comment = $request->query('comment');
-        
         
         $inventory = Inventory::where('property_no_generated', $qr)->first();
         

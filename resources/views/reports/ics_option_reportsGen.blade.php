@@ -110,6 +110,7 @@
 					<th>Unit</th>
 					<th>Description</th>
 					<th>Unit Cost</th>
+					<th>Total Cost</th>
 					<th>Date Acquired</th>
 					<th>Inventory Item No.</th>
 					<th width="30">Estimated Useful Life</th>
@@ -117,7 +118,6 @@
 			</thead>
 			<tbody>
 				@php
-					$maxRows = 25;
 					$rowCount = 0;
 					$overallTotal = 0;
 					$grandTotal = 0;
@@ -129,11 +129,9 @@
 				 $parts = explode(';', $icsitem->serial_number);
 					 $result = [];
 
-					 // Group parts in sets of two and join them with semicolons and line breaks
 					 for ($i = 0; $i < count($parts); $i += 2) {
 						 $result[] = trim($parts[$i]) . (isset($parts[$i + 1]) ? '; ' . trim($parts[$i + 1]) : '');
 					 }
-
 				 @endphp
 					<tr>
 						<td>{{ $no++ }}</td>
@@ -146,6 +144,7 @@
 							<b>SN : </b> <span style="font-size: 12px;">{{  implode($result) }}</span>
 						</td>
 					    <td>{{ number_format( str_replace(',', '', $icsitem->item_cost), 2) }}</td>
+						<td>{{ number_format( str_replace(',', '', $icsitem->total_cost), 2) }}</td>
 					    <td>
 					    	@if($icsitem->date_acquired)
 						        {{ \Carbon\Carbon::parse($icsitem->date_acquired)->format('M. j, Y') }}
@@ -166,26 +165,32 @@
 					    @php $rowCount++; @endphp
 					@endif
 				@endforeach
-
-				@php
-					$emptyRows = $maxRows - $rowCount;
-				@endphp
-
-				@for ($i = 0; $i < $emptyRows; $i++)
-					<tr>
-					    <td height="13"></td>
-					    <td></td>
-					    <td></td>
-					    <td></td>
-					    <td></td>
-					    <td></td>
-					    <td></td>
-					    <td></td>
-					</tr>
-				@endfor
+				<tr>
+					<td height="13"></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td height="13"></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
 				<tr>
 			    	<th colspan="4" style="text-align: right"><b class="text-total">Total:</b></th>
 			    	<th colspan="4" style="text-align: left"><b class="text-total">{{ number_format($grandTotal, 2) }}</b></th>
+					<th></th>
 			    </tr>
 			</tbody>
 
@@ -218,11 +223,11 @@
 					<span class="text-receivedby" style="float: left">Issued by:</span><br>
 					<span class="footer-cell">
 
-					   <span class="footer-cell-sign"><u><b>LUIGIE T. CABU-AL</u></span><br>
+						<span class="footer-cell-sign"><u><b>MA. SOCORRO T. LLAMAS</u></span><br>
 					   <span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
 					   <span class="footer-cell-sign" style="text-decoration: underline;">
-						   <b>Supply Officer II / SUPPLY OFFICE
+						   <b>Supply Officer / SUPPLY OFFICE
 					   </span><br>
 					   <span class="footer-cell-text">Positon / Office</span><br><br>
 
