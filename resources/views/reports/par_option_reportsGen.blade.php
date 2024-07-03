@@ -116,8 +116,8 @@
 		<table id="rpcppe" class="table table-bordered">
 			<thead>
 				<tr>
-					<th>No</th>
-					<th width="10%">Quantity</th>
+					<th width="30">No</th>
+					<th width="30">Qty</th>
 					<th width="8%">Unit</th>
 					<th width="30%">Description</th>
 					<th>Property Number</th>
@@ -136,14 +136,14 @@
 
 			    @foreach ($paritems as $paritem)
 			        <tr>
-						<td>{{ $no++ }}</td>
-			            <td>{{ $paritem->qty }}</td>
+						<td style="text-align: center;">{{ $no++ }}</td>
+			            <td style="text-align: center;">{{ $paritem->qty }}</td>
 			            <td>{{ $paritem->unit_name }}</td>
-						<td style="font-size: 10px;">
+						<td>
 							<b>{{ $paritem->item_name }}</b>
 							<br><i> {{ $paritem->item_descrip }}</i><br>
 							<b>MODEL:</b>{{ $paritem->item_model ? str_replace('Model:', '', $paritem->item_model) : '' }}<br>
-							<b>SN : </b> {{ $paritem->serial_number }}
+							<b>SN : </b> <span style="font-size: 12px;">{!!  str_replace(';', '<br>', $paritem->serial_number) !!}</span>
 						</td>
 			            <td>{{ $paritem->property_no_generated }}</td>
 			            <td>{{ $paritem->date_acquired }}</td>

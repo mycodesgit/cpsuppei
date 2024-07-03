@@ -125,14 +125,6 @@
 				@endphp
 
 				 @foreach ($icsitems as $icsitem)
-				 @php
-				 $parts = explode(';', $icsitem->serial_number);
-					 $result = [];
-
-					 for ($i = 0; $i < count($parts); $i += 2) {
-						 $result[] = trim($parts[$i]) . (isset($parts[$i + 1]) ? '; ' . trim($parts[$i + 1]) : '');
-					 }
-				 @endphp
 					<tr>
 						<td>{{ $no++ }}</td>
 					    <td>{{ $icsitem->qty }}</td>
@@ -141,7 +133,7 @@
 							<b>{{ $icsitem->item_name }}</b>
 							<br><i> {{ $icsitem->item_descrip }}</i><br>
 							<b>MODEL:</b>{{ $icsitem->item_model ? str_replace('Model:', '', $icsitem->item_model) : '' }}<br>
-							<b>SN : </b> <span style="font-size: 12px;">{{  implode($result) }}</span>
+							<b>SN : </b> <span style="font-size: 12px;">{!!  str_replace(';', '<br>', $icsitem->serial_number) !!}</span>
 						</td>
 					    <td>{{ number_format( str_replace(',', '', $icsitem->item_cost), 2) }}</td>
 						<td>{{ number_format( str_replace(',', '', $icsitem->total_cost), 2) }}</td>
