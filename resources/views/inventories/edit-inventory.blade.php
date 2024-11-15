@@ -173,8 +173,8 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-12 mt-3">
-                                    <label>Accountable Person:</label>
+                                <div class="col-md-6 mt-3">
+                                    <label>Accountable Person 1:</label>
                                     <select class="form-control select2bs4" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
                                         <option value=""> </option>
                                         @foreach ($accnt as $data)
@@ -182,9 +182,19 @@
                                         @endforeach
                                     </select>
                                 </div>
+
+                                <div class="col-md-6 mt-3">
+                                    <label>Accountable Person 2:</label>
+                                    <select class="form-control select2bs4" name="person_accnt1" data-placeholder=" ---Select Accountable Person 2--- " style="width: 100%;">
+                                        <option value=""> </option>
+                                        <option value="0">N/A</option>
+                                        @foreach ($accnt as $data)
+                                            <option value="{{ $data->id }}" {{ $data->id == $selectedPerson1 ? 'selected' : '' }}>{{ $data->person_accnt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        
                         
                         <div class="form-group">
                             <div class="form-row">

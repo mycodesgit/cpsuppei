@@ -90,11 +90,15 @@
 
                         <div class="form-group">
                             <div class="form-row">
-                                <div class="col-md-12">
+                                <div class="col-md-11">
                                     <label>Item:</label>
                                     <select class="select2bs4" multiple="multiple" data-placeholder="Select Items" id="item_id" name="item_id[]" style="width: 100%;" required>
                                        
                                     </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label>Add. Columns:</label>
+                                    <input type="checkbox" name="serial" class="form-control" value="1">
                                 </div>
                             </div>
                         </div>

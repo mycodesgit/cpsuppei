@@ -49,6 +49,7 @@
                     render: function(data, type, row) {
                         if (type === 'display') {
                             var editUrl = "{{ route('inventoryEdit', ['id' => ':id']) }}".replace(':id', data);
+                            var returnSlipUrl = "{{ route('returnSlip', ['id' => ':id']) }}".replace(':id', data);
                             return `
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success dropdown-toggle dropdown-icon" data-toggle="dropdown"></button>
@@ -56,6 +57,7 @@
                                         <a href="${editUrl}" class="dropdown-item btn-edit" href="#"><i class="fas fa-exclamation-circle"></i> Edit</a>
                                         <button id="${data}" onclick="printSticker(${data})" class="dropdown-item btn-print" href="#"><i class="fas fa-print"></i> Sticker</button>
                                         <button value="${data}" class="dropdown-item inventory-delete" href="#"><i class="fas fa-trash"></i> Delete</button>
+                                        ${row.remarks === "Unserviceable" ? `<a href="${returnSlipUrl}" class="dropdown-item"><i class="fas fa-file-alt"></i> Return Slip</a>` : ""}
                                     </div>
                                 </div>
                             `;

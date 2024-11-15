@@ -133,6 +133,8 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/list/low', [InventoryController::class, 'inventorylowREAD'])->name('inventorylowREAD');
         Route::get('/list/intangible', [InventoryController::class, 'inventoryintangibleREAD'])->name('inventoryintangibleREAD');
 
+        Route::get('/return-slip/{id}', [InventoryController::class, 'returnSlip'])->name('returnSlip');
+
         Route::post('/list/add', [InventoryController::class, 'inventoryCreate'])->name('inventoryCreate');
         Route::get('/list/edit/{id}', [InventoryController::class, 'inventoryEdit'])->name('inventoryEdit');
         Route::post('/list/update', [InventoryController::class, 'inventoryUpdate'])->name('inventoryUpdate');
@@ -143,7 +145,7 @@ Route::group(['middleware'=>['login_auth']],function(){
         Route::get('/list/sticker', [InventoryController::class, 'inventoryStickerTemplate'])->name('inventoryStickerTemplate');
         Route::get('/list/sticker/pdf', [InventoryController::class, 'inventoryStickerTemplatePDF'])->name('inventoryStickerTemplatePDF');
     });
-    
+     
     //Reports
     Route::prefix('/reports')->group(function () {
         Route::get('/rpcppe/option', [ReportsController::class, 'rpcppeOption'])->name('rpcppeOption');

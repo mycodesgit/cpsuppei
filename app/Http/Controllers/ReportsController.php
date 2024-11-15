@@ -10,7 +10,7 @@ use App\Models\Office;
 use App\Models\property;
 use App\Models\Properties;
 use App\Models\Unit;
-use App\Models\Item;
+use App\Models\Item; 
 use App\Models\Campus;
 use App\Models\Category;
 use App\Models\User;
@@ -41,6 +41,8 @@ class ReportsController extends Controller
         $unit = Unit::all();
         $category = Category::all();
 
+        $serial = $request->serial;
+        
         $officeId = $request->query('office_id');
         $officeId1 = $request->query('office_id');
         $propertiesId = $request->query('properties_id');
@@ -165,6 +167,7 @@ class ReportsController extends Controller
             'bforward' => $bforward, 
             'bforward1' => $bforward1, 
             'countBforward' => $countBforward,
+            'serial' => $serial,
         ];
 
         if($request->file_type == "PDF"){
@@ -644,7 +647,6 @@ class ReportsController extends Controller
 
     public function unserviceReport(Request $request){
         $setting = Setting::firstOrNew(['id' => 1]);
-    
         $officeId = $request->office_id;
         $personaccountable = $request->person_accnt;
         $itemId = $request->item_id;
@@ -655,6 +657,8 @@ class ReportsController extends Controller
         $endDate = $request->end_date_acquired;
         $selectId = $request->selected_account_id;
 
+        $serial = $request->serial;
+        
         $formattedStartDate = $startDate ? date('M. d, Y', strtotime($startDate)) : '';
         $formattedEndDate = $endDate ? date('M. d, Y', strtotime($endDate)) : '';
         $datereport = $formattedStartDate.'-'.$formattedEndDate;
@@ -701,9 +705,9 @@ class ReportsController extends Controller
             })
             ->where('inventories.remarks', 'Unserviceable')
             ->get();
-    // dd($unservitems);
+
         if($unservitems->isNotEmpty()){
-            $pdf = PDF::loadView('reports.unserviceable_report', compact('selectedItem', 'unservitems', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'landscape');
+            $pdf = PDF::loadView('reports.unserviceable_report', compact('selectedItem', 'unservitems', 'serial', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'landscape');
             return $pdf->stream();
         }else{
             return redirect()->back()->with('error', 'No Item Found Belong to this End User!');

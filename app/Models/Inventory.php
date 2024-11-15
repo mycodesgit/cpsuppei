@@ -32,6 +32,7 @@ class Inventory extends Model
         'date_stat',
         'price_stat',
         'person_accnt',
+        'person_accnt1',
         'person_accnt_name',
         'print_stat'
     ];

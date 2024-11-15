@@ -98,6 +98,10 @@
                                         <option value="EXCEL">EXCEL</option>
                                     </select>
                                 </div>
+                                <div class="col-md-1">
+                                    <label>Serial Column:</label>
+                                    <input type="checkbox" name="serial" class="form-control" value="1">
+                                </div>
                             </div>
                         </div>
                         

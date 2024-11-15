@@ -41,6 +41,12 @@ class InventoryController extends Controller
         return view('inventories.listajax', compact('setting', 'office', 'accnt', 'item', 'unit', 'property', 'currentPrice','category', 'inventory'));
     }
 
+    public function returnSlip($id){
+        $inventory = Inventory::find($id);
+        $pdf = PDF::loadView('inventories.return-slip', compact('inventory'))->setPaper('Legal', 'portrait');
+        return $pdf->stream();
+    }
+
     public function inventoryppeREAD(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);
         $office = Office::all();
@@ -258,6 +264,7 @@ class InventoryController extends Controller
 
         $selectedOfficeId = $inventory->office_id;
         $selectedPerson = $inventory->person_accnt;
+        $selectedPerson1 = $inventory->person_accnt1;
         $selectedItemId = $inventory->item_id;
         $selectedUnitId = $inventory->unit_id;
         $selectedCatId = $inventory->categories_id;
@@ -272,7 +279,7 @@ class InventoryController extends Controller
 
         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
 
-        return view('inventories.edit-inventory', compact('setting', 'property', 'property1', 'inventory', 'office', 'accnt', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedPerson', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
+        return view('inventories.edit-inventory', compact('setting', 'property', 'property1', 'inventory', 'office', 'accnt', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedPerson', 'selectedPerson1', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
     }
 
     public function inventoryUpdate(Request $request) {
@@ -318,8 +325,9 @@ class InventoryController extends Controller
             'item_cost' => 'required',
             'total_cost' => 'required',
             'properties_id' => 'required',
+            'person_accnt1' => 'nullable',
         ]);
-
+        
        try {
             $inventory = Inventory::findOrFail($request->input('id'));
             $inventory->update([
@@ -342,6 +350,7 @@ class InventoryController extends Controller
                 'remarks' => $request->input('remarks'),
                 'price_stat' => $request->input('price_stat'),
                 'person_accnt' => $request->input('person_accnt'),
+                'person_accnt1' => $request->input('person_accnt1'),
             ]);
 
             return redirect()->route('inventoryEdit', ['id' => $inventory->id])->with('success', 'Updated Successfully');

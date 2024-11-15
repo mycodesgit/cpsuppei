@@ -48,9 +48,7 @@
 		  	border: 2px solid #000;
 		  	padding: 8px;
 		}
-
-
-
+		
 		#unserve tr:hover {background-color: #ddd;}
 
 		#unserve th {
@@ -80,6 +78,9 @@
 		}
 		.sign {
 			height: 80px;
+		}
+		.text-center{
+			text-align: center;
 		}
 	</style>
 </head>
@@ -118,8 +119,8 @@
 			<thead>
 				<tr>
 					<th colspan="10">INVENTORY</th>
-					<th colspan="8">INSPECTION and DISPOSAL</th>
-				</tr>
+					<th colspan="@if($serial == 1) 10 @else 8 @endif">INSPECTION and DISPOSAL</th>
+				</tr> 
 				<tr style="padding: 2px">
 					<th rowspan="2" width="50">Date Acquired</th>
 					<th rowspan="2" width="100">Particulars / Article</th>
@@ -134,6 +135,9 @@
 					<th colspan="5" style="height: 10px !important;"> DISPOSAL</th>
 					<th rowspan="2"> Appraised Value</th>
 					<th colspan="2"> RECORDS OF SALE</th>
+					@if($serial == 1) 
+						<th colspan="2"></th>
+					@endif
 				</tr>
 				<tr>
 					<th >Sale</th>
@@ -144,11 +148,19 @@
 
 					<th >OR No. </th>
 					<th >Amount </th>
+					@if($serial == 1) 
+					<th width="100">Serial Number</th>
+					<th width="100">Accountable Person</th>
+					@endif
 				</tr>
 				<tr>
 					@for($i = 1; $i <= 18; $i++)
 					<th>{{ $i }}</th>
 					@endfor
+					@if($serial == 1) 
+					<th>19</th>
+					<th>20</th>
+					@endif
 				</tr>				
 			</thead>
 			<tbody>
@@ -159,12 +171,12 @@
 						<b>{{ $unservitem->item_name }}</b>
 						<br><i> {{ $unservitem->item_descrip }}</i><br>
 						<b>MODEL:</b>{{ $unservitem->item_model ? str_replace('Model:', '', $unservitem->item_model) : '' }}<br>
-						<b>SN : </b> {{ $unservitem->serial_number }}
+						{{-- <b>SN : </b> {{ $unservitem->serial_number }} --}}
 					</td>
-					<td>{{ $unservitem->property_no_generated }}</td>
-					<td>{{ $unservitem->qty }}</td>
-					<td>{{ $unservitem->item_cost }}</td>
-					<td>{{ $unservitem->item_cost }}</td>
+					<td class="text-center">{{ $unservitem->property_no_generated }}</td>
+					<td class="text-center">{{ $unservitem->qty }}</td>
+					<td class="text-center">{{ $unservitem->item_cost }}</td>
+					<td class="text-center">{{ number_format(str_replace(',', '', $unservitem->item_cost) * str_replace(',', '', $unservitem->qty)) }}</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -177,6 +189,10 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					@if($serial == 1) 
+						<td>{{ $unservitem->serial_number }}</td>
+						<td class="text-center">{{ ($unservitem->person_accnt1 !== '') ? $unservitem->person_accnt_name : '' }}</td>
+					@endif
 				</tr>
 				@endforeach
 			</tbody>
@@ -189,7 +205,7 @@
 						I CERTIFY that I have inspected each and every article enumerated in this report, and that the disposition made thereof was, in my judgment, the best for the public interest.  													
 						<br>
 					</td>
-					<td colspan="4" style="border-bottom: none !important;">
+					<td colspan="@if($serial == 1) 6 @else 4 @endif" style="border-bottom: none !important;">
 						I CERTIFY that I have witnessed the disposition of the articles enumerated on this report this <u>{{ \Carbon\Carbon::now()->format('jS') }}</u> of <u>{{ \Carbon\Carbon::now()->format('F') }}</u>, <u>{{ \Carbon\Carbon::now()->format('Y') }}</u>.
 					</td>
 				</tr>
@@ -212,7 +228,7 @@
 						<br>
 						<i>Signature over Printed Name of Inspection Officer</i>
 					</td>
-					<td colspan="4" class="text1"  style="border-top: none !important;"><br><br>
+					<td colspan="@if($serial == 1) 6 @else 4 @endif" class="text1"  style="border-top: none !important;"><br><br>
 						<span style="display: inline-block; margin-bottom: -3px; width: 160px; "><b>JEREMIAS G. AGUI </span>
 						<br>
 						<i>Signature over Printed Name of Inspection Officer</i>
