@@ -1,109 +1,220 @@
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Return Slip</title>
+    <title>{{ strtoupper('ICS REPORT ' . $datereport) }}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header img {
-            width: 100%;
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .table-container {
-            width: 300px;
+        /*.table-responsive {
             overflow-x: auto;
-            margin: 0 auto;
-        }
-
-        table {
-            width: 300px;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
-
-        th, td {
-            border: 1px solid #333;
-            padding: 8px;
+            max-width: 100%; 
+        }*/
+        .text-type {
             text-align: center;
-            font-size: 14px;
-            word-wrap: break-word;
-            white-space: normal;
+            margin-top: -5px;
         }
-
-        th {
-            background-color: #f2f2f2;
+        .text1 {
+            text-align: center;
+        }
+        .text2 {
+            text-align: center;
+        }
+        .text3 {
+            font-size: 11pt;
+            margin-top: 10px;
+        }
+        .text4 {
+            font-size: 11pt;
+        }
+        #rpcppe {
+            font-family: Arial;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 11pt;
+        }
+        #rpcppe td {
+            border: 1px solid #000;
+            padding: 3px;
+        } 
+        #rpcppe th {
+            border: 1px solid #000;
+            /*padding: 8px;*/
+        }
+        .icsno{
+            text-align: right !important;
+            font-size: 8pt;
+        }
+        .text-total {
+            font-size: 12pt !important;
+        }
+        #rpcppe tfoot {
+            border: 1px solid #000;
+            padding: 8px;
+        }
+        #rpcppe tr:nth-child(even){background-color: #f2f2f2;}
+        #rpcppe tr:hover {background-color: #ddd;}
+        #rpcppe th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #fff;
+            font-size: 10pt;
+        }
+        .footer-cell {
+            width: 32%;
+            padding: 5px; 
+        }
+        .footer-cell-title {
             font-weight: bold;
         }
-
-        td {
-            background-color: #ffffff;
+        .footer-cell-sign {
+            margin-top: 20px;
         }
-
-        /* Set specific widths for columns to maintain a readable layout */
-        th:nth-child(1), td:nth-child(1) { width: 5%; }   /* ITEM NO. */
-        th:nth-child(2), td:nth-child(2) { width: 5%; }   /* QTY. */
-        th:nth-child(3), td:nth-child(3) { width: 5%; }   /* UNIT */
-        th:nth-child(4), td:nth-child(4) { width: 10%; }  /* NAME */
-        th:nth-child(5), td:nth-child(5) { width: 20%; }  /* DESCRIPTION */
-        th:nth-child(6), td:nth-child(6) { width: 10%; }  /* UNIT VALUE */
-        th:nth-child(7), td:nth-child(7) { width: 10%; }  /* TOTAL VALUE */
-        th:nth-child(8), td:nth-child(8) { width: 10%; }  /* PROPERTY NUMBER */
-        th:nth-child(9), td:nth-child(9) { width: 10%; }  /* DATE ACQUIRED */
-        th:nth-child(10), td:nth-child(10) { width: 5%; } /* FUND CODE */
-        th:nth-child(11), td:nth-child(11) { width: 10%; } /* END USER */
-
-        /* Optional styling for better readability */
-        th, td {
-            border-color: #666; /* Border color */
+        .footer-cell-text {
+            font-size: 8pt;
+            margin-top: 5px;
+        }
+        .sign {
+            height: 80px;
+        }
+        .text-receivedby {
+            font-size: 8pt;
         }
     </style>
 </head>
 <body>
-    <header>
-        <img src="{{ asset('uploads/header-return-slip.png') }}" alt="Header Image">
-    </header>
-    <main class="table-container">
-        <table id="rpcppe">
+    <header style="margin-top: -40px; margin-left: ;">
+        <img src="{{ asset('template/img/ics.png') }}">
+        <table id="rpcppe" class="table table-bordered">
             <thead>
                 <tr>
-                    <th>ITEM NO.</th>
-                    <th>QTY.</th>
-                    <th>UNIT</th>
-                    <th>NAME</th>
-                    <th>DESCRIPTION</th>
-                    <th>UNIT VALUE</th>
-                    <th>TOTAL VALUE</th>
-                    <th>PROPERTY NUMBER</th>
-                    <th>DATE ACQUIRED</th>
-                    <th>FUND CODE</th>
-                    <th>END USER</th>
+                    <th colspan="8"><h3>INVENTORY CUSTODIAN SLIP</h3><p class="icsno" style="margin-bottom: -6px;">ICS No. _________________</p></th>
+                </tr>
+            </thead>
+        </table>
+    </header>
+    <div class="table-responsive">
+        <table id="rpcppe" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                    <th>Description</th>
+                    <th>Unit Cost</th>
+                    <th>Total Cost</th>
+                    <th>Date Acquired</th>
+                    <th>Inventory Item No.</th>
+                    <th width="30">Estimated Useful Life</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Rows of data would go here -->
-                <!-- Example row: -->
+                @php
+                    $rowCount = 0;
+                    $overallTotal = 0;
+                    $grandTotal = 0;
+                    $no = 1;
+                @endphp
+                 @foreach ($icsitems as $icsitem)
+                    <tr>
+                        <td>{{ $no++ }}</td>
+                        <td>{{ $icsitem->qty }}</td>
+                        <td>{{ $icsitem->unit_name }}</td>
+                        <td>
+                            <b>{{ $icsitem->item_name }}</b>
+                            <br><i> {{ $icsitem->item_descrip }}</i><br>
+                            <b>MODEL:</b>{{ $icsitem->item_model ? str_replace('Model:', '', $icsitem->item_model) : '' }}<br>
+                            <b>SN : </b> <span style="font-size: 12px;">{!!  str_replace(';', '<br>', $icsitem->serial_number) !!}</span>
+                        </td>
+                        <td>{{ number_format( str_replace(',', '', $icsitem->item_cost), 2) }}</td>
+                        <td>{{ number_format( str_replace(',', '', $icsitem->total_cost), 2) }}</td>
+                        <td>
+                            @if($icsitem->date_acquired)
+                                {{ \Carbon\Carbon::parse($icsitem->date_acquired)->format('M. j, Y') }}
+                            @endif
+                        </td>
+                        <td>{{ $icsitem->property_no_generated }}</td>
+                        <td></td>
+                            @if (is_numeric(str_replace(',', '', $icsitem->item_cost)))
+                            {{-- @php $overallTotal += str_replace(',', '', $icsitem->item_cost); @endphp --}}
+                            @php 
+                                $itemTotal = $icsitem->qty * str_replace(',', '', $icsitem->item_cost);
+                                $overallTotal += $itemTotal;
+                                $grandTotal += $itemTotal; // Add to grand total
+                            @endphp
+                        @endif
+                    </tr>
+                    @if (is_numeric(str_replace(',', '', $icsitem->item_cost)))
+                        @php $rowCount++; @endphp
+                    @endif
+                @endforeach
                 <tr>
-                    <td>1</td>
-                    <td>10</td>
-                    <td>pcs</td>
-                    <td>Sample Item</td>
-                    <td>Item Description that might be long and needs to wrap within the cell to avoid overflow issues.</td>
-                    <td>$100.00</td>
-                    <td>$1000.00</td>
-                    <td>123456</td>
-                    <td>2024-11-13</td>
-                    <td>FC001</td>
-                    <td>End User Name</td>
+                    <td height="13"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td height="13"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th colspan="4" style="text-align: right"><b class="text-total">Total:</b></th>
+                    <th colspan="4" style="text-align: left"><b class="text-total">{{ number_format($grandTotal, 2) }}</b></th>
+                    <th></th>
                 </tr>
             </tbody>
         </table>
-    </main>
+        <table id="rpcppe" class="table table-bordered">
+        <tfoot>
+            <tr>
+                <td colspan="4" class="sign" style="text-align: center;">
+                    <span class="text-receivedby" style="float: left">Received by:</span><br>
+                     <span class="footer-cell"> 
+                        <span class="footer-cell-sign" style="text-decoration: underline;">
+                            @if($pAccountable == 'officeAccountable')
+                                <b>{{ isset($icsitems->first()->office_officer) ? strtoupper($icsitems->first()->office_officer) : '' }}
+                            @else
+                                <b>{{ isset($icsitems->first()->person_accnt_name) ? strtoupper($icsitems->first()->person_accnt_name) : '' }}
+                            @endif          
+                        </span><br>                                                                                                                                                                                                                              
+                        <span class="footer-cell-text">Signature Over Printed Name</span><br><br>
+                        <span class="footer-cell-sign" style="text-decoration: underline;">
+                            <b>{{ isset($icsitems->first()->person_accnt)  ? strtoupper($icsitems->first()->office_name) : strtoupper($icsitems->first()->office_name); }}
+                        </span><br>
+                        <span class="footer-cell-text">Positon / Office</span><br><br>
+                        <span class="footer-cell-sign">____________________</span><br>
+                        <span class="footer-cell-text">Date</span>
+                    </span>
+                </td>
+                <td colspan="4" class="sign" style="text-align: center;">
+                    <span class="text-receivedby" style="float: left">Issued by:</span><br>
+                    <span class="footer-cell">
+                        <span class="footer-cell-sign"><u><b>MA. SOCORRO T. LLAMAS</u></span><br>
+                       <span class="footer-cell-text">Signature Over Printed Name</span><br><br>
+                       <span class="footer-cell-sign" style="text-decoration: underline;">
+                           <b>Supply Officer / SUPPLY OFFICE
+                       </span><br>
+                       <span class="footer-cell-text">Positon / Office</span><br><br>
+                       <span class="footer-cell-sign"><u><b>{{ \Carbon\Carbon::now()->format('M. j, Y') }}</u></span><br>
+                       <span class="footer-cell-text">Date</span>
+                   </span>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
 </body>
 </html>
