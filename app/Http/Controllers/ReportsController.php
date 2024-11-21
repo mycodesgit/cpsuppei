@@ -335,6 +335,8 @@ class ReportsController extends Controller
         $unit = Unit::all();
         $category = Category::all();
 
+        $serial = $request->serial;
+
         $officeId = $request->office_id;
         $propertiesId = $request->properties_id;
         $propId = $request->property_id;
@@ -479,6 +481,7 @@ class ReportsController extends Controller
             'category_id' => $purchase,
             'bforward' => $bforward, 
             'bforward1' => $bforward1, 
+            'serial' => $serial,
         ];
 
         if($request->file_type == "PDF"){

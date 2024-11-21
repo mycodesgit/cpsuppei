@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title></title>
 	<style>
-		/*.table-responsive {
+		/*.table-responsive { 
 		  	overflow-x: auto;
 		  	max-width: 100%; 
 		}*/
@@ -119,6 +119,9 @@
 					<th colspan="2">SHORTAGE<br>OVERAGE</th>
 					<th rowspan="2">REMARKS</th>
 					<th colspan="1">LOCATION</th>
+					@if($serial == 1)
+					<th class="" rowspan="2	">SERIAL</th>
+					@endif
 				</tr>
 				<tr>
 					<th>Quantity</th>	
@@ -129,11 +132,17 @@
 			<tr>
 				<th colspan="6" style="text-align: right">Balance Brought Forwarded</th>
 				<th colspan="6" style="text-align: left">{{ number_format($bforward, 2) }}</th>
+				@if($serial == 1)
+					<td></td>
+				@endif
 			</tr>
 			<tbody>
 				@if ($purchase->isEmpty())
 				<tr>
 				    <td colspan="11" align="center">No purchase data available.</td>
+					@if($serial == 1)
+						<td></td>
+					@endif
 				</tr>
 				@else 
 					@php $no = 1; $overallTotal = 0; @endphp
@@ -151,6 +160,9 @@
 				            <td></td>
 				            <td>{{ $purchaseData->remarks }}</td>
 				            <td>{{ $purchaseData->office_name }}</td>
+							@if($serial == 1)
+							<td>{{ $purchaseData->serial_number }}</td>
+							@endif
 				        </tr>
 				        @if (is_numeric(str_replace(',', '', $purchaseData->total_cost)))
 					        @php $overallTotal += str_replace(',', '', $purchaseData->total_cost); @endphp
@@ -159,10 +171,16 @@
 				    <tr>
 			        	<td colspan="6" style="text-align: right"><strong>Total</strong></td>
 			        	<td colspan="6"><strong>{{ number_format($overallTotal, 2) }}</strong></td>
+						@if($serial == 1)
+							<td></td>
+						@endif
 			        </tr>
 			        <tr>
 			        	<td colspan="6" style="text-align: right"><strong>Grand Total </strong></td>
 			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward, 2) }}</strong></td>
+						@if($serial == 1)
+							<td></td>
+						@endif
 			        </tr>
 				@endif
 			</tbody>
@@ -187,6 +205,9 @@
 							<div class="footer-cell-text">Signature over Printed Name of COA Representative</div>
 						</div>
 					</td>
+					@if($serial == 1)
+						<td></td>
+					@endif
 					{{-- <td rowspan=""></td> --}}
 				</tr>
 			</tfoot>
