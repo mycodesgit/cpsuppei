@@ -162,7 +162,6 @@
                                         <option value="No Longer Needed" @if($inventory->remarks == 'No Longer Needed') selected @endif>No Longer Needed</option>
                                         <option value="Not used since purchase" @if($inventory->remarks == 'Not used since purchase') selected @endif>Not used since purchase</option>
                                     </select>
-
                                 </div>
 
                                 <div class="col-md-12 mt-3">
@@ -173,26 +172,43 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6 mt-3">
+                                <div class="col-md-12 mt-3">
                                     <label>Accountable Person 1:</label>
                                     <select class="form-control select2bs4" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
                                         <option value=""> </option>
                                         @foreach ($accnt as $data)
                                             <option value="{{ $data->id }}" {{ $data->id == $selectedPerson ? 'selected' : '' }}>{{ $data->person_accnt }}</option>
                                         @endforeach
-                                    </select>
+                                    </select> 
                                 </div>
 
                                 <div class="col-md-6 mt-3">
                                     <label>Accountable Person 2:</label>
-                                    <select class="form-control select2bs4" name="person_accnt1" data-placeholder=" ---Select Accountable Person 2--- " style="width: 100%;">
-                                        <option value=""> </option>
-                                        <option value="0">N/A</option>
+                                    <select class="form-control select2bs4" name="person_accnt1[]" data-placeholder="--- Select Accountable Person 2 ---" style="width: 100%;" multiple>
+                                        <option value="0" {{ in_array('0', $selectedPerson1 ?? []) ? 'selected' : '' }}>N/A</option>
                                         @foreach ($accnt as $data)
-                                            <option value="{{ $data->id }}" {{ $data->id == $selectedPerson1 ? 'selected' : '' }}>{{ $data->person_accnt }}</option>
+                                            <option value="{{ $data->id }}" {{ in_array($data->id, $selectedPerson1 ?? []) ? 'selected' : '' }}>
+                                                {{ $data->person_accnt }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
+                                
+                                <div class="col-md-6 mt-3">
+                                    <label>Item Serial Number Owned:</label>
+                                    <select class="form-control select2bs4" name="serial_owned[]" data-placeholder="--- Select Serial Number ---" style="width: 100%;" multiple>
+                                        <option value="0" {{ in_array('0', $serialOwned ?? []) ? 'selected' : '' }}>N/A</option>
+                                        @php
+                                            $serialNumbers = explode(';', $inventory->serial_number); // Assuming serial_number is separated by ;
+                                        @endphp
+                                        @foreach ($serialNumbers as $serial)
+                                            <option value="{{ trim($serial) }}" {{ in_array(trim($serial), $serialOwned ?? []) ? 'selected' : '' }}>
+                                                {{ trim($serial) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                                     
                             </div>
                         </div>
                         

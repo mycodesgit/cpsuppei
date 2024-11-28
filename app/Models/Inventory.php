@@ -33,6 +33,7 @@ class Inventory extends Model
         'price_stat',
         'person_accnt',
         'person_accnt1',
+        'serial_owned',
         'person_accnt_name',
         'print_stat'
     ];

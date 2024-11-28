@@ -279,7 +279,10 @@ class InventoryController extends Controller
 
         $currentPrice = floatval(str_replace(',', '', $request->input('item_cost'))) ?? 0;
 
-        return view('inventories.edit-inventory', compact('setting', 'property', 'property1', 'inventory', 'office', 'accnt', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedPerson', 'selectedPerson1', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
+        $selectedPerson1 = explode(';', $inventory->person_accnt1);
+        $serialOwned = explode(';', $inventory->serial_owned);
+
+        return view('inventories.edit-inventory', compact('setting', 'property', 'property1', 'inventory', 'office', 'accnt', 'item', 'unit', 'category', 'selectedOfficeId', 'selectedPerson', 'selectedPerson1', 'serialOwned', 'selectedItemId', 'selectedUnitId', 'currentPrice', 'selectedCatId', 'selectedAccId', 'selectedPropId'));
     }
 
     public function inventoryUpdate(Request $request) {
@@ -325,7 +328,8 @@ class InventoryController extends Controller
             'item_cost' => 'required',
             'total_cost' => 'required',
             'properties_id' => 'required',
-            'person_accnt1' => 'nullable',
+            'person_accnt1' => 'nullable|array',
+            'serial_owned' => 'nullable|array',
         ]);
         
        try {
@@ -344,13 +348,13 @@ class InventoryController extends Controller
                 'properties_id' => $request->input('properties_id'),
                 'categories_id' => $request->input('categories_id'),
                 'property_id' => $request->input('property_id'),
-                //'item_number' => $request->input('item_number'),
                 'property_no_generated' => $propertyCodeGen,
                 'selected_account_id' => $request->input('selected_account_id'),
                 'remarks' => $request->input('remarks'),
                 'price_stat' => $request->input('price_stat'),
                 'person_accnt' => $request->input('person_accnt'),
-                'person_accnt1' => $request->input('person_accnt1'),
+                'person_accnt1' => implode(';', $request->input('person_accnt1', [])),
+                'serial_owned' => implode(';', $request->input('serial_owned', [])),  
             ]);
 
             return redirect()->route('inventoryEdit', ['id' => $inventory->id])->with('success', 'Updated Successfully');
