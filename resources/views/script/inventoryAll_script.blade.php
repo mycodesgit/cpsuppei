@@ -66,7 +66,6 @@
                         }
                     }
                 }
-
             ],
             initComplete: function(settings, json) {
                 var api = this.api();
@@ -76,10 +75,14 @@
             },
             "createdRow": function (row, data, dataIndex) {
                 $(row).attr('id', 'tr-' + data.id);
+                if (data.remarks === "Unserviceable") {
+                    $('td', row).addClass('un-bg');
+                }
             }
         });
     });
 </script>
+
 
 <script>
     $(document).on('click', '.inventory-delete', function(e){

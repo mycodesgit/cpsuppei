@@ -19,7 +19,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\EnduserController;
 use App\Http\Controllers\ReportsController;
-
+use App\Http\Controllers\TechController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,20 +35,29 @@ Route::get('/', function () {
     return view('login');
 });
 
-//Login
-Route::get('/login',[LoginController::class,'getLogin'])->name('getLogin');
-Route::post('/login',[LoginController::class,'postLogin'])->name('postLogin');
+    //Login
+    Route::get('/login',[LoginController::class,'getLogin'])->name('getLogin');
+    Route::post('/login',[LoginController::class,'postLogin'])->name('postLogin');
 
-Route::middleware(['android'])->group(function () {
-    Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
-    Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
-    Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
-    Route::get('/instat', [InventoryController::class, 'inventoryStat'])->name('inventoryStat');
-    Route::get('/instat-update', [InventoryController::class, 'inventoryStatUp'])->name('inventoryStatUp');
-});
+    Route::middleware(['android'])->group(function () {
+        Route::get('/app-login',[UserController::class,'appLogin'])->name('appLogin');
+        Route::get('/gene-qr', [InventoryController::class, 'geneQr'])->name('gene-qr');
+        Route::get('/qr-check', [InventoryController::class, 'geneCheck'])->name('gene-check');
+        Route::get('/instat', [InventoryController::class, 'inventoryStat'])->name('inventoryStat');
+        Route::get('/instat-update', [InventoryController::class, 'inventoryStatUp'])->name('inventoryStatUp');
+    });
+
+    Route::prefix('/repair')->group(function () {
+    Route::get('/repairRead/{prop}/{issue}/{urgency}', [TechController::class, 'repairRead'])->name('repairRead');
+    Route::get('/repairProp', [TechController::class, 'repairProp'])->name('repairProp');
+    Route::get('/editEssue/{id}', [TechController::class, 'editEssue'])->name('editEssue.edit');
+    Route::get('/issueInsert/{id}', [TechController::class, 'issueInsert'])->name('issueInsert.insert');
+    Route::post('/issueUpdate/{id}', [TechController::class, 'issueUpdate'])->name('issueUpdate');
+    Route::post('/issueInsertion', [TechController::class, 'issueInsertion'])->name('issueInsertion');
+    });
 
 //Middleware
-Route::group(['middleware'=>['login_auth']],function(){
+    Route::group(['middleware'=>['login_auth']],function(){
     Route::get('/dashboard',[MasterController::class,'dashboard'])->name('dashboard');
 
     //View
@@ -79,6 +88,7 @@ Route::group(['middleware'=>['login_auth']],function(){
             Route::post('listINT/update', [PropertyTypeIntController::class, 'intUpdate'])->name('intUpdate');
             Route::get('listINT/delete/{id}', [PropertyTypeIntController::class, 'intDelete'])->name('intDelete');
         });
+        
 
         Route::prefix('/unit')->group(function () {
             Route::get('/list', [UnitController::class, 'unitRead'])->name('unitRead');

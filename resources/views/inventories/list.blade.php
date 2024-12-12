@@ -10,6 +10,7 @@
     background-color: #06601f;
     color: #fff;
 }
+
 </style>
 
 <div class="container-fluid">
@@ -65,7 +66,7 @@
                             <tbody>
                                 @php $no = 1; @endphp
                                 @foreach($inventory as $data)
-                                <tr id="tr-{{ $data->id }}" class="">
+                                <tr id="tr-{{ $data->id }}" class="uns-bg">
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $data->abbreviation }}</td>
                                     <td>{{ $data->property_no_generated }}</td>

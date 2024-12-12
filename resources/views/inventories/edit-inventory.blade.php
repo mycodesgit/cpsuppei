@@ -174,8 +174,8 @@
 
                                 <div class="col-md-12 mt-3">
                                     <label>Accountable Person 1:</label>
-                                    <select class="form-control select2bs4" name="person_accnt" data-placeholder=" ---Select Accountable Person--- " style="width: 100%;">
-                                        <option value=""> </option>
+                                    <select class="form-control select2bs4" name="person_accnt" style="width: 100%;">
+                                        <option value="">N/A</option>
                                         @foreach ($accnt as $data)
                                             <option value="{{ $data->id }}" {{ $data->id == $selectedPerson ? 'selected' : '' }}>{{ $data->person_accnt }}</option>
                                         @endforeach

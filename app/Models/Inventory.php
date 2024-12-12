@@ -38,4 +38,9 @@ class Inventory extends Model
         'print_stat'
     ];
 
+    public function repairs()
+    {
+        return $this->hasMany(Repair::class);
+    }
+
 }

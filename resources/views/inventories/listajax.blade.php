@@ -10,6 +10,9 @@
     background-color: #06601f;
     color: #fff;
 }
+.un-bg {
+    background-color: #f8d7da;
+}
 </style>
 
 <div class="container-fluid">
