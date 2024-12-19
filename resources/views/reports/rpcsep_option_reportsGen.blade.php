@@ -102,7 +102,7 @@
 	<div class="text1">(Type of Property, Plant and Equipment)</div>
 	<div class="text2">As at <u>{{ $startDate }} to {{ $endDate }}</u>.</div>
 	<div class="text3">Fund Cluster : ________________________________</div>
-	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on______________.</div>
+	<div class="text4">For which <u>ALADINO C. MORACA, Ph.D.</u>,  <u>CPSU, Camingawan, Kabankalan City</u>,  of <u>CENTRAL PHILIPPINES STATE UNIVERSITY</u>,  is accountable, having assumed such accountability on August 16, 2018.</div>
 
 	<div class="table-responsive">
 		<table id="rpcppe" class="table table-bordered">
@@ -190,7 +190,7 @@
 				        <div class="footer-cell">
 							<div class="footer-cell-title">Certified Correct by:</div>
 							<div class="footer-cell-sign">MA. SOCORRO T. LLAMAS</div>
-							<div class="footer-cell-text">Administrative Officer IV/Supply Officer designate</div>
+							<div class="footer-cell-text">Administrative Officer V/Supply Officer designate</div>
 						</div>
 
 						<div class="footer-cell">

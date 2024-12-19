@@ -610,6 +610,7 @@ class ReportsController extends Controller
         $purchase = Purchases::join('accountable', 'purchases.person_accnt', '=', 'accountable.id')
                     ->select('purchases.*', 'accountable.person_accnt')
                     ->get();
+                    
         return view('reports.ics_option', compact('setting', 'office', 'property', 'category', 'purchase'));
     }
 

@@ -725,7 +725,10 @@ class ReportsController extends Controller
         $purchase = Inventory::join('accountable', 'inventories.person_accnt', '=', 'accountable.id')
                     ->select('inventories.*', 'accountable.person_accnt')
                     ->get();
-        return view('reports.ics_option', compact('setting', 'office', 'property', 'category', 'purchase'));
+                                        
+        $accntables = Accountable::all();
+
+        return view('reports.ics_option', compact('setting', 'office', 'property', 'category', 'purchase', 'accntables'));
     }
 
     public function icsOptionReportGen(Request $request) {
@@ -789,10 +792,12 @@ class ReportsController extends Controller
                 }
             })
             ->get();
+
+        $pAccountable2 = $request->person_accnt1;
     
     
         if($icsitems->isNotEmpty()){
-            $pdf = PDF::loadView('reports.ics_option_reportsGen', compact('selectedItem', 'icsitems', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'portrait');
+            $pdf = PDF::loadView('reports.ics_option_reportsGen', compact('selectedItem', 'icsitems', 'itemId', 'pAccountable', 'pAccountable2', 'datereport'))->setPaper('Legal', 'portrait');
             return $pdf->stream();
         }else{
             return redirect()->back()->with('error', 'No Item Found Belong to this End User!');
@@ -804,7 +809,8 @@ class ReportsController extends Controller
         $office = Office::all();
         $property = Property::all();
         $category = Category::all();
-        return view('reports.par_option', compact('setting', 'office', 'property', 'category'));
+        $accntables = Accountable::all();
+        return view('reports.par_option', compact('setting', 'office', 'property', 'accntables', 'category'));
     }
 
     public function parOptionReportGen(Request $request) {
@@ -866,9 +872,11 @@ class ReportsController extends Controller
                 }
             })
             ->get();
+        
+        $pAccountable2 = $request->person_accnt1;
 
         if($paritems->isNotEmpty()){
-            $pdf = PDF::loadView('reports.par_option_reportsGen', compact('selectedItem', 'paritems', 'itemId', 'pAccountable', 'datereport'))->setPaper('Legal', 'portrait');
+            $pdf = PDF::loadView('reports.par_option_reportsGen', compact('selectedItem', 'paritems', 'itemId', 'pAccountable', 'pAccountable2', 'datereport'))->setPaper('Legal', 'portrait');
             return $pdf->stream();
         }else{
             return redirect()->back()->with('error', 'No Item Found Belong to this End User!');

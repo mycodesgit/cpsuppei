@@ -205,6 +205,13 @@
 							</span><br>
 							<span class="footer-cell-text">Signature Over Printed Name</span><br><br>
 
+							@if($pAccountable2 != 0)
+								<span class="footer-cell-sign" style="text-decoration: underline;">
+									<b>{{ strtoupper($pAccountable2) }}</b>
+								</span><br>                                                                                                                                                                                                                              
+								<span class="footer-cell-text">End User</span><br><br>
+							@endif
+
 							<span class="footer-cell-sign" style="text-decoration: underline;">
 								<b>{{ isset($paritems[0]->person_accnt_id)  ? strtoupper($paritems[0]->office_name) : strtoupper($paritems[0]->office_name); }}
 							</span><br>

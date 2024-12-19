@@ -91,6 +91,21 @@
                         <div class="form-group">
                             <div class="form-row">
                                 <div class="col-md-12">
+                                    <label>End User 2:</label>
+                                    <input type="hidden" id="accountType" name="pAccountable">
+                                    <select class="form-control select2bs4" name="person_accnt1">
+                                        <option value="0">NONE</option>
+                                        @foreach ($accntables as $acc)
+                                            <option>{{ $acc->person_accnt }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-md-12">
                                     <label>Item:</label>
                                     <select class="select2bs4" multiple="multiple" data-placeholder="Select Items" id="item_id" name="item_id[]" style="width: 100%;" required>
                                        
