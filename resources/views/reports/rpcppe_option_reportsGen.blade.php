@@ -123,9 +123,12 @@
 					<th rowspan="2" width="50">QUANTITY <br>PER<br> PHYSICAL COUNT</th>
 					<th colspan="2">SHORTAGE<br>OVERAGE</th>
 					<th rowspan="2">REMARKS</th>
-					<th colspan="1" width="@if($serial == 1) 11 @else 10 @endif">LOCATION</th>
+					<th colspan="1" width="@if($serial == 1 && $acquired == 1) 12 @elseif($serial == 1 || $acquired == 1) 11 @else 10 @endif">LOCATION</th>
 					@if($serial == 1)
 					<th class="" rowspan="2	">SERIAL</th>
+					@endif
+					@if($acquired == 1)
+					<th class="" rowspan="2	">DATE ACQUIRED</th>
 					@endif
 				</tr>
 				<tr style="padding: 2px">
@@ -140,12 +143,18 @@
 				@if($serial == 1)
 					<td></td>
 				@endif
+				@if($acquired == 1)
+					<td></td>
+				@endif
 			</tr>
 			<tbody>
 				@if ($purchase->isEmpty())
 				<tr>
 				    <td colspan="12" style="text-align:center;">No purchase data available.</td>
 					@if($serial == 1)
+						<td></td>
+					@endif
+					@if($acquired == 1)
 						<td></td>
 					@endif
 				</tr>
@@ -166,7 +175,10 @@
 				            <td class="text-center">{{ $purchaseData->remarks }}</td>
 				            <td class="text-center">{{ $purchaseData->office_name }}</td>
 							@if($serial == 1)
-							<td>{{ $purchaseData->serial_number }}</td>
+								<td>{{ $purchaseData->serial_number }}</td>
+							@endif
+							@if($acquired == 1)
+								<td width="65" style="text-align: center;">{{ strtoupper(\Carbon\Carbon::parse($purchaseData->date_acquired)->format('M. d, Y')) }}</td>
 							@endif
 				        </tr>
 				        @if (is_numeric(str_replace(',', '', $purchaseData->total_cost)))
@@ -179,11 +191,17 @@
 						@if($serial == 1)
 							<td></td>
 						@endif
+						@if($acquired == 1)
+							<td></td>
+						@endif
 			        </tr>
 			        <tr>
 			        	<td colspan="6" style="text-align: right"><strong>Grand Total</strong></td>
 			        	<td colspan="6"><strong>{{ number_format($overallTotal + $bforward, 2) }}</strong></td>
 						@if($serial == 1)
+							<td></td>
+						@endif
+						@if($acquired == 1)
 							<td></td>
 						@endif
 			        </tr>
@@ -211,6 +229,9 @@
 						</div>
 					</td>
 					@if($serial == 1)
+						<td></td>
+					@endif
+					@if($acquired == 1)
 						<td></td>
 					@endif
 					{{-- <td rowspan=""></td> --}}

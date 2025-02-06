@@ -31,7 +31,7 @@ class ReportsController extends Controller
         $category = Category::all();
 
         return view('reports.rpcppe_option', compact('setting', 'office', 'property', 'category'));
-    }
+    } 
     
     public function rpcppeOptionReportGen(Request $request) {
         $setting = Setting::firstOrNew(['id' => 1]);

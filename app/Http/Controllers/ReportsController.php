@@ -42,6 +42,7 @@ class ReportsController extends Controller
         $category = Category::all();
 
         $serial = $request->serial;
+        $acquired = $request->acquired;
         
         $officeId = $request->query('office_id');
         $officeId1 = $request->query('office_id');
@@ -168,8 +169,9 @@ class ReportsController extends Controller
             'bforward1' => $bforward1, 
             'countBforward' => $countBforward,
             'serial' => $serial,
+            'acquired' => $acquired,
         ];
-
+ 
         if($request->file_type == "PDF"){
             $pdf = PDF::loadView('reports.rpcppe_option_reportsGen', $data)->setPaper('Legal', 'landscape');
             return $pdf->stream();
